@@ -4,7 +4,7 @@ import (
 	"context"
 	"math"
 
-	arkhev1beta1 "arkhe-operator/api/v1beta1"
+	arkhev1beta1 "github.com/arkhe-n/arkhe-operator/api/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"

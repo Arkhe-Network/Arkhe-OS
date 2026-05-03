@@ -1,0 +1,6 @@
+/*
+Arkhe(n) Operator
+Copyright 2026 Arkhe(n) Foundation
+
+SPDX-License-Identifier: Apache-2.0
+*/

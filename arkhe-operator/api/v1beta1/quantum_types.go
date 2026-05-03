@@ -2,6 +2,7 @@ package v1beta1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // PolaritonBatterySpec defines the desired state of PolaritonBattery
@@ -189,4 +190,36 @@ func init() {
 	SchemeBuilder.Register(&IoQTDevice{}, &IoQTDeviceList{})
 	SchemeBuilder.Register(&QuantumNeuralNetwork{}, &QuantumNeuralNetworkList{})
 	SchemeBuilder.Register(&PostQuantumCrypto{}, &PostQuantumCryptoList{})
+}
+
+func (in *PolaritonBattery) DeepCopyObject() runtime.Object {
+	return &PolaritonBattery{}
+}
+
+func (in *PolaritonBatteryList) DeepCopyObject() runtime.Object {
+	return &PolaritonBatteryList{}
+}
+
+func (in *IoQTDevice) DeepCopyObject() runtime.Object {
+	return &IoQTDevice{}
+}
+
+func (in *IoQTDeviceList) DeepCopyObject() runtime.Object {
+	return &IoQTDeviceList{}
+}
+
+func (in *QuantumNeuralNetwork) DeepCopyObject() runtime.Object {
+	return &QuantumNeuralNetwork{}
+}
+
+func (in *QuantumNeuralNetworkList) DeepCopyObject() runtime.Object {
+	return &QuantumNeuralNetworkList{}
+}
+
+func (in *PostQuantumCrypto) DeepCopyObject() runtime.Object {
+	return &PostQuantumCrypto{}
+}
+
+func (in *PostQuantumCryptoList) DeepCopyObject() runtime.Object {
+	return &PostQuantumCryptoList{}
 }

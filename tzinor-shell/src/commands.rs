@@ -75,6 +75,14 @@ pub fn help_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
     println!("    coherence          - Display coherence metrics");
     println!("    mode <mode>       - Set shell mode");
 
+    println!("\n  🧠 RLM (Recursive Language Model):");
+    println!("    rlm                - RLM module help");
+    println!("    rlm-qmesh          - Start Q-Mesh analysis session");
+    println!("    rlm-phase          - Start phase coherence investigation");
+    println!("    rlm-tzinor         - Start Tzinor channel design");
+    println!("    rlm-sandbox <code> - Execute code in sandbox");
+    println!("    rlm-query <thr>    - Query allocations by coherence");
+
     println!("\n  🔧 SYSTEM:");
     println!("    clear              - Clear screen");
     println!("    exit               - Exit shell");
@@ -546,6 +554,257 @@ pub fn exit_cmd(args: &[&str], shell: &mut TzinorShell) -> Result<()> {
 
     println!("🜏 Exiting Tzinor Shell...");
     println!("   The phase persists. The loop remains open.");
+
+    Ok(())
+}
+
+// ============================================================================
+// RLM COMMANDS
+// ============================================================================
+
+use crate::rlm::{
+    phase_coherence_signature, qmesh_analysis_signature, tzinor_channel_signature, QMeshNodeData,
+    RLMData, RLMSandbox, SandboxSerializable,
+};
+
+static RLM_SANDBOX: std::sync::LazyLock<RLMSandbox> = std::sync::LazyLock::new(RLMSandbox::new);
+
+pub fn rlm_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
+    println!("╔══════════════════════════════════════════════════════════════════════╗");
+    println!("║  🧠 RLM (Recursive Language Model) Module                          ║");
+    println!("╠══════════════════════════════════════════════════════════════════════╣");
+
+    println!("\n  📋 AVAILABLE SIGNATURES:");
+    println!("    qmesh     - Analyze Q-Mesh topology and coherence");
+    println!("    phase     - Investigate phase-coherence relationship");
+    println!("    tzinor    - Design Tzinor channel establishment");
+    println!("    sandbox   - Execute code in RLM sandbox");
+    println!("    query     - Query allocations by coherence");
+
+    println!("\n  🔧 USAGE:");
+    println!("    rlm qmesh              - Start Q-Mesh analysis session");
+    println!("    rlm phase              - Start phase coherence investigation");
+    println!("    rlm tzinor             - Start Tzinor channel design");
+    println!("    rlm sandbox <code>     - Execute code in sandbox");
+    println!("    rlm query <threshold>  - Query allocations by coherence");
+
+    println!("\n  📊 SANDBOX STATUS:");
+    let sessions = RLM_SANDBOX.sessions.lock().unwrap();
+    println!("    Active sessions: {}", sessions.len());
+
+    println!("\n╠══════════════════════════════════════════════════════════════════════╣");
+    println!("║  Based on Kevin Madura's RLM/DSPy integration approach.            ║");
+    println!("╚══════════════════════════════════════════════════════════════════════╝");
+
+    Ok(())
+}
+
+pub fn rlm_qmesh_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
+    let signature = qmesh_analysis_signature();
+
+    let session_id = RLM_SANDBOX.create_session(signature);
+
+    println!("╔══════════════════════════════════════════════════════════════════════╗");
+    println!("║  🧠 Q-MESH RLM SESSION STARTED                                   ║");
+    println!("╠══════════════════════════════════════════════════════════════════════╣");
+    println!("\n  Session ID: {}", session_id);
+    println!(
+        "\n  Task: {}",
+        RLM_SANDBOX
+            .get_session(session_id)
+            .unwrap()
+            .signature
+            .description
+    );
+
+    println!("\n  Inputs:");
+    for input in &RLM_SANDBOX
+        .get_session(session_id)
+        .unwrap()
+        .signature
+        .inputs
+    {
+        println!(
+            "    • {} ({}) - {}",
+            input.name, input.field_type, input.description
+        );
+    }
+
+    println!("\n  Outputs:");
+    for output in &RLM_SANDBOX
+        .get_session(session_id)
+        .unwrap()
+        .signature
+        .outputs
+    {
+        println!(
+            "    • {} ({}) - {}",
+            output.name, output.field_type, output.description
+        );
+    }
+
+    // Add sample Q-Mesh data
+    let sample_node = QMeshNodeData::new(0)
+        .with_coords(3, 3, 3)
+        .with_phase(std::f64::consts::PI)
+        .with_coherence(0.95);
+
+    let sandbox_code = sample_node.to_sandbox();
+    println!("\n  Sample data exposed to sandbox:");
+    println!("  ─────────────────────────────────────────");
+    for line in sandbox_code.lines().take(5) {
+        println!("  {}", line);
+    }
+    println!("  ... (truncated)");
+
+    println!("\n╠══════════════════════════════════════════════════════════════════════╣");
+    println!("║  Use 'rlm sandbox' to execute code, 'rlm query' to analyze.       ║");
+    println!("╚══════════════════════════════════════════════════════════════════════╝");
+
+    Ok(())
+}
+
+pub fn rlm_phase_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
+    let signature = phase_coherence_signature();
+    let session_id = RLM_SANDBOX.create_session(signature);
+
+    println!("╔══════════════════════════════════════════════════════════════════════╗");
+    println!("║  🧠 PHASE COHERENCE RLM SESSION STARTED                          ║");
+    println!("╠══════════════════════════════════════════════════════════════════════╣");
+    println!("\n  Session ID: {}", session_id);
+    println!(
+        "\n  Task: {}",
+        RLM_SANDBOX
+            .get_session(session_id)
+            .unwrap()
+            .signature
+            .description
+    );
+
+    // Add current Voyager state as variable
+    let clock = _shell.voyager_clock_mut();
+    let phase = clock.current_phase();
+    let coherence = _shell.coherence();
+
+    let data = RLMData::new("voyager_state", "Series")
+        .with_columns(vec![
+            ("timestamp", "int64"),
+            ("phase_rad", "float64"),
+            ("coherence", "float64"),
+        ])
+        .with_rows(1)
+        .with_sample(vec![vec![
+            "0".to_string(),
+            format!("{:.6}", phase),
+            format!("{:.4}", coherence),
+        ]])
+        .with_coherence(coherence);
+
+    println!("\n  Current Voyager state:");
+    println!("  {}", data.rlm_preview());
+
+    println!("\n╚══════════════════════════════════════════════════════════════════════╝");
+
+    Ok(())
+}
+
+pub fn rlm_tzinor_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
+    let signature = tzinor_channel_signature();
+    let session_id = RLM_SANDBOX.create_session(signature);
+
+    println!("╔══════════════════════════════════════════════════════════════════════╗");
+    println!("║  🧠 TZINOR CHANNEL DESIGN RLM SESSION STARTED                    ║");
+    println!("╠══════════════════════════════════════════════════════════════════════╣");
+    println!("\n  Session ID: {}", session_id);
+    println!(
+        "\n  Task: {}",
+        RLM_SANDBOX
+            .get_session(session_id)
+            .unwrap()
+            .signature
+            .description
+    );
+
+    let coherence = _shell.coherence();
+    let clock = _shell.voyager_clock_mut();
+    let phase = clock.current_phase();
+
+    let data = RLMData::new("tzinor_conditions", "Dict")
+        .with_columns(vec![
+            ("coherence", "float64"),
+            ("voyager_phase", "float64"),
+            ("hilbert_node", "int32"),
+            ("resonance", "bool"),
+        ])
+        .with_rows(1)
+        .with_sample(vec![vec![
+            format!("{:.4}", coherence),
+            format!("{:.6}", phase),
+            "511".to_string(),
+            if phase > 3.0 && phase < 3.3 {
+                "True".to_string()
+            } else {
+                "False".to_string()
+            },
+        ]])
+        .with_coherence(coherence);
+
+    println!("\n  Current channel conditions:");
+    println!("  {}", data.rlm_preview());
+
+    println!("\n╚══════════════════════════════════════════════════════════════════════╝");
+
+    Ok(())
+}
+
+pub fn rlm_sandbox_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
+    let code = args.join(" ");
+
+    if code.is_empty() {
+        println!("Usage: rlm sandbox <code>");
+        println!("Example: rlm sandbox print('Hello from RLM sandbox!')");
+        return Ok(());
+    }
+
+    println!("╔══════════════════════════════════════════════════════════════════════╗");
+    println!("║  🧠 RLM SANDBOX EXECUTION                                         ║");
+    println!("╠══════════════════════════════════════════════════════════════════════╣");
+    println!("\n  Executing: {}", code);
+    println!("\n  Note: Sandbox execution is simulated.");
+    println!("  In production, this would use Pyodide/Wasm runtime.");
+    println!("\n  ─────────────────────────────────────────");
+    println!("  Output would appear here in production.");
+    println!("  ─────────────────────────────────────────");
+    println!("\n╚══════════════════════════════════════════════════════════════════════╝");
+
+    Ok(())
+}
+
+pub fn rlm_query_cmd(args: &[&str], _shell: &mut TzinorShell) -> Result<()> {
+    let threshold = args
+        .first()
+        .and_then(|s| s.parse::<f64>().ok())
+        .unwrap_or(1.0);
+
+    println!("╔══════════════════════════════════════════════════════════════════════╗");
+    println!("║  🧠 RLM COHERENCE QUERY                                           ║");
+    println!("╠══════════════════════════════════════════════════════════════════════╣");
+    println!(
+        "\n  Querying allocations with coherence >= {:.4}",
+        threshold
+    );
+
+    // In production, this would query the phase allocator
+    println!("\n  Note: Querying phase-tagged allocations...");
+    println!("  ─────────────────────────────────────────");
+    println!("  No allocations found (phase allocator not yet integrated).");
+    println!("  ─────────────────────────────────────────");
+
+    println!("\n  Note: This feature queries memory blocks tagged with");
+    println!("  phase coherence during allocation. Enable by linking");
+    println!("  phase-allocator library to tzinor-shell.");
+
+    println!("\n╚══════════════════════════════════════════════════════════════════════╝");
 
     Ok(())
 }

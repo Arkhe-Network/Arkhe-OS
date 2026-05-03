@@ -9,8 +9,8 @@
 |-------|-------|
 | **Name** | Rafael Oliveira |
 | **ORCID** | 0009-0005-2697-4668 |
-| **Email** | [To be provided] |
-| **Organization** | Teknet Oracle |
+| **Email** | [lemestua@hotmail.com] |
+| **Organization** | Safe Core |
 | **Date of Nomination** | 2026-03-22 |
 
 ---

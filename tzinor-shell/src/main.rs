@@ -11,11 +11,12 @@
 //! - Retrocausal command execution
 
 mod commands;
+mod hilbert;
+mod phase;
+mod qmcp;
+mod rlm;
 mod shell;
 mod tzinor;
-mod qmcp;
-mod phase;
-mod hilbert;
 
 use anyhow::Result;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -26,9 +27,9 @@ fn main() -> Result<()> {
         .init();
 
     tracing::info!("🜏 Tzinor Shell v0.1.0 - Initializing...");
-    
+
     let mut shell = shell::TzinorShell::new()?;
     shell.run()?;
-    
+
     Ok(())
 }

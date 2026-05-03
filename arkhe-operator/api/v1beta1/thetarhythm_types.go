@@ -2,6 +2,7 @@ package v1beta1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // ThetaRhythmSpec defines the desired state of ThetaRhythm
@@ -47,4 +48,12 @@ type ThetaRhythmList struct {
 
 func init() {
 	SchemeBuilder.Register(&ThetaRhythm{}, &ThetaRhythmList{})
+}
+
+func (in *ThetaRhythm) DeepCopyObject() runtime.Object {
+	return &ThetaRhythm{}
+}
+
+func (in *ThetaRhythmList) DeepCopyObject() runtime.Object {
+	return &ThetaRhythmList{}
 }

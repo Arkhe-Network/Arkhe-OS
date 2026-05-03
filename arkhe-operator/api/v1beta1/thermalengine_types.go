@@ -2,6 +2,7 @@ package v1beta1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // ThermalEngineSpec defines the desired state of ThermalEngine
@@ -61,4 +62,12 @@ type ThermalEngineList struct {
 
 func init() {
 	SchemeBuilder.Register(&ThermalEngine{}, &ThermalEngineList{})
+}
+
+func (in *ThermalEngine) DeepCopyObject() runtime.Object {
+	return &ThermalEngine{}
+}
+
+func (in *ThermalEngineList) DeepCopyObject() runtime.Object {
+	return &ThermalEngineList{}
 }

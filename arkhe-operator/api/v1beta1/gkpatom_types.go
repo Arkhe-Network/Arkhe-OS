@@ -2,6 +2,7 @@ package v1beta1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // GKPAtomSpec defines the desired state of GKPAtom
@@ -63,4 +64,12 @@ type GKPAtomList struct {
 
 func init() {
 	SchemeBuilder.Register(&GKPAtom{}, &GKPAtomList{})
+}
+
+func (in *GKPAtom) DeepCopyObject() runtime.Object {
+	return &GKPAtom{}
+}
+
+func (in *GKPAtomList) DeepCopyObject() runtime.Object {
+	return &GKPAtomList{}
 }

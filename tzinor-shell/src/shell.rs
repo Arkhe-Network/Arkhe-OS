@@ -86,6 +86,17 @@ impl TzinorShell {
             .register("genesis", crate::commands::genesis_cmd);
         self.registry
             .register("voyager", crate::commands::voyager_cmd);
+        self.registry.register("rlm", crate::commands::rlm_cmd);
+        self.registry
+            .register("rlm-qmesh", crate::commands::rlm_qmesh_cmd);
+        self.registry
+            .register("rlm-phase", crate::commands::rlm_phase_cmd);
+        self.registry
+            .register("rlm-tzinor", crate::commands::rlm_tzinor_cmd);
+        self.registry
+            .register("rlm-sandbox", crate::commands::rlm_sandbox_cmd);
+        self.registry
+            .register("rlm-query", crate::commands::rlm_query_cmd);
     }
 
     fn load_history(&mut self) -> Result<()> {
