@@ -40,3 +40,18 @@ impl Default for OrbitalMesh {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mesh_tracks_synced_nodes() {
+        let mut m = OrbitalMesh::new();
+        m.start_sync();
+        assert_eq!(m.synced_nodes(), 0);
+        m.mark_synced();
+        m.mark_synced();
+        assert_eq!(m.synced_nodes(), 2);
+    }
+}

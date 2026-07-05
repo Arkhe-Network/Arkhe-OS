@@ -239,3 +239,56 @@ impl TemporalHashChain {
         current == cause
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn verify_cache_insert_and_get() {
+        let mut c = VerifyCache::new();
+        c.insert(VerifyEntry { block_number: 7, block_hash: [1u8; 32], is_valid: true });
+        let got = c.get(7).expect("entry present");
+        assert_eq!(got.block_number, 7);
+        assert!(got.is_valid);
+        assert!(c.get(999).is_none());
+    }
+
+    #[test]
+    fn merkle_root_is_deterministic() {
+        let data = b"arkhe temporal block payload";
+        let a = TemporalHashChain::calculate_merkle_root(data);
+        let b = TemporalHashChain::calculate_merkle_root(data);
+        assert_eq!(a, b);
+        // Sensível ao conteúdo.
+        let c = TemporalHashChain::calculate_merkle_root(b"outro payload");
+        assert_ne!(a, c);
+    }
+
+    #[test]
+    fn merkle_root_handles_large_multichunk_input() {
+        // > 64 bytes força o caminho de árvore com múltiplos chunks.
+        let big = alloc::vec![0xABu8; 12_000];
+        let root = TemporalHashChain::calculate_merkle_root(&big);
+        assert_ne!(root, [0u8; 32]);
+    }
+
+    #[test]
+    fn add_block_links_and_advances_head() {
+        let mut chain = TemporalHashChain::new(1);
+        let h0 = chain.header.head_hash;
+        let hash1 = chain.add_block(b"block-1");
+        assert_eq!(chain.header.head_hash, hash1);
+        assert_ne!(chain.header.head_hash, h0);
+        let hash2 = chain.add_block(b"block-2");
+        assert_ne!(hash1, hash2);
+        assert_eq!(chain.header.block_count.load(Ordering::SeqCst), 2);
+    }
+
+    #[test]
+    fn causal_link_rejects_non_increasing() {
+        let chain = TemporalHashChain::new(1);
+        assert!(!chain.verify_causal_link(5, 5));
+        assert!(!chain.verify_causal_link(9, 3));
+    }
+}

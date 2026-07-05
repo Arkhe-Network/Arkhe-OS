@@ -196,3 +196,26 @@ impl ModelLoader {
         self.state.progress_percent.load(Ordering::SeqCst)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn layer_size_estimates_are_bounded() {
+        let l = ModelLoader::new();
+        for idx in 0..8u64 {
+            let sz = l.estimate_layer_size(idx);
+            assert!(sz > 0, "layer {idx} deve ter tamanho > 0");
+        }
+    }
+
+    #[test]
+    fn calculate_layers_scales_with_params() {
+        let l = ModelLoader::new();
+        let small = l.calculate_layers(250 * 1024 * 1024);
+        let big = l.calculate_layers(250 * 1024 * 1024 * 100);
+        assert_eq!(small, 1);
+        assert_eq!(big, 100);
+    }
+}

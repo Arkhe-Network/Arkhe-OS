@@ -30,3 +30,17 @@ pub fn timeout_ns() -> u64 {
 pub fn kicks() -> u64 {
     LAST_KICK.load(Ordering::SeqCst)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn init_sets_timeout_and_kick_counts() {
+        init(Duration::from_secs(5));
+        assert_eq!(timeout_ns(), 5_000_000_000);
+        let before = kicks();
+        kick();
+        assert_eq!(kicks(), before + 1);
+    }
+}

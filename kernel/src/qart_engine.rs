@@ -67,3 +67,34 @@ impl QArtEngine {
         Some(*header)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn art_bytes(block_type: u8) -> [u8; 32] {
+        let mut b = [0u8; 32];
+        b[0..4].copy_from_slice(&[b'A', b'R', b'T', 0]);
+        b[6] = block_type; // offset do campo block_type no header packed
+        b
+    }
+
+    #[test]
+    fn rejects_non_art_and_short_input() {
+        let mut e = QArtEngine::new();
+        assert!(e.process_art_block(b"no", 0).is_none());
+        let mut bad = [0u8; 32];
+        bad[0..4].copy_from_slice(&[b'X', b'X', b'X', b'X']);
+        assert!(e.process_art_block(&bad, 0).is_none());
+        assert_eq!(e.registered_artworks, 0);
+    }
+
+    #[test]
+    fn accepts_valid_art_and_accrues_royalty() {
+        let mut e = QArtEngine::new();
+        let out = e.process_art_block(&art_bytes(0), 1); // Visual => 100
+        assert!(out.is_some());
+        assert_eq!(e.registered_artworks, 1);
+        assert_eq!(e.total_royalties, 100);
+    }
+}

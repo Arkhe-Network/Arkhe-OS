@@ -148,3 +148,27 @@ impl InferenceLoop {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fps_counter_averages_samples() {
+        let mut c = FpsCounter::new();
+        assert_eq!(c.average_ns(), 0);
+        c.record(1000);
+        c.record(3000);
+        assert_eq!(c.average_ns(), 2000);
+        assert!(c.current_fps() > 0.0);
+    }
+
+    #[test]
+    fn fps_counter_wraps_after_window() {
+        let mut c = FpsCounter::new();
+        for _ in 0..120 {
+            c.record(1000);
+        }
+        assert_eq!(c.average_ns(), 1000);
+    }
+}

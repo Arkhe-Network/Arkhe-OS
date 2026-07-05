@@ -103,3 +103,36 @@ impl QIPEngine {
         x
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn isqrt_matches_expected() {
+        assert_eq!(QIPEngine::isqrt(0), 0);
+        assert_eq!(QIPEngine::isqrt(1), 1);
+        assert_eq!(QIPEngine::isqrt(16), 4);
+        assert_eq!(QIPEngine::isqrt(15), 3);
+        assert_eq!(QIPEngine::isqrt(1_000_000), 1000);
+    }
+
+    #[test]
+    fn cosine_of_identical_is_maximal_and_of_zero_is_zero() {
+        let v = [7u8; 32];
+        let zero = [0u8; 32];
+        let same = QIPEngine::cosine_sim_fixed(&v, &v);
+        let with_zero = QIPEngine::cosine_sim_fixed(&v, &zero);
+        assert_eq!(with_zero, 0);
+        // Vetores idênticos: similaridade ~1.0 em fixed-point (<<16 => ~65536).
+        assert!(same > 60_000, "esperado alto, obtido {same}");
+    }
+
+    #[test]
+    fn store_gradient_respects_capacity_and_counts() {
+        let mut e = QIPEngine::new();
+        let h = e.process_block(b"payload", 42);
+        assert_ne!(h, [0u8; 32]);
+        assert_eq!(e.entry_count, 1);
+    }
+}
