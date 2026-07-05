@@ -128,7 +128,7 @@
     "node": "^20.19.0 || ^22.12.0 || >=23"
   },
   "dependencies": {
-    "@erc725/smart-contracts": "^6.0.0",
+    "@erc725/smart-contracts": "^8.0.1",
     "@openzeppelin/contracts": "^4.9.3",
     "@react-native-async-storage/async-storage": "^3.0.2",
     "@react-native-community/netinfo": "^12.0.1",
@@ -145,9 +145,9 @@
     "motion": "^12.38.0",
     "react-i18next": "^17.0.7",
     "react-katex": "^3.1.0",
-    "react-native": "^0.85.3",
+    "react-native": "^0.86.0",
     "recharts": "^3.8.1",
-    "three": "^0.184.0"
+    "three": "^0.185.1"
   },
   "directories": {
     "doc": "docs",
