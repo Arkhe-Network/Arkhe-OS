@@ -1,0 +1,18 @@
+# crates/arkhe-mobile-bridge/Cargo.toml
+[package]
+name = "arkhe-mobile-bridge"
+version.workspace = true
+edition.workspace = true
+description = "Mobile FFI bridge — exposes policy check + audit to Android/iOS via uniffi"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-identity = { path = "../arkhe-identity" }
+arkhe-configuration = { path = "../arkhe-configuration" }
+arkhe-audit-trail = { path = "../arkhe-audit-trail" }
+arkhe-policy-as-code = { path = "../arkhe-policy-as-code" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }

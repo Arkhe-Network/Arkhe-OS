@@ -1,0 +1,19 @@
+[package]
+name = "arkhe-governance-bridge"
+version.workspace = true
+edition.workspace = true
+description = "Cross-platform identity bridge — DID↔SID/UID mapping + unified policy evaluation"
+license.workspace = true
+
+[dependencies]
+arkhe-core = { workspace = true }
+arkhe-identity = { workspace = true }
+arkhe-governance = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

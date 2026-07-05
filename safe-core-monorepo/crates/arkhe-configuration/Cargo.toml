@@ -1,0 +1,16 @@
+# crates/arkhe-configuration/Cargo.toml
+[package]
+name = "arkhe-configuration"
+version.workspace = true
+edition.workspace = true
+description = "Hierarchical configuration with env vars, files, and feature flags"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+tempfile = { workspace = true }

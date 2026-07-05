@@ -1,0 +1,30 @@
+[package]
+name = "arkhe-vector-store"
+version.workspace = true
+edition.workspace = true
+description = "Vector store abstraction with policy enforcement"
+
+[dependencies]
+arkhe-core = { workspace = true }
+arkhe-policy-gateway = { workspace = true }
+arkhe-audit-trail = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+sqlx = { workspace = true, optional = true }
+qdrant = { workspace = true, optional = true }
+
+[features]
+default = ["sqlite"]
+sqlite = ["dep:sqlx", "sqlx/sqlite"]
+postgres = ["dep:sqlx", "sqlx/postgres"]
+qdrant = ["dep:qdrant"]
+memory = []
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+tempfile = { workspace = true }

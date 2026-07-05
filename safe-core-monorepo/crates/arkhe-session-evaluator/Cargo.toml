@@ -1,0 +1,19 @@
+[package]
+name = "arkhe-session-evaluator"
+version.workspace = true
+edition.workspace = true
+description = "Evaluates agent sessions for causal consistency and quality"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+regex = { workspace = true }
+strsim = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

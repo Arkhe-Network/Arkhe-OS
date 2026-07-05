@@ -1,0 +1,19 @@
+# crates/arkhe-secrets-management/Cargo.toml
+[package]
+name = "arkhe-secrets-management"
+version.workspace = true
+edition.workspace = true
+description = "Secrets management with in-memory store, file backend, and audit logging"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-audit-trail = { path = "../arkhe-audit-trail" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+tempfile = { workspace = true }

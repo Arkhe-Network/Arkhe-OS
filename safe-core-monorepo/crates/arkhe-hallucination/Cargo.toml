@@ -1,0 +1,10 @@
+[package]
+name = "arkhe-hallucination"
+version.workspace = true
+edition = "2021"
+description = "Hallucination detection — confidence estimation and semantic consistency"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+tracing = { workspace = true }

@@ -1,0 +1,17 @@
+[package]
+name = "arkhe-core"
+version.workspace = true
+edition.workspace = true
+description = "Foundation types, traits, and error handling for Arkhe OS"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+hex = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }

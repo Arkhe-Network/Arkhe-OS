@@ -1,0 +1,18 @@
+[package]
+name = "arkhe-tool-sandbox"
+version.workspace = true
+edition.workspace = true
+description = "WASM-based tool sandboxing — AISVS C9.3.1"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+wasmtime = { workspace = true, optional = true }
+
+[features]
+default = []
+wasm-sandbox = ["dep:wasmtime"]

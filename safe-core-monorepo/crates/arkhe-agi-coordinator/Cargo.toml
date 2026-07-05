@@ -1,0 +1,24 @@
+[package]
+name = "arkhe-agi-coordinator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "AGI Coordinator — orquestra SafetyEnforcer + InferenceEngine + EvolutionaryMemoryV2"
+repository.workspace = true
+
+[dependencies]
+arkhe-core = { workspace = true }
+arkhe-pea = { workspace = true }
+arkhe-inference = { workspace = true }
+arkhe-memory-v2 = { workspace = true }
+arkhe-session-evaluator = { workspace = true }
+arkhe-reflector-agent = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }

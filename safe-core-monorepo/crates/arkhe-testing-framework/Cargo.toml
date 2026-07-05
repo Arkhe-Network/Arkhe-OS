@@ -1,0 +1,16 @@
+# crates/arkhe-testing-framework/Cargo.toml
+[package]
+name = "arkhe-testing-framework"
+version.workspace = true
+edition.workspace = true
+description = "Shared test utilities, fixtures, and assertion helpers for Arkhe OS"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

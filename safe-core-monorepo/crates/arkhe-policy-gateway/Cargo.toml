@@ -1,0 +1,20 @@
+# crates/arkhe-policy-gateway/Cargo.toml
+[package]
+name = "arkhe-policy-gateway"
+version.workspace = true
+edition.workspace = true
+description = "Unified policy enforcement gateway with Rego + audit trail"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-pea = { path = "../arkhe-pea" }
+arkhe-policy-as-code = { path = "../arkhe-policy-as-code" }
+arkhe-policy-regorus = { path = "../arkhe-policy-regorus" }
+arkhe-wormgraph-core = { path = "../arkhe-wormgraph-core" }
+arkhe-audit-trail = { path = "../arkhe-audit-trail" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

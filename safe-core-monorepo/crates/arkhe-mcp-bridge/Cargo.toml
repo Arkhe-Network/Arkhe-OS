@@ -1,0 +1,13 @@
+// crates/arkhe-mcp-bridge/Cargo.toml
+[package]
+name = "arkhe-mcp-bridge"
+version.workspace = true
+edition.workspace = true
+description = "MCP protocol bridge"
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }

@@ -1,0 +1,15 @@
+[package]
+name = "arkhe-rate-limit"
+version.workspace = true
+edition.workspace = true
+description = "Token and request rate limiting for AI systems — AISVS C9.4"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+dashmap = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

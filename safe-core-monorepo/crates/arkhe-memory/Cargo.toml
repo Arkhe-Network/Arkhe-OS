@@ -1,0 +1,20 @@
+# crates/arkhe-memory/Cargo.toml
+[package]
+name = "arkhe-memory"
+version.workspace = true
+edition.workspace = true
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+dashmap = { workspace = true }
+sled = { workspace = true, optional = true }
+rmp-serde = { workspace = true, optional = true }
+
+[features]
+default = []
+persistent = ["sled", "rmp-serde"]

@@ -1,0 +1,35 @@
+[package]
+name = "arkhe-inference"
+version.workspace = true
+edition.workspace = true
+description = "Unified inference engine with multiple backends"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+futures = "0.3"
+
+# Backends opcionais
+mistralrs = { workspace = true, optional = true }
+candle-core = { workspace = true, optional = true }
+candle-nn = { workspace = true, optional = true }
+candle-transformers = { workspace = true, optional = true }
+llama-cpp-2 = { workspace = true, optional = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+
+[features]
+default = []
+mistralrs-backend = ["dep:mistralrs"]
+candle-backend = ["dep:candle-core", "dep:candle-nn", "dep:candle-transformers"]
+gguf-backend = ["dep:llama-cpp-2"]
+full = ["mistralrs-backend", "candle-backend", "gguf-backend"]

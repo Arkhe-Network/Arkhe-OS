@@ -1,0 +1,11 @@
+# crates/arkhe-identity/Cargo.toml
+[package]
+name = "arkhe-identity"
+version.workspace = true
+edition.workspace = true
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+hex = { workspace = true }

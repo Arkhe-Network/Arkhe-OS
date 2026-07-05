@@ -1,0 +1,22 @@
+[package]
+name = "arkhe-agi"
+version.workspace = true
+edition.workspace = true
+description = "AGI coordinator with safety, inference, memory, and reflection"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-inference = { path = "../arkhe-inference" }
+arkhe-session-evaluator = { path = "../arkhe-session-evaluator" }
+arkhe-reflector-agent = { path = "../arkhe-reflector-agent" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

@@ -1,0 +1,22 @@
+# crates/arkhe-deploy/Cargo.toml
+[package]
+name = "arkhe-deploy"
+version.workspace = true
+edition.workspace = true
+description = "Declarative deployment and rollback for Arkhe OS — NixOS-inspired"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-configuration = { path = "../arkhe-configuration" }
+arkhe-audit-trail = { path = "../arkhe-audit-trail" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+blake3 = { workspace = true }
+uuid = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+tempfile = { workspace = true }

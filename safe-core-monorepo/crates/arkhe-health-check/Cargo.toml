@@ -1,0 +1,16 @@
+# crates/arkhe-health-check/Cargo.toml
+[package]
+name = "arkhe-health-check"
+version.workspace = true
+edition.workspace = true
+description = "Health check framework with dependency status and readiness probes"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

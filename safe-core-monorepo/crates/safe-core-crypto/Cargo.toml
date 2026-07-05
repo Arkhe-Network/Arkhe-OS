@@ -1,0 +1,16 @@
+[package]
+name = "safe-core-crypto"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+blake3 = "1.5"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+async-trait = "0.1"
+tokio = { version = "1.0", features = ["macros", "rt"] }
+hex = "0.4"
+
+[dev-dependencies]
+kani = "0.55.0" # Versão estável atual do Kani
+tokio = { version = "1.0", features = ["macros", "rt", "rt-multi-thread"] }

@@ -1,0 +1,11 @@
+[package]
+name = "arkhe-prompt-detector"
+version.workspace = true
+edition.workspace = true
+description = "Prompt injection detection — AISVS C2.1.3, C2.1.8"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+regex = { workspace = true }
+tracing = { workspace = true }

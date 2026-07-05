@@ -1,0 +1,18 @@
+[package]
+name = "arkhe-reflector-agent"
+version.workspace = true
+edition.workspace = true
+description = "Reflects on sessions and extracts learning patterns"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-inference = { path = "../arkhe-inference" }
+arkhe-session-evaluator = { path = "../arkhe-session-evaluator" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }

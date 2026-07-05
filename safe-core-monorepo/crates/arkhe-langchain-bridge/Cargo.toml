@@ -1,0 +1,28 @@
+# crates/arkhe-langchain-bridge/Cargo.toml
+[package]
+name = "arkhe-langchain-bridge"
+version.workspace = true
+edition.workspace = true
+description = "Bridge between Arkhe policy gateway and LangChain Rust models"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-policy-gateway = { path = "../arkhe-policy-gateway" }
+arkhe-configuration = { path = "../arkhe-configuration" }
+arkhe-llm-router = { path = "../arkhe-llm-router" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+
+# LangChain crates (opcionais — o bridge funciona sem elas)
+langchain-rust = { version = "0.1", optional = true }
+
+[features]
+default = []
+langchain = ["langchain-rust"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

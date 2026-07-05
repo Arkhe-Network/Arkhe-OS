@@ -1,0 +1,12 @@
+[package]
+name = "arkhe-bom"
+version.workspace = true
+edition = "2021"
+description = "AI Bill of Materials — CycloneDX ML-BOM generation"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }

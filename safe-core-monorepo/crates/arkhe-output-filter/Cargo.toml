@@ -1,0 +1,13 @@
+[package]
+name = "arkhe-output-filter"
+version.workspace = true
+edition.workspace = true
+description = "Output filtering — schema validation, harmful content, injection blocking"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+tracing = { workspace = true }

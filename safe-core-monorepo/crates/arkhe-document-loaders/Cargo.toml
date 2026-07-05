@@ -1,0 +1,25 @@
+[package]
+name = "arkhe-document-loaders"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+arkhe-core = { workspace = true }
+arkhe-policy-gateway = { workspace = true }
+arkhe-policy-regorus = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+regex = { workspace = true }
+pdf-extract = { workspace = true, optional = true }
+html2md = { workspace = true, optional = true }
+csv = { version = "1.2", optional = true }
+walkdir = { workspace = true, optional = true }
+
+[features]
+default = ["pdf", "html", "csv", "dir"]
+pdf = ["pdf-extract"]
+html = ["html2md"]
+csv = ["csv"]
+dir = ["walkdir"]

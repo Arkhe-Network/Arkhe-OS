@@ -1,0 +1,14 @@
+# crates/arkhe-pea/Cargo.toml
+[package]
+name = "arkhe-pea"
+version.workspace = true
+edition.workspace = true
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-identity = { path = "../arkhe-identity" }
+arkhe-governance = { path = "../arkhe-governance" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }

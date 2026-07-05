@@ -1,0 +1,35 @@
+[package]
+name = "arkhe-unified-fs"
+version.workspace = true
+edition.workspace = true
+description = "Unified filesystem — single namespace across Windows (NTFS) and Linux (ext4)"
+license.workspace = true
+
+[dependencies]
+arkhe-core = { workspace = true }
+arkhe-identity = { workspace = true }
+arkhe-governance = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# FUSE (Linux/macOS)
+fuse3 = { version = "0.7", optional = true }
+
+# WinFsp (Windows) — placeholder para futuro
+# winfsp-sys = { version = "0.1", optional = true }
+
+[features]
+default = []
+fuse = ["dep:fuse3"]
+# winfsp = ["dep:winfsp-sys"]
+all-backends = ["fuse"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+tempfile = { workspace = true }
