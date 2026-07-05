@@ -1,0 +1,26 @@
+# ARKHE OS v∞.Ω — Dependências
+# Arquiteto: Rafael Oliveira (ORCID: 0009-0005-2697-4668)
+
+# Core (stdlib only — zero external dependencies for constitutional layer)
+# hashlib, json, time, math, random, dataclasses, typing, enum, argparse
+
+# Optional enhancements
+numpy>=1.24.0          # Simulações numéricas avançadas
+matplotlib>=3.7.0      # Visualização de dados
+scipy>=1.10.0          # Análise estatística
+
+# Networking (for mesh simulation)
+# asyncio, socket — stdlib
+
+# Cryptography (already in stdlib: hashlib)
+# pycryptodome>=3.18.0  # Opcional: criptografia avançada
+
+# AGI / ML (optional layers)
+# tensorflow>=2.13.0     # TensorFlow Lite para edge AI
+# torch>=2.0.0           # PyTorch para SNN federado
+
+# Database (for TemporalChain persistence)
+# sqlite3 — stdlib
+pytest
+aiohttp
+# torch: opcional (testes usam importorskip)

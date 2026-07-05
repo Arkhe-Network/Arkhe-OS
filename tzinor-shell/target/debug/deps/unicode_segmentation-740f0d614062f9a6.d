@@ -1,9 +1,0 @@
-C:\Users\Lemes\Downloads\sasc-v34.8-ω-__-real-implementation-engine\tzinor-shell\target\debug\deps\unicode_segmentation-740f0d614062f9a6.d: C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\lib.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\grapheme.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\sentence.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\word.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\tables.rs
-
-C:\Users\Lemes\Downloads\sasc-v34.8-ω-__-real-implementation-engine\tzinor-shell\target\debug\deps\libunicode_segmentation-740f0d614062f9a6.rmeta: C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\lib.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\grapheme.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\sentence.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\word.rs C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\tables.rs
-
-C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\lib.rs:
-C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\grapheme.rs:
-C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\sentence.rs:
-C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\word.rs:
-C:\Users\Lemes\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-segmentation-1.12.0\src\tables.rs:

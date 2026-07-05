@@ -1,0 +1,12 @@
+[package]
+name = "arkhe-python-bindings"
+version.workspace = true
+edition.workspace = true
+description = "ARKHE Python bindings (PyO3)"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true

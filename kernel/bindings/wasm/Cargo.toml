@@ -1,0 +1,12 @@
+[package]
+name = "arkhe-wasm-bindings"
+version.workspace = true
+edition.workspace = true
+description = "ARKHE Wasm bindings"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true

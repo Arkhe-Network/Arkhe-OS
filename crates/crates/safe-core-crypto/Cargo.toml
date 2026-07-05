@@ -1,0 +1,17 @@
+[package]
+name = "safe-core-crypto"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+blake3 = "1.5"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+async-trait = "0.1"
+tokio = { version = "1", features = ["macros", "rt"] }
+hex = "0.4"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt", "rt-multi-thread"] }
+# Kani is installed via `cargo install kani-verifier`, NOT as a Cargo dependency.

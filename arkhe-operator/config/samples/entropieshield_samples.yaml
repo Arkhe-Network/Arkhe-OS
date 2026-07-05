@@ -1,9 +1,0 @@
-apiVersion: arkhe.io/v1alpha1
-kind: EntropyShield
-metadata:
-  name: shield-default
-  namespace: arkhe
-spec:
-  maxEntropynW: 1e-9
-  criticalTempMilliKelvin: 10.0
-  breachAction: Isolate

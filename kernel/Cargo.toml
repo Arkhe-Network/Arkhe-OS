@@ -1,0 +1,14 @@
+[package]
+name = "arkhe-kernel"
+version.workspace = true
+edition.workspace = true
+description = "ARKHE Ω-TEMP Kernel — TemporalHashChain, shard management, inference loop"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+rand.workspace = true
+
+[features]
+default = []

@@ -1,0 +1,49 @@
+# Logs
+logs
+*.log
+.hashtree/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Secrets
+*.key
+*.pem
+*.p12
+*.pfx
+.env
+.env.*
+.env.local
+credentials.json
+secrets.json
+*.secret
+id_rsa*
+*.log
+
+# --- limpeza 2026-07-04 ---
+archive/root-cleanup-2026-07-04/
+__pycache__/
+*.pyc
+.pytest_cache/
+target/
+*.gguf
+tests/*/bin/
+tests/*/obj/

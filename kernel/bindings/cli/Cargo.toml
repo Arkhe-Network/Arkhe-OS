@@ -1,0 +1,9 @@
+[package]
+name = "arkhe-cli"
+version.workspace = true
+edition.workspace = true
+description = "ARKHE Rust CLI helpers"
+
+[dependencies]
+serde.workspace = true
+clap = { version = "4", features = ["derive"] }

@@ -1,0 +1,31 @@
+[project]
+name = "cathedral-arkhe"
+version = "5.1.0"
+description = "Cathedral ARKHE — ZK-Agentic Orchestrator with Garak Red-Teaming"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+zkml = ["ezkl", "onnx", "onnxruntime"]
+lora = ["torch>=2.0", "transformers>=4.30", "peft>=0.5", "trl>=0.7", "datasets>=2.10"]
+garak = ["garak>=0.5"]
+full = [
+    "torch>=2.0", "transformers>=4.30", "peft>=0.5",
+    "ezkl", "garak>=0.5",
+]
+
+[project.urls]
+Source = "https://github.com/arkhe/cathedral-arkhe"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["quarantine"]
+python_files = ["test_*.py"]
+filterwarnings = ["ignore"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

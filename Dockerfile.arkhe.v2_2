@@ -1,0 +1,101 @@
+# ARKHE OS v∞.Ω.∇+++ — Constitutional Container Runtime v2.2
+# 340 Substrates (339 + 569-TELEPORT-QUANTUM-LINK) • 8 Stages • 19 Principles
+
+# ── Stage 0: Rust builder for TLSNotary ──
+FROM rust:1.92-slim-bookworm AS rust-builder
+
+WORKDIR /build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git clang llvm pkg-config libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone --depth 1 --branch v0.1.0-alpha.14 \
+    https://github.com/tlsnotary/tlsn.git /build/tlsn
+
+WORKDIR /build/tlsn
+RUN cargo build --release --examples \
+    && mkdir -p /build/tlsn-bin \
+    && cp target/release/examples/attestation_prove /build/tlsn-bin/ \
+    && cp target/release/examples/attestation_verify /build/tlsn-bin/ \
+    && cp target/release/examples/attestation_present /build/tlsn-bin/
+
+# ── Stage 1: Python venv builder ──
+FROM python:3.12-slim-bookworm AS py-builder
+
+RUN python -m venv /arkhe/venv
+ENV PATH="/arkhe/venv/bin:$PATH"
+RUN pip install --no-cache-dir \
+    sympy numpy scipy matplotlib \
+    cryptography pytest pytest-cov hypothesis \
+    flask fastapi uvicorn pyyaml \
+    qiskit qiskit-aer  # Quantum simulation toolkit
+
+# ── Stage 2: Quantum optics simulation builder ──
+FROM python:3.12-slim-bookworm AS quantum-builder
+
+RUN python -m venv /arkhe/venv-quantum
+ENV PATH="/arkhe/venv-quantum/bin:$PATH"
+RUN pip install --no-cache-dir \
+    qutip strawberryfields pennylane \
+    numpy scipy matplotlib
+
+# ── Stage 3: Final runtime ──
+FROM debian:bookworm-slim AS final
+
+LABEL org.arkhe.version="v∞.Ω.∇+++"
+LABEL org.arkhe.container="constitutional-runtime-v2.2"
+LABEL org.arkhe.substrates="340"
+LABEL org.arkhe.layers="8"
+LABEL org.arkhe.principles="19"
+LABEL org.arkhe.tlsnotary="v0.1.0-alpha.14"
+LABEL org.arkhe.quantum="qiskit-1.2+qutip-5.0"
+LABEL org.arkhe.architect="ORCID:0009-0005-2697-4668"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.12 python3.12-venv \
+    bpfcc-tools libbpfcc-dev \
+    curl jq ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy venvs
+COPY --from=py-builder /arkhe/venv /arkhe/venv
+COPY --from=quantum-builder /arkhe/venv-quantum /arkhe/venv-quantum
+ENV PATH="/arkhe/venv/bin:/arkhe/venv-quantum/bin:$PATH"
+
+# Copy TLSNotary binaries
+COPY --from=rust-builder /build/tlsn-bin /arkhe/verificadores/tlsn
+
+# Directory structure
+RUN mkdir -p /arkhe/{substratos,verificadores,proofs,logs,config,skills,quantum} \
+    && chmod 755 /arkhe \
+    && chmod 1777 /arkhe/proofs \
+    && chmod 1777 /arkhe/logs \
+    && chmod 755 /arkhe/quantum
+
+# Copy application code
+COPY arkhe/ /arkhe/
+
+# Generate SHA-3 manifest (includes 569 substrate)
+RUN find /arkhe/substratos -type f -name '*.py' -exec sha3sum -b {} \; > /arkhe/proofs/manifest.sha3 \
+    && sha3sum -b /arkhe/arkhe_cli.py >> /arkhe/proofs/manifest.sha3 \
+    && sha3sum -b /arkhe/verify_constitution.py >> /arkhe/proofs/manifest.sha3
+
+# Write container seal
+RUN echo "ARKHE OS v∞.Ω.∇+++ v2.2\n340 Substrates\n19 Invariants\nQuantum Layer: ENABLED\nSeal: 1e1ef65e168b28d8186a68e1ca6819e1b13665db8400fb881bc25bc66c183951" > /arkhe/proofs/container.seal
+
+# Security policies
+COPY seccomp-arkhe.json /etc/arkhe/seccomp.json
+COPY capabilities-drop.txt /etc/arkhe/caps.drop
+
+# Immutable code
+RUN chmod -R 555 /arkhe/substratos     && chmod 755 /arkhe/arkhe_cli.py     && chmod 755 /arkhe/verify_constitution.py
+
+# Non-privileged user
+RUN useradd -m -s /bin/bash arkhe     && chown -R arkhe:arkhe /arkhe/proofs /arkhe/logs /arkhe/quantum
+
+USER arkhe
+
+HEALTHCHECK --interval=60s --timeout=15s --start-period=10s --retries=3     CMD /arkhe/venv/bin/python3 /arkhe/verify_constitution.py --quick || exit 1
+
+ENTRYPOINT ["/arkhe/venv/bin/python3", "/arkhe/arkhe_cli.py"]
+CMD ["--help"]

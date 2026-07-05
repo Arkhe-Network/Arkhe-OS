@@ -1,0 +1,62 @@
+[workspace]
+resolver = "2"
+members = [
+    "kernel",
+    "kernel/cmd/arkhe",
+    "kernel/bindings/cli",
+    "kernel/bindings/python",
+    "kernel/bindings/wasm", "projects/arkhe-sagemaker-proxy",
+]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2024"
+authors = ["Arquiteto ORCID 0009-0005-2697-4668"]
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+rand = "0.8"
+
+[package]
+name = "arkhe-safe-core-sdk"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/arkhe-os/safe-core-sdk"
+
+# lib disabled — project is at projects/arkhe-safe-core-sdk/
+[lib]
+path = "dummy.rs"
+
+[dependencies]
+tokio = { version = "1.40", features = ["full"] }
+sha3 = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+async-trait = "0.1"
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+chrono = { version = "0.4", features = ["serde"] }
+num-traits = "0.2"
+hex = "0.4"
+
+# Optional: no_std for embedded
+[features]
+default = ["std"]
+std = ["tokio/rt-multi-thread", "reqwest/default-tls"]
+embedded = []
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockall = "0.13"
+criterion = "0.5"
+
+[[bench]]
+name = "phi_c_compute"
+harness = false

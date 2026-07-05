@@ -1,0 +1,12 @@
+[package]
+name = "arkhe-cmd"
+version.workspace = true
+edition.workspace = true
+description = "ARKHE Go CLI shim — Rust binary entrypoint"
+
+[[bin]]
+name = "arkhe"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }

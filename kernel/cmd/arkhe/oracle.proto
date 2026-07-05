@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package arkhe.api;
+option go_package = "github.com/arkhe-os/arkhe/cmd/arkhe/api";
+
+import "google/protobuf/empty.proto";
+
+// ─── Shard Service ────────────────────────────────────────────────────────────
+
+service ShardService {
+  rpc CreateShard(CreateShardRequest) returns (Shard);
+  rpc ListShards(ListShardsRequest) returns (ListShardsResponse);
+  rpc DestroyShard(DestroyShardRequest) returns (google.protobuf.Empty);
+  rpc GetShardStatus(GetShardStatusRequest) returns (ShardStatus);
+}
+
+message CreateShardRequest {
+  string substrate_id = 1;
+  string motor = 2;                    // "continental-mind", "qart-engine", ...
+  bool   gpu = 3;
+  map<string,string> labels = 4;
+}
+
+message Shard {
+  string shard_id    = 1;
+  string substrate_id = 2;
+  string motor       = 3;
+  string status      = 4;              // "provisioning", "running", "dead"
+  string endpoint    = 5;              // gRPC endpoint to the shard itself
+  map<string,string> labels = 6;
+}
+
+message ListShardsRequest {}
+message ListShardsResponse {
+  repeated Shard shards = 1;
+}
+
+message DestroyShardRequest {
+  string shard_id = 1;
+}
+
+message GetShardStatusRequest {
+  string shard_id = 1;
+}
+
+message ShardStatus {
+  string shard_id      = 1;
+  string status        = 2;
+  int64  uptime_seconds = 3;
+  double coherence     = 4;
+}
+
+// ─── Portal / Royalty Service ─────────────────────────────────────────────────
+
+service PortalService {
+  rpc QueryRoyalties(QueryRoyaltiesRequest) returns (QueryRoyaltiesResponse);
+  rpc GetPortalStatus(GetPortalStatusRequest) returns (PortalStatus);
+}
+
+message QueryRoyaltiesRequest {
+  int32 limit = 1;
+}
+
+message RoyaltyEventProto {
+  string target_block_id = 1;
+  string source_orcid    = 2;
+  double amount          = 3;
+  string pix_key         = 4;
+  string status          = 5;
+  uint64 timestamp       = 6;
+}
+
+message QueryRoyaltiesResponse {
+  repeated RoyaltyEventProto royalties = 1;
+}
+
+message GetPortalStatusRequest {}
+message PortalStatus {
+  string   status            = 1;
+  int64    total_royalties   = 2;
+  double   total_amount_brl  = 3;
+  string   bridge_status     = 4;
+  double   coherence         = 5;
+}

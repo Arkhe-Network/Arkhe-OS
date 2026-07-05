@@ -1,0 +1,206 @@
+version: "3.8"
+services:
+  # ── Core Runtime ──────────────────────────────────────────────────────
+  runtime-939:
+    image: arkhe/runtime:latest
+    container_name: arkhe-runtime-939
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.runtime
+    ports:
+      - "9390:9390"  # gRPC
+      - "9391:9391"  # REST API
+    volumes:
+      - arkhe_data:/data
+      - ./config:/config:ro
+    environment:
+      - ARKHE_RUNTIME_PORT=9390
+      - ARKHE_LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9391/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ── FluxMem (Memory Graph) ────────────────────────────────────────────
+  fluxmem-933:
+    image: arkhe/fluxmem:latest
+    container_name: arkhe-fluxmem-933
+    build:
+      context: substrates/933-fluxmem
+      dockerfile: Dockerfile
+    ports:
+      - "9330:9330"  # gRPC
+    volumes:
+      - arkhe_data:/data
+    environment:
+      - FLUXMEM_GRPC_PORT=9330
+      - FLUXMEM_PERSIST_PATH=/data/fluxmem
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── TemporalChain (Immutable Ledger) ───────────────────────────────────
+  temporalchain-923:
+    image: arkhe/temporalchain:latest
+    container_name: arkhe-temporalchain-923
+    build:
+      context: substrates/923-temporalchain
+      dockerfile: Dockerfile
+    ports:
+      - "9230:9230"
+    volumes:
+      - arkhe_chain:/data/chain
+    environment:
+      - CHAIN_PORT=9230
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── Cognitive Effort Controller ───────────────────────────────────────
+  cognitive-effort-941:
+    image: arkhe/cognitive-effort:latest
+    container_name: arkhe-effort-941
+    build:
+      context: substrates/941-cognitive-effort
+      dockerfile: Dockerfile
+    ports:
+      - "9410:9410"
+    environment:
+      - EFFORT_PORT=9410
+      - KOLMOGOROV_URL=grpc://runtime-939:9390
+      - FLUXMEM_URL=grpc://fluxmem-933:9330
+    depends_on:
+      - runtime-939
+      - fluxmem-933
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── Visual Ontology Layer ─────────────────────────────────────────────
+  visual-ontology-943:
+    image: arkhe/visual-ontology:latest
+    container_name: arkhe-ontology-943
+    build:
+      context: substrates/943-visual-ontology-layer
+      dockerfile: Dockerfile
+    ports:
+      - "9430:9430"
+    volumes:
+      - ./substrates/943-visual-ontology-layer/schema_943.jsonld:/app/schema.jsonld:ro
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── Glasswing Sentinel (Security Scanner) ──────────────────────────────
+  glasswing-944:
+    image: arkhe/glasswing:latest
+    container_name: arkhe-sentinel-944
+    build:
+      context: substrates/944-glasswing-sentinel
+      dockerfile: Dockerfile
+    ports:
+      - "9440:9440"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # For repo scanning
+    environment:
+      - SENTINEL_PORT=9440
+      - TEMPORALCHAIN_URL=http://temporalchain-923:9230
+    depends_on:
+      - temporalchain-923
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── Code Agent (CI/CD Integration) ────────────────────────────────────
+  code-agent-942:
+    image: arkhe/code-agent:latest
+    container_name: arkhe-code-942
+    build:
+      context: substrates/942-catedral-code-agent
+      dockerfile: Dockerfile
+    ports:
+      - "9420:9420"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - CODE_AGENT_PORT=9420
+      - RUNTIME_URL=http://runtime-939:9390
+    depends_on:
+      - runtime-939
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── MythOS (Poetic Fusion Layer) ──────────────────────────────────────
+  mythos-938:
+    image: arkhe/mythos:latest
+    container_name: arkhe-mythos-938
+    build:
+      context: substrates/938-arkhe-mythos-merge
+      dockerfile: Dockerfile
+    ports:
+      - "9380:9380"
+    environment:
+      - MYTHOS_PORT=9380
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+  # ── DoubleZero Services ───────────────────────────────────────────────
+  dz-bridge-267:
+    image: arkhe/dz-bridge:latest
+    container_name: arkhe-dz-bridge-267
+    build:
+      context: substrates/267-dz-bridge
+      dockerfile: Dockerfile
+    ports:
+      - "2670:2670"
+    networks:
+      - arkhe-net
+
+  dz-routing-269:
+    image: arkhe/dz-routing:latest
+    container_name: arkhe-dz-routing-269
+    build:
+      context: substrates/269-dz-routing
+      dockerfile: Dockerfile
+    ports:
+      - "2690:2690"
+    networks:
+      - arkhe-net
+
+  # ── ARKHE-WATCH (Web Dashboard) ────────────────────────────────────────
+  arkhe-watch-935:
+    image: arkhe/watch:latest
+    container_name: arkhe-watch-935
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.watch
+    ports:
+      - "9350:9350"  # SSE dashboard
+    volumes:
+      - ./status_cathedral.ps1:/app/status.ps1:ro
+    depends_on:
+      - runtime-939
+      - fluxmem-933
+      - temporalchain-923
+    restart: unless-stopped
+    networks:
+      - arkhe-net
+
+networks:
+  arkhe-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+volumes:
+  arkhe_data:
+    driver: local
+  arkhe_chain:
+    driver: local
