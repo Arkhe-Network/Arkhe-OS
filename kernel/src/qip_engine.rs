@@ -2,11 +2,11 @@
 // ARKHE QIP Engine — Kernel Module
 // ============================================================================
 
-#![no_std]
 
 use sha3::{Sha3_256, Digest};
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct GradientEntry {
     pub shard_id: u32,
     pub layer_idx: u32,

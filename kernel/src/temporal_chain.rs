@@ -2,9 +2,9 @@
 // ARKHE TemporalHashChain — Kernel Implementation
 // ============================================================================
 
-#![no_std]
 
 use core::sync::atomic::{AtomicU64, Ordering};
+use alloc::vec::Vec;
 use sha3::{Digest, Sha3_256};
 
 const VERIFY_CACHE_SIZE: usize = 10_000;
@@ -22,7 +22,7 @@ pub struct TemporalBlock {
 }
 
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug)]
 pub struct ChainHeader {
     pub version: u32,
     pub block_count: AtomicU64,

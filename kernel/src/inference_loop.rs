@@ -2,9 +2,9 @@
 // ARKHE Inference Loop — Kernel Module
 // ============================================================================
 
-#![no_std]
 
 use core::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+use alloc::vec::Vec;
 
 pub type BlockCallback = fn(block_data: &[u8], block_number: u64);
 

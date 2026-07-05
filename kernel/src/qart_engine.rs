@@ -2,11 +2,10 @@
 // ARKHE Q-Art Engine — Kernel Module
 // ============================================================================
 
-#![no_std]
 
-use sha3::{Sha3_256, Digest};
 
 #[repr(u8)]
+#[derive(Clone, Copy)]
 pub enum ArtBlockType {
     Visual = 0,
     Musical = 1,
@@ -15,6 +14,7 @@ pub enum ArtBlockType {
 }
 
 #[repr(C, packed)]
+#[derive(Clone, Copy)]
 pub struct ArtBlockHeader {
     pub magic: [u8; 4],
     pub version: u16,

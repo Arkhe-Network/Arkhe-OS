@@ -2,7 +2,6 @@
 // ARKHE Model Loader — Kernel Module
 // ============================================================================
 
-#![no_std]
 
 use core::sync::atomic::{AtomicU64, AtomicU8, Ordering};
 
@@ -138,7 +137,7 @@ impl ModelLoader {
         true
     }
 
-    fn spawn_stream_loader(&mut self, stream_id: u8) {
+    fn spawn_stream_loader(&mut self, _stream_id: u8) {
         let layers_per_stream = self.state.total_layers / (self.config.parallel_streams as u64);
         let time_per_layer = self.config.timeout_per_layer_ns;
         let total_time = layers_per_stream * time_per_layer;
