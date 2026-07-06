@@ -9,3 +9,9 @@ serde = { workspace = true }
 thiserror = { workspace = true }
 blake3 = { workspace = true }
 hex = { workspace = true }
+ed25519-dalek = { workspace = true }
+zeroize = { workspace = true, features = ["derive"] }
+subtle = { workspace = true }
+bs58 = { workspace = true }
+postcard = { workspace = true }
+serde-big-array = { workspace = true }

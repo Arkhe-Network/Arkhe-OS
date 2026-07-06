@@ -66,6 +66,10 @@ wasmtime = { version = "28.0" }
 # ✅ F1: ed25519-dalek v2.2.0 — API v2.x (SigningKey, não Keypair)
 ed25519-dalek = { version = "2.2" }
 zeroize = { version = "1.8" }
+# ✅ GDID: comparação constant-time + Base58Check
+subtle = "2.6"
+bs58 = "0.5"
+serde-big-array = "0.5"
 
 
 [profile.release]
