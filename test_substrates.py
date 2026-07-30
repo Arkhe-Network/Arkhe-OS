@@ -3296,6 +3296,10 @@ def test_1101_cathedral_qubes_integration():
     assert data["SubstrateID"] == "1101_cathedral_qubes"
     assert "cathedral_qubes_integration_1101.md" in data["Files"]
     assert "substrate.toml" in data["Files"]
+    assert "provision_qubes.sh" in data["Files"]
+    assert "cathedral.LLMInference" in data["Files"]
+    assert "30-cathedral.policy" in data["Files"]
+    assert "agi_core_orchestrator.py" in data["Files"]
 
 def test_1103_btfs_depin_storage():
     import importlib.util
