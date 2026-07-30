@@ -27,7 +27,10 @@ members = [
     "crates/safe-core-verifier",
     "crates/safe-core-audit",
     "crates/safe-core-governance",
-    "crates/safe-core-bridge"
+    "crates/safe-core-bridge",
+    "cathedral-arkhe/floquet_ptc",
+    "cathedral-arkhe/safety-core",
+    "cathedral-arkhe/unified_uep"
 ]
 
 [workspace.package]
