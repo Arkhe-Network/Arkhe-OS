@@ -1,0 +1,13 @@
+[substrate]
+id = "2140.8"
+name = "CreekGuard"
+version = "1.0.0"
+description = "Pub/Sub Covert Channel Detection - Kernel ARKHE"
+author = "ORCID 0009-0005-2697-4668"
+seal = "CATHEDRAL-2140.8-CREEKGUARD-v1.0.0-2026-06-13"
+
+[dependencies]
+rust = ">=1.70"
+
+[execution]
+entrypoint = "creekguard_2140_8.rs"

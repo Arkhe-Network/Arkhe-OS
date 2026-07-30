@@ -1,0 +1,25 @@
+[package]
+name = "arkhe-federation"
+version = "1200.1.0"
+edition = "2021"
+authors = ["Arquiteto ORCID 0009-0005-2697-4668"]
+license = "MIT"
+description = "Substrato 1200: Federação Soberana de Inferência (FSI)"
+
+[features]
+default = ["stub"]
+stub = []
+production = ["real-pqc", "real-tee", "real-zk"]
+real-pqc = []
+real-tee = []
+real-zk = []
+
+[dependencies]
+thiserror = "1.0"
+log = "0.4"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[dev-dependencies]
+tokio-test = "0.4"

@@ -1,0 +1,26 @@
+[package]
+name = "src-tauri"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[package.metadata.bundle]
+name = "Cathedral OS"
+identifier = "com.cathedral.os"
+icon = ["icons/icon.icns", "icons/icon.ico"]
+copyright = "Copyright © 2026 Cathedral OS Team"
+category = "DeveloperTool"
+short_description = "Sistema Operacional da Engenharia"
+long_description = "Plataforma unificada para engenharia de software e hardware"
+
+[package.metadata.bundle.linux]
+deb = { depends = "libwebkit2gtk-4.0-37, libgtk-3-0, libxdo-dev" }
+rpm = { requires = "webkit2gtk4.0, gtk3, libxdo" }
+
+[package.metadata.bundle.macos]
+minimum_system_version = "10.13"
+frameworks = ["WebKit.framework"]
+
+[package.metadata.bundle.windows]
+wix = true

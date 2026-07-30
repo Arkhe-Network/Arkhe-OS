@@ -1,0 +1,11 @@
+[substrate]
+id = "00"
+name = "Kernel Cognitivo"
+version = "1.0.0"
+type = "documentation"
+author = "Arkhe OS"
+
+[canonization]
+payload_file = "cognitive_kernel_00.md"
+seal_date = "2026-06-13"
+static_seal = "ASI-COGNITIVE-KERNEL-v1.0-2026-06-13"

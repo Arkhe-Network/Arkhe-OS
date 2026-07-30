@@ -641,10 +641,3 @@ pub fn pre_install_check(package: &PackageManifest) -> Result<(), InstallBlocked
     }
     Ok(())
 }
-
-
-    let entropy = shannon_entropy(&package.payload);
-    let temporal_anomaly = check_publication_burst(&package.name, 6); // 6 min window
-    let obfuscation_score = detect_obfuscation(&package.files);
-
-}

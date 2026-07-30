@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+const fs = require('node:fs');
+const path = require('node:path');
 
 const BUILD_DIR = path.join(process.cwd(), 'build');
 

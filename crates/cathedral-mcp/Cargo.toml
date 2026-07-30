@@ -1,0 +1,50 @@
+[package]
+name = "cathedral-mcp"
+version = "0.4.0"
+edition = "2021"
+authors = ["Cathedral ARKHE Architects <arkhe@cathedral.dev>"]
+description = "MCP Bridge for Cathedral ARKHE"
+license = "MIT OR Apache-2.0"
+rust-version = "1.93.0"
+
+[dependencies]
+cathedral-core = { path = "../cathedral-core", version = "0.1.0" }
+cathedral-mem = { path = "../cathedral-mem", version = "0.4.0" }
+
+tokio = { version = "1.38", features = ["full"] }
+tokio-stream = "0.1"
+async-trait = "0.1"
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "stream"] }
+url = "2.5"
+
+thiserror = "2.0"
+anyhow = "1.0"
+
+tracing = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+lru = "0.12"
+jsonwebtoken = "9.3"
+oauth2 = { version = "4.4", features = ["reqwest"] }
+base64 = "0.22"
+uuid = { version = "1.10", features = ["v4", "serde"] }
+
+axum = "0.8"
+once_cell = "1.19"
+
+[dev-dependencies]
+tokio-test = "0.4"
+wiremock = "0.6"
+mockall = "0.13"
+
+[features]
+default = ["oauth"]
+oauth = []
+pat-only = []
+
+[[bin]]
+name = "cathedral-mcp-server"
+path = "src/main.rs"

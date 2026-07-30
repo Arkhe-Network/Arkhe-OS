@@ -1,0 +1,26 @@
+FROM rust:1.78-slim-bookworm AS builder
+
+WORKDIR /app
+COPY cathedral-agent .
+
+RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/lib/apt/lists/*
+RUN cargo build --release
+
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y ca-certificates curl python3 python3-pip netcat-traditional python3-venv && rm -rf /var/lib/apt/lists/*
+
+# Instalar dependências Python para bridge (se necessário)
+COPY cathedral_agent_bridge.py /opt/cathedral/
+RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir httpx pydantic maturin
+
+WORKDIR /app
+COPY --from=builder /app/target/release/cathedral-agent-runtime /usr/local/bin/
+
+# Copy python bridge and orchestrator
+COPY cathedral_agent_bridge.py /app/
+COPY multi_agent_orchestrator.py /app/
+
+ENV PATH="/opt/venv/bin:$PATH"
+EXPOSE 8001
+CMD ["cathedral-agent-runtime"]

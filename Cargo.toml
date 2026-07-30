@@ -1,189 +1,87 @@
-# ============================================================================
-# ARKHE Ω‑TEMP v6.1.0 — Unified Workspace Root Cargo.toml
-# ============================================================================
-#
-# This workspace orchestrates the entire multiverse:
-# from the bootloader to the multiversal agency, including quantum cells,
-# orbital mesh, compliance engines, and the Daybreak security layer.
-#
-# Build: cargo build --workspace --release
-# Test:  cargo test  --workspace --features full,simulation
-#
-# System dependencies (Debian/Ubuntu):
-#   sudo apt-get install build-essential cmake libclang-dev libssl-dev pkg-config
-# ============================================================================
-
 [workspace]
 resolver = "2"
 members = [
-    "arkhe_token",
-    # --- Low‑level foundations ---
-    "bootloader",                           # Bare‑metal firmware & handoff
-    "kernel",                               # Arkhe kernel (temporal, model loader, etc.)
-
-    # --- Core neural and biological substrates ---
-    "substrate-6064",                       # Continental Mind (250T)
-    # "substrate-6064.1",                     # Carbon Twin: Quantum‑Biological Bridge
-    "substrate-6065",                       # Neural Cartography (proofreading)
-    "substrate-6066",                       # Retrocausal UNIX Channel
-
-    # --- Intellectual property & art ---
-    "substrate-6070",                       # The Entropy Oracle
-    "substrate-6071",                       # Quantum IP (QIP)
-    "arkhe-qart/substrate-6072",                       # Q‑Art (artistic influence & royalties)
-    "substrate-6073",                       # Financial Message Validator (SWIFT/Pix)
-
-    # --- Cryptography & compliance ---
-    "substrate-6080",
-    "substrate-6085",                       # zkLib (Plonky2, Poseidon, Merkle)
-    "substrate-6090",                       # Full Compliance (HIPAA, GDPR, FDA, etc.)
-    "substrate-6091",                       # Multiversal Compliance
-
-    # --- Agency & orchestration ---
-    "substrate-6095",                       # Multiversal Agency
-    "substrate-9000",                       # Enterprise Plus Suite
-
-    # --- Cosmic & quantum computation ---
-    "substrate-9001",                       # Cosmological Computation Engine
-    "substrate-9002",                       # Vortex Quantum Accelerator (PHFE)
-    "substrate-9010",                       # Nanophotonic Force Engine
-    "substrate-9020",                       # Daybreak‑ARKHE Security Synthesis
-    "substrate-9110",                       # NVIDIA Space Hardware Orchestrator
-
-    # --- DevOps & infrastructure ---
-    "substrate-9100",                       # DevOps Orchestration (CI/CD, Helm, Terraform)
-    "substrate-9515",                       # Ark-lang MCP Bridge
-
-    # --- CLI & bindings ---
-    "cmd/arkhe",                            # Go CLI (via Go workspace, if applicable) – Rust binary shim
-    "cmd/arkhe-unix",
-    "bindings/python",                      # Python bindings (PyO3)
-    "bindings/wasm",                        # Wasm bindings
-    "bindings/cli",                         # Rust CLI helpers (if any)
-
-    # --- Tooling & scripts ---
-    "oracle-server",                        # gRPC oracle daemon (Rust)
-    "scripts",                              # Self‑completion binary (arkhe-self-complete)
-    "ark-lang/ark-compiler", "substrate-6067",
-    "arkp-polyglot", "arkhe_photon", "bhyve",
-    "substrates/substrato_231_sqlite"
-, "store/rust"]
-
-# ============================================================================
-# Workspace‑level shared dependencies
-# ============================================================================
+    "crates/cathedral-llm-core",
+    "crates/cathedral-inference-runtime",
+    "crates/cathedral-identity",
+    "crates/cathedral-reputation",
+    "crates/cathedral-wormgraph",
+    "crates/cathedral-zk",
+    "crates/cathedral-arkheobex",
+    "crates/cathedral-observer",
+    "crates/cathedral-api",
+    "crates/cathedral-cli",
+    "crates/cathedral-benchmarks",
+    "crates/cathedral-tests",
+    "crates/arkhe-core",
+    "crates/arkhe-forge",
+    "crates/arkhe-agents",
+    "crates/arkhe-security-audit",
+    "crates/arkhe-llm",
+    "crates/arkhe-metacognition",
+    "crates/arkhe-bridge",
+    "crates/arkhe-image-builder",
+    "crates/safe-core-reactive-governance",
+    "crates/safe-core-ethics",
+    "crates/safe-core-persistence",
+    "crates/safe-core-verifier",
+    "crates/safe-core-audit",
+    "crates/safe-core-governance",
+    "crates/safe-core-bridge",
+    "cathedral-arkhe/floquet_ptc",
+    "cathedral-arkhe/safety-core",
+    "cathedral-arkhe/unified_uep"
+]
 
 [workspace.package]
-edition = "2021"
-version = "6.1.0"
-authors = ["Arkhe OS Team"]
-homepage = "https://arkhe-os.com"
-repository = "https://github.com/arkhe-os/arkhe"
-publish = false
-keywords = []
-categories = []
-
+version = "0.1.0"
+edition = "2024"
+authors = ["Cathedral ARKHE ORCHESTRATOR <orcid:0009-0005-2697-4668>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/cathedral-os/cathedral-llm"
 
 [workspace.dependencies]
-
-nexus-sdk = { path = "third_party/nexus-zkvm/sdk" }
-nexus-core = { path = "third_party/nexus-zkvm/core" }
-nexus-network = { path = "third_party/nexus-cli/clients/cli" }
-
-
-clap = { version = "4.3", features = ["derive"] }
-num-derive = "0.4.2"
-stwo = { git = "https://github.com/starkware-libs/stwo", rev = "0790eba", features = ["std", "prover", "parallel"] }
-stwo-constraint-framework = { git = "https://github.com/starkware-libs/stwo", rev = "0790eba", features = ["std", "prover", "parallel"] }
-tiny-keccak = { version = "2.0.2", features = ["keccak"] }
-
-# Async runtime
-tokio = { version = "1.38", features = ["full"] }
-async-trait = "0.1"
-
-# Serialization
-
+tokio = { version = "1.44", features = ["full", "tracing"] }
+tokio-util = "0.7"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+toml = "0.8"
 bincode = "1.3"
-postcard = "1.0"
-
-# Error handling
-thiserror = "1.0"
-anyhow = "1.0"
-
-# Hashing
-sha2 = "0.10"
+axum = "0.8"
+tower = "0.5"
+tower-http = "0.6"
+tonic = "0.13"
+hyper = "1.6"
+tokio-tungstenite = "0.26"
+dashmap = "6.1"
+redis = { version = "0.29", features = ["tokio-comp"] }
+ml-dsa = "0.1.1"
+ml-kem = "0.1.1"
+slh-dsa = "0.1.0"
+ed25519-dalek = "2.1"
 sha3 = "0.10"
-blake3 = "1.7"
-hex = "0.4"
-base64 = "0.22"
-
-# Cryptography / Zero‑Knowledge
-arkhe-zklib = { path = "substrate-6080" }
-# ... (other shared internal crates can be listed here as needed)
-
-# Logging
+blake3 = "1.8"
+risc0-zkvm = { version = "2.0" }
+risc0-build = { version = "2.0" }
 tracing = "0.1"
-tracing-subscriber = "0.3"
-
-# Numerical / linear algebra
-nalgebra = "0.32"
-ndarray = "0.15"
-num-complex = "0.4"
-num-traits = "0.2"
-
-# Graph & data structures
-petgraph = "0.6"
-dashmap = "5.5"
-once_cell = "1.19"
-uuid = { version = "1.8", features = ["v4", "serde"] }
-
-# Random
-rand = "0.8"
-rand_distr = "0.4"
-
-# Temporal (shared)
-arkhe-temporal = { path = "substrate-6064/temporal" }
-
-# ============================================================================
-# Workspace‑level features (aggregate top‑level features)
-# ============================================================================
-
-
-
-[workspace.features]
-full = [
-    "substrate-6080/full",
-    "substrate-6090/full",
-    "substrate-6091/full",
-    "substrate-6095/full",
-]
-simulation = [
-    "substrate-9001/sim",
-    "substrate-6064/sim-test",
-]
-
-# ============================================================================
-# Global build profiles
-# ============================================================================
-rand = "0.8"
-rand_distr = "0.4"
-
-[profile.release]
-opt-level = 3
-lto = "fat"
-strip = true
-codegen-units = 1
-panic = "abort"
-incremental = false
-
-[profile.dev]
-opt-level = 0
-debug = true
-overflow-checks = true
-
-[profile.bench]
-opt-level = 3
-lto = true
-debug = false
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+prometheus = "0.14"
+opentelemetry = "0.29"
+thiserror = "2.0"
+anyhow = "1.0"
+tokio-test = "0.4"
+mockall = "0.13"
+criterion = { version = "0.5", features = ["async_tokio"] }
+clap = { version = "4.5", features = ["derive"] }
+indicatif = "0.17"
+console = "0.15"
+uuid = { version = "1.16", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+regex = "1.11"
+once_cell = "1.21"
+hex = "0.4"
+dirs = "5.0"
+candle-core = { version = "0.10" }
+candle-nn = { version = "0.10" }
+candle-transformers = { version = "0.10" }
+async-trait = "0.1"

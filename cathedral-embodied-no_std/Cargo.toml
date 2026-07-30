@@ -1,0 +1,12 @@
+[package]
+name = "cathedral-embodied-no_std"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hyperon-bridge = { path = "../hyperon-bridge" }
+metacognitive-regulator = { path = "../metacognitive-regulator" }
+srta-client = { path = "../srta-client" }
+hex = "0.4"
+ed25519-dalek = { version = "2.0", features = ["rand_core"] }
+hyperon = { path = "../mock_hyperon" }

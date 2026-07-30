@@ -1,0 +1,41 @@
+{
+  "dashboard": {
+    "title": "Cathedral ARKHE v28.3 — Emergence Dashboard",
+    "panels": [
+      {
+        "title": "Compression Score (per agent)",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "cathedral_compression_score / 1000",
+            "legendFormat": "{{agent_id}}"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+      },
+      {
+        "title": "Active Agents by Role",
+        "type": "bargauge",
+        "targets": [
+          {
+            "expr": "sum by (agent_role)(cathedral_agent_count)",
+            "legendFormat": "{{agent_role}}"
+          }
+        ],
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
+      },
+      {
+        "title": "Rollout Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(cathedral_rollout_total[1m])",
+            "legendFormat": "rollouts/min"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 8, "w": 24, "h": 8 }
+      }
+    ],
+    "time": { "from": "now-6h", "to": "now" }
+  }
+}

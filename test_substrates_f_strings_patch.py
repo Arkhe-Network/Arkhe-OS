@@ -19,6 +19,12 @@ def test_1114_cathedral_sphincs_verifier_f_strings():
         tree = ast.parse(f.read())
     for node in ast.walk(tree):
         assert not isinstance(node, ast.JoinedStr)
+def test_4004_b20_base_bridge_f_strings():
+    import ast
+    with open('substrates/t/4004_b20_base_bridge/canonizer.py', 'r') as f:
+        tree = ast.parse(f.read())
+    for node in ast.walk(tree):
+        assert not isinstance(node, ast.JoinedStr), "f-string found in canonizer.py"
 
 def test_825_f_strings():
     import ast
@@ -568,6 +574,23 @@ def test_1079_1080_auto_canonization_engine_f_strings():
     matches = f_string_pattern.findall(content)
     assert not matches, f"f-strings found in {file_path}"
 
+
+def test_8000_headroom_bridge_f_strings():
+    file_path = "substrates/t/8000_headroom_bridge/canonizer_8000.py"
+    with open(file_path, "rb") as f:
+        content = f.read()
+    assert not re.search(rb'f([\'"])', content), f"File {file_path} contains f-strings!"
+
+def test_1200_fsi_f_strings():
+    import os
+    import re
+    file_path = "substrates/t/1200_federacao_soberana_inferencia/fsi_canonizer.py"
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        f_string_pattern = re.compile(r'\bf(["\'])')
+        assert not f_string_pattern.search(content), f"Found f-string in {file_path}"
+
 def test_1082_cathedral_translation_engine_f_strings():
     import os
     import re
@@ -678,3 +701,120 @@ def test_1103_btfs_depin_storage_f_strings():
         tree = ast.parse(f.read())
     for node in ast.walk(tree):
         assert not isinstance(node, ast.JoinedStr)
+
+def test_12_9_multi_cut_out_f_strings():
+    import ast
+
+    files_to_check = [
+        'substrates/t/12_9_multi_cut_out_bft/substrato_12_9_multi_cut_out.py',
+        'substrates/t/12_9_multi_cut_out_bft/multi_cut_out_bft.py',
+        'substrates/t/12_9_multi_cut_out_bft/classification_enforcement.py'
+    ]
+
+    for file_path in files_to_check:
+        with open(file_path, 'r') as f:
+            tree = ast.parse(f.read())
+        for node in ast.walk(tree):
+            assert not isinstance(node, ast.JoinedStr), "F-strings are not allowed in %s" % file_path
+
+def test_00_cognitive_kernel_no_f_strings():
+    import re
+    with open('substrates/t/00_cognitive_kernel/substrato_00_cognitive_kernel.py', 'r', encoding='utf-8') as f:
+        content = f.read()
+    if re.search(r'\bf(["\'])', content):
+        assert False, "Found f-strings in substrato_00_cognitive_kernel.py"
+
+def test_1120_cathedral_blockchain_spec_no_fstrings():
+    import re
+    with open('substrates/t/cathedral_blockchain_spec/substrato_1120_cathedral_blockchain_spec.py', 'r') as f:
+        content = f.read()
+
+    # Simple check for f-strings: look for f"..." or f'...'
+    # Use the regex that memory mentioned: \bf(['"])
+    pattern = re.compile(r'\bf([\'"])')
+    match = pattern.search(content)
+    assert match is None, "f-string found in substrato_1120_cathedral_blockchain_spec.py"
+
+def test_2140_7_f_strings():
+    file_path = "substrates/t/2140_7_firewall_semantico_temporal/substrato_2140_7.py"
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    assert not re.search(r'\bf(["\'])', content), "f-strings found!"
+
+def test_319_1_f_strings():
+    import ast
+    with open('substrates/t/319_1_caster_software/substrato_319_1.py', 'r') as f:
+        tree = ast.parse(f.read())
+    for node in ast.walk(tree):
+        assert not isinstance(node, ast.JoinedStr)
+
+def test_1300_f_strings():
+    import ast
+    with open('substrates/t/1300_asi_readiness/canonizer_1300.py', 'r') as f:
+        tree = ast.parse(f.read())
+    for node in ast.walk(tree):
+        assert not isinstance(node, ast.JoinedStr), "f-strings found!"
+
+def test_no_f_strings_1600_cognitive_autonomous_structural():
+    import os
+    import re
+
+    base_dir = "substrates/t/1600_cognitive_autonomous_structural"
+    f_string_pattern = re.compile(r'\bf([\'\"])')
+
+    for root, _, files in os.walk(base_dir):
+        for file in files:
+            if file.endswith(".py"):
+                file_path = os.path.join(root, file)
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                    matches = f_string_pattern.findall(content)
+                    assert not matches, "Found f-strings in " + file_path + ": " + str(matches)
+
+def test_16_2_zvec_f_strings():
+    import os
+    import re
+    # check that we aren't using f-strings
+    target_dir = os.path.join(os.path.dirname(__file__), "substrates", "t", "16_2_zvec")
+    f_string_pattern = re.compile(rb'f([\'"])')
+    if os.path.exists(target_dir):
+        for root, _, files in os.walk(target_dir):
+            for file in files:
+                if file.endswith(".py"):
+                    file_path = os.path.join(root, file)
+                    with open(file_path, "rb") as f:
+                        content = f.read()
+                        assert not f_string_pattern.search(content), "f-string found in {0}".format(file_path)
+import ast
+
+def test_3001_f_strings():
+    with open('substrates/t/3001_agi_platform_specification/substrato_3001.py', 'r') as f:
+        tree = ast.parse(f.read())
+    for node in ast.walk(tree):
+        assert not isinstance(node, ast.JoinedStr)
+
+def test_1115_f_strings():
+    import ast
+    import glob
+    for filepath in glob.glob("substrates/t/1115_paxos_usdg_integration/*.py"):
+        with open(filepath, 'r', encoding='utf-8') as f:
+            tree = ast.parse(f.read())
+        for node in ast.walk(tree):
+            assert not isinstance(node, ast.JoinedStr), "f-strings found in {0}!".format(filepath)
+
+def test_265_f_strings():
+    import ast
+    with open('substrates/t/265_tensorzkp_gpu_daemon_v5_0/substrato_265.py', 'r') as f:
+        tree = ast.parse(f.read())
+    for node in ast.walk(tree):
+        assert not isinstance(node, ast.JoinedStr)
+
+def test_canonizer_7001_v2_no_fstrings():
+    import re
+    import os
+    canonizer_path = os.path.join("substrates", "t", "7001_x402_polar_v2", "canonizer_7001.py")
+    if os.path.exists(canonizer_path):
+        with open(canonizer_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            # The python file must not contain any f-string
+            assert not re.search(r'f["\']', content)

@@ -1,0 +1,18 @@
+[substrate]
+id = "12_9"
+name = "MULTI-CUT-OUT BFT + CLASSIFICACAO HIERARQUICA"
+version = "1.0.0"
+architect = "ORCID 0009-0005-2697-4668"
+date = "2026-06-12"
+status = "PROPOSED"
+
+[features]
+multi_cut_out = true
+bft_consensus = true
+classification_enforcement = true
+
+[dependencies]
+hotstuff = "1.0.0"
+lean4 = "4.0.0"
+tee = "1.0.0"
+zk_proofs = "1.0.0"

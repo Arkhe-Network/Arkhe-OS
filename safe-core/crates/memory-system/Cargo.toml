@@ -1,0 +1,35 @@
+[package]
+name = "memory-system"
+version = "0.8.0"
+edition = "2021"
+
+[dependencies]
+# Internos
+cognitive-core = { path = "../cognitive-core" }
+
+# Vetores (UPDATED to qdrant-client 1.18 with builder pattern)
+qdrant-client = { workspace = true }
+
+# Merkle Tree (UPDATED to rs_merkle 1.5)
+rs_merkle = { workspace = true }
+
+# Criptografia
+sha2 = { workspace = true }
+blake3 = { workspace = true }
+hex = { workspace = true }
+
+# Utils
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+rand = "0.8"

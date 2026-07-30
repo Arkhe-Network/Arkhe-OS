@@ -1,0 +1,8 @@
+[substrate]
+id = "1200"
+name = "OMNISCIENT_SWITCH_THINKING"
+type = "Architecture"
+version = "12.0.0"
+era = "12"
+status = "CANONIZED_FULL"
+description = "Integração do motor de raciocínio SWIREASONING (ICLR 2026) mapeado ao Plasma Toroidal e Discurso Lacaniano."

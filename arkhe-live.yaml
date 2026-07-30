@@ -1,0 +1,145 @@
+image:
+  name: "Arkhe OS Live"
+  version: "0.5.0"
+  architecture: "x86_64"
+  description: "Live image of Arkhe OS with PQC, DIDs, and content-addressed layers"
+
+  # Build settings
+  build:
+    compression: "zstd"
+    compression_level: 3
+    parallel_jobs: 8
+    keep_work_dir: false
+    verbose: true
+
+  # Output formats (iso, usb, docker, raw, qcow2)
+  output_formats:
+    - iso
+
+  # Signing
+  signing:
+    enabled: true
+    key_path: "~/.arkhe/keys/signing.key"
+    key_type: "ml-dsa-65"
+    certificate_path: "~/.arkhe/keys/signing.crt"
+
+layers:
+  # Kernel layer (arkhe-kernel)
+  - name: "kernel"
+    type: "kernel"
+    source: "../arkhe-kernel"
+    build_script: "build.sh"
+    build_args:
+      - "--target=x86_64-unknown-none"
+      - "--release"
+      - "--features=pqc,zk,tee,nostr"
+    compression: "zstd"
+    metadata:
+      description: "Arkhe kernel with PQC and ZK support"
+      tags: ["kernel", "pqc", "zk"]
+
+  # Initrd layer (arkhe-initrd)
+  - name: "initrd"
+    type: "initrd"
+    source: "../arkhe-initrd"
+    build_script: "build.sh"
+    build_args:
+      - "--target=x86_64-unknown-linux-musl"
+      - "--release"
+      - "--features=pqc,tee"
+    compression: "zstd"
+    metadata:
+      description: "Arkhe initrd with PQC attestation"
+      tags: ["initrd", "pqc", "boot"]
+
+  # Base layer (core libraries)
+  - name: "base"
+    type: "base"
+    source: "../arkhe-base"
+    build_script: "build.sh"
+    compression: "zstd"
+    metadata:
+      description: "Arkhe base system (musl libc, coreutils)"
+      tags: ["base", "musl"]
+
+  # Libraries layer (dependencies)
+  - name: "libraries"
+    type: "libraries"
+    source: "../arkhe-libs"
+    build_script: "build-libs.sh"
+    compression: "zstd"
+    parents:
+      - "base"
+    metadata:
+      description: "Arkhe external libraries (candle-core, tokio)"
+      tags: ["libs", "candle", "tokio"]
+
+  # Arkhe crates layer
+  - name: "arkhe-crates"
+    type: "arkhe-crates"
+    source: "../arkhe-crates"
+    build_script: "build-crates.sh"
+    compression: "zstd"
+    parents:
+      - "base"
+      - "libraries"
+    metadata:
+      description: "Arkhe crates (identity, llm, agents, apex)"
+      tags: ["arkhe", "agi", "agents"]
+
+  # Configuration layer
+  - name: "config"
+    type: "config"
+    source: "../arkhe-config"
+    compression: "zstd"
+    parents:
+      - "arkhe-crates"
+    metadata:
+      description: "Arkhe OS configuration (DIDs, PQC keys, Nostr relays)"
+      tags: ["config", "dids", "nostr"]
+
+  # LLM cache layer (optional)
+  - name: "llm-cache"
+    type: "llm-cache"
+    source: "./llm-models"
+    compression: "zstd"
+    parents:
+      - "arkhe-crates"
+    optional: true
+    metadata:
+      description: "Pre-downloaded LLM models (GGUF)"
+      tags: ["llm", "gguf", "cache"]
+
+boot:
+  bootloader: "limine"  # or "grub"
+  timeout: 10
+  default_entry: "arkhe-live"
+
+  kernel:
+    path: "boot:///vmlinuz-arkhe"
+    cmdline: "root=overlay quiet splash arkhe.live=1"
+
+  initrd:
+    path: "boot:///initrd-arkhe.img"
+
+  overlay:
+    type: "tmpfs"
+    size: "512M"
+    persistent: false
+
+  entries:
+    - name: "Arkhe OS Live"
+      cmdline: "root=overlay quiet splash arkhe.live=1"
+    - name: "Arkhe OS Live (Debug)"
+      cmdline: "root=overlay arkhe.live=1 console=ttyS0 earlyprintk=serial"
+    - name: "Arkhe OS Live (Recovery)"
+      cmdline: "root=overlay arkhe.live=1 single"
+
+metadata:
+  author: "Arkhe OS Project"
+  license: "MIT/Apache-2.0"
+  version: "1.0.0"
+  release_notes: "Initial Arkhe OS Live image release"
+  repository: "https://github.com/arkhe-os/arkhe-live"
+  documentation: "https://arkhe-os.org/docs/live"
+  contact: "contact@arkhe-os.org"

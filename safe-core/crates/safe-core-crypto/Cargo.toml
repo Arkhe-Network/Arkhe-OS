@@ -1,0 +1,22 @@
+[package]
+name = "safe-core-crypto"
+version = "0.1.0"
+edition = "2024"
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+blake3.workspace = true
+sha3.workspace = true
+kyberlib.workspace = true
+# lattice-safe-threshold-ml-dsa.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+
+[dev-dependencies]
+mockall.workspace = true
+proptest.workspace = true
+# kani.workspace = true

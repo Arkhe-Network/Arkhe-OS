@@ -1,0 +1,14 @@
+services:
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile.bridge
+    container_name: safe-core-bridge
+    ports:
+      - "8081:8081"
+    command: ["safe-core-bridge", "--mcp"]
+    stdin_open: true
+    tty: false
+    environment:
+      RUST_LOG: safe_core_bridge=warn
+    restart: unless-stopped

@@ -1,0 +1,14 @@
+FROM vllm/vllm-openai:latest
+
+WORKDIR /app
+
+# Set environment variables for the inference server
+ENV CATHEDRAL_MODEL_PATH=/models
+ENV HOST=0.0.0.0
+ENV PORT=8000
+
+# Install additional requirements if needed (none strictly needed if just using vllm base)
+RUN pip install --no-cache-dir prometheus_client
+
+# Define the model path, can be overridden by docker-compose
+CMD ["--model", "/models", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,11 @@
+[substrate]
+id = "1113"
+name = "Cathedral ARKHE v12.9 Repository Structure"
+version = "1.0.0"
+type = "documentation"
+author = "Arkhe OS"
+
+[canonization]
+payload_file = "cathedral_arkhe_v12_9.md"
+seal_date = "2026-06-12"
+static_seal = "CATHEDRAL-REPO-STRUCTURE-v1.0-2026-06-12"

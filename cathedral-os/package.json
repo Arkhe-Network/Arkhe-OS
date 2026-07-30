@@ -1,0 +1,37 @@
+{
+  "name": "cathedral-os",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "runtimes/*",
+    "marketplace/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "e2e": "pnpm run --parallel e2e",
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "tauri": "pnpm --filter native tauri",
+    "tauri:android": "pnpm tauri android dev",
+    "tauri:ios": "pnpm tauri ios dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "prettier": "^3.0.0",
+    "eslint": "^8.0.0",
+    "@playwright/test": "^1.40.0",
+    "turbo": "^2.0.0",
+    "husky": "^9.0.0",
+    "commitlint": "^19.0.0",
+    "lint-staged": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

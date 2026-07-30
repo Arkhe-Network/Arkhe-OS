@@ -1,0 +1,21 @@
+[package]
+name = "safe-core-interface"
+version = "0.1.0"
+edition = "2024"
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+safe-core-consensus = { path = "../safe-core-consensus" }
+safe-core-policy = { path = "../safe-core-policy" }
+safe-core-memory = { path = "../safe-core-memory" }
+serde.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+
+[dev-dependencies]
+mockall.workspace = true
+proptest.workspace = true
+# kani.workspace = true

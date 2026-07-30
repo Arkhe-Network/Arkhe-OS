@@ -1,0 +1,7 @@
+target/
+*.lock
+.env
+*.log
+dist/
+node_modules/
+.cache/

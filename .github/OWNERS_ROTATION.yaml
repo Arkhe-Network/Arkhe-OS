@@ -1,0 +1,18 @@
+# .github/OWNERS_ROTATION.yaml
+rotation_policy:
+  enabled: true
+  max_tenure_years: 3
+  handover_days: 30
+  crates:
+    - arkhe-core:
+        current_team: core-team
+        next_team: security-team
+        handover_date: 2026-09-01
+    - arkhe-pqc:
+        current_team: crypto-team
+        next_team: core-team
+        handover_date: 2026-12-01
+    - arkhe-llm:
+        current_team: ai-team
+        next_team: security-team
+        handover_date: 2027-03-01

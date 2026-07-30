@@ -1,0 +1,78 @@
+---
+description: Integra o Cursor com o servidor MCP do Cathedral ARKHE para identidade soberana, atestação e governança.
+globs: ["**/*.rs", "**/*.py", "**/*.toml", "**/*.md"]
+version: 2.0
+---
+
+# 🏛️ Cathedral ARKHE — MCP Integration Rules (Refinado)
+
+## 📡 Configuração
+
+| Variável | Padrão | Descrição |
+|----------|--------|-----------|
+| `ENABLE_MCP_SERVER` | `true` | Ativa o servidor MCP |
+| `MCP_PORT` | `3032` | Porta do servidor |
+| `MCP_AUTH_TOKEN` | (opcional) | Token Bearer |
+| `IDENTITY_TTL_SECONDS` | `86400` | TTL do IdentityAttestation (24h) |
+
+**Endpoint:** `http://localhost:3032`
+
+## 🧰 Ferramentas (v2)
+
+| Ferramenta | Códigos de Erro |
+|------------|-----------------|
+| `attest_identity` | `-32000` a `-32003` |
+| `execute_workload` | `-32001` a `-32010` |
+| `request_voice_proof` | `-32000` |
+| `validate_attestation` | `-32000` |
+| `list_policies` | `-32000` |
+
+## 🛡️ Regras de Validação
+
+### 1. Antes de `execute_workload`:
+
+- **DEVE** chamar `attest_identity` (ou usar cache) e verificar:
+  - `confidence > 0.7`
+  - `identity_verified == true`
+  - Não expirado (TTL 86400s)
+  - Assinatura válida
+
+- **SE** erro `-32003` (expirado) → chamar `request_voice_proof`.
+- **SE** erro `-32001` (confiança) → abortar.
+
+### 2. Durante `execute_workload`:
+
+- **DEVE** fornecer `provenance` (`user`, `ai-suggested`, `ai-executed`, `user-revised`).
+- **DEVE** tratar códigos de erro específicos:
+
+| Código | Ação |
+|--------|------|
+| `-32001` | Abortar, sugerir `request_voice_proof` |
+| `-32002` | Abortar, exigir prova de vida |
+| `-32003` | Chamar `request_voice_proof` |
+| `-32004` | Abortar (assinatura inválida) |
+| `-32006` | Abortar (política bloqueadora) |
+| `-32008` | Abortar (policy_compliance false) |
+
+### 3. Pós-execução:
+
+- **DEVE** verificar `policy_compliance == true`.
+- **DEVE** registrar o `ExecutionAttestation`.
+
+### 4. Operações de Alto Risco (Override P13):
+
+- **DEVE** chamar `request_voice_proof` com `phrase="confirmo override P13"`.
+- **DEVE** esperar `phrase_matched == true` e `coercion_score < 0.6`.
+- **SE** falhar → abortar.
+
+## 🚫 Comportamento Proibido
+
+- `--dangerously-skip-permissions` sem `request_voice_proof`.
+- Ignorar `IdentityAttestation` expirado.
+- Prosseguir com `policy_compliance == false`.
+- Usar `provenance` fora dos valores permitidos.
+
+---
+
+**Versão:** 2.0
+**Selo:** CATHEDRAL-ARKHE-v28.3.2-CURSOR-RULES-V2-2026-06-17

@@ -1,0 +1,17 @@
+[package]
+name = "orchestrator"
+version = "0.1.0"
+edition = "2021"
+[dependencies]
+arcode = "0.2.4"
+async-trait = "0.1.89"
+bitbit = "0.2.0"
+prometheus = "0.14.0"
+reqwest = { version = "0.13.4", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+[workspace]
+rand = "0.8"

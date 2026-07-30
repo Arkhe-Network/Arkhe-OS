@@ -1,0 +1,130 @@
+# Cathedral ARKHE v28.2 Configuration
+# Selo: CATHEDRAL-ARKHE-v28.2-CONFIG-2026-06-16
+# Arquiteto ORCID: 0009-0005-2697-4668
+
+# ============================================================================
+# LLM Server (Rust/Axum)
+# ============================================================================
+llm_server:
+  host: "0.0.0.0"
+  port: 8000
+  model_path: "/models"
+  model_name: "Cathedral-Instruct-7B"        # ou "Llama-2-7b-chat-hf", "Mistral-7B-Instruct"
+  tensor_parallel_size: 1
+  max_batch_size: 8
+  max_seq_len: 4096
+  tool_call_mode: "automatic"                # "declarative" ou "automatic"
+  circuit_breaker:
+    failure_threshold: 5
+    recovery_timeout_secs: 30
+  memory_proof:
+    required_for_tiers: [201, 255]           # trust tiers que exigem proof
+    verification_endpoint: "http://localhost:9000/verify"
+
+# ============================================================================
+# Agent Runtime (Rust + Python bridge)
+# ============================================================================
+agent:
+  default:
+    name: "CathedralOracle"
+    system_prompt_path: "/config/system_prompts.yaml"
+    model_id: "cathedral-llm"
+    planning_strategy: "ReAct"               # ReAct, ChainOfThought, TreeOfThoughts, PlanAndExecute, Reflexion
+    temperature: 0.7
+    max_tokens: 1024
+    memory:
+      short_term_capacity: 100
+      long_term_enabled: true
+      vector_db_url: "http://vector-db:6333"
+      embedding_model: "all-MiniLM-L6-v2"
+    guardrails:
+      content_filter_enabled: true
+      max_tool_execution_time_secs: 30
+      forbidden_tools: []
+      required_memory_proof_for: ["code_execution"]
+      output_moderation_threshold: 0.7
+    cathedral_policy_hash: "sha256:example"
+
+  # Configurações específicas para cada agente (podem sobrescrever o default)
+  oracle:
+    planning_strategy: "PlanAndExecute"
+  coder:
+    planning_strategy: "ReAct"
+    tools: ["code_execution", "web_search"]
+  analyst:
+    planning_strategy: "ChainOfThought"
+    tools: ["web_search", "memory_search"]
+  guardian:
+    planning_strategy: "Reflexion"
+    tools: ["cathedral_policy"]
+
+# ============================================================================
+# Tool Registry
+# ============================================================================
+tools:
+  web_search:
+    enabled: true
+    api_key_env: "SEARCH_API_KEY"            # variável de ambiente
+    endpoint: "https://api.search.example.com"
+    timeout_secs: 10
+  code_execution:
+    enabled: true
+    sandbox_path: "/sandbox"
+    timeout_secs: 30
+    memory_proof_required: true
+    allowed_imports: ["math", "json", "numpy"]
+    forbid_imports: ["os", "subprocess", "socket", "requests"]
+  file_system:
+    enabled: true
+    allowed_paths: ["/data", "/workdir"]
+    read_only: false
+  cathedral_policy:
+    enabled: true
+    policy_source: "file:///config/policy.rego"   # OPA policy
+  memory_search:
+    enabled: true
+    vector_store_type: "qdrant"
+
+# ============================================================================
+# Multi-Agent Orchestrator
+# ============================================================================
+orchestrator:
+  workflows_dir: "/workflows"                 # diretório com workflows em YAML
+  default_timeout_secs: 120
+  message_bus:
+    type: "redis"                            # "redis", "in_memory", "nats"
+    url: "redis://redis:6379/0"
+  persistence:
+    enabled: true
+    backend: "postgres"
+    dsn: "postgres://cathedral:secure_password@temporal-chain:5432/orchestrator"
+
+# ============================================================================
+# TemporalChain (Proveniência Imutável)
+# ============================================================================
+temporal_chain:
+  enabled: true
+  backend: "postgres"                        # "postgres", "sqlite", "ethereum"
+  dsn: "postgres://cathedral:secure_password@temporal-chain:5432/temporalchain"
+  block_time_secs: 2
+  sphincs_signatures: true                   # ativar assinaturas pós‑quânticas
+
+# ============================================================================
+# Telemetry & Observability
+# ============================================================================
+telemetry:
+  prometheus_enabled: true
+  metrics_port: 9090
+  log_level: "info"                          # debug, info, warn, error
+  otlp_endpoint: "http://jaeger:4317"        # opcional
+  tracing_sample_rate: 0.1
+
+# ============================================================================
+# Security & Axiarquia
+# ============================================================================
+security:
+  axiarquia_endpoint: "http://axiarquia:8080/check"
+  memory_proof_required_for_roles: ["coder", "guardian"]
+  max_token_rate: 100                        # tokens por minuto por agente
+  human_review_required_for_critical: true
+  policy_file: "/config/axiarquia_policy.rego"

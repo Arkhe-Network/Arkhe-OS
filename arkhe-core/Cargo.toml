@@ -1,0 +1,13 @@
+[package]
+name = "arkhe-core"
+version = "7.0.0"
+edition = "2021"
+
+[dependencies]
+proptest-derive = "0.4.0"
+
+[dev-dependencies]
+proptest = "1.4"
+rand = "0.8"
+
+[workspace]

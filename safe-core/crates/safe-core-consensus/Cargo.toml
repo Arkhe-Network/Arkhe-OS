@@ -1,0 +1,20 @@
+[package]
+name = "safe-core-consensus"
+version = "0.1.0"
+edition = "2024"
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+safe-core-crypto = { path = "../safe-core-crypto" }
+safe-core-policy = { path = "../safe-core-policy" }
+serde.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+
+[dev-dependencies]
+mockall.workspace = true
+proptest.workspace = true
+# kani.workspace = true

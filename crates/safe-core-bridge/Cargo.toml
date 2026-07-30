@@ -1,0 +1,30 @@
+[package]
+name = "safe-core-bridge"
+version = "0.1.0"
+edition = "2024"
+description = "Integration API — Ethics, Monitoring, Invariants via HTTP + MCP"
+
+[dependencies]
+safe-core-ethics = { path = "../safe-core-ethics" }
+
+axum = { version = "0.8", features = ["macros"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+tokio = { version = "1.44", features = ["full", "tracing"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.16", features = ["v4"] }
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive", "env"] }
+tower = "0.5"
+
+# Optional: MCP integration via rmcp 2.0.0
+# Compile with: cargo build -p safe-core-bridge --features mcp
+rmcp = { version = "2.0", optional = true, features = ["transport-io"] }
+schemars = "0.8"
+
+[features]
+default = []
+mcp = ["dep:rmcp"]

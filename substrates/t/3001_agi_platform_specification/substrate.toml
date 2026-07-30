@@ -1,0 +1,6 @@
+[module]
+name = "3001_agi_platform_specification"
+version = "1.0.0"
+seal = "CATHEDRAL-OS-3001-v1.0.0-2026-06-14"
+
+[dependencies]

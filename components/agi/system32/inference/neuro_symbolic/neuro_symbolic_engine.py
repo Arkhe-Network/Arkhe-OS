@@ -6,7 +6,13 @@ Combines neural embeddings with symbolic knowledge graphs for transparent infere
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch_geometric
+import rdflib
+import owlready2
+import z3
 from typing import Dict, List, Tuple, Optional
+
+_ = (torch_geometric, rdflib, owlready2, z3)
 
 class NeuroSymbolicEngine(nn.Module):
     def __init__(self, neural_dim: int, symbol_dim: int, num_classes: int):

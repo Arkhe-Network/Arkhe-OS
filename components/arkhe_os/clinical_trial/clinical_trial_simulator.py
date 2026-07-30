@@ -1,3 +1,7 @@
+import torchmeta
+import learn2learn
+
+_ = (torchmeta, learn2learn)
 # arkhe_os/clinical_trial/clinical_trial_simulator.py
 """
 Substrato 286: Simulador de Ensaios Clínicos In Silico

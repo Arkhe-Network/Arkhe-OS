@@ -1,0 +1,17 @@
+[substrate]
+id = "1104.2"
+name = "Rio-3.5-Open-397B Integration"
+version = "1.0.0"
+architect = "ORCID 0009-0005-2697-4668"
+seal = "CATHEDRAL-1104.2-RIO35-ENGINE-2026-06-13"
+domain = "portuguese_technical_legal"
+dependencies = [
+    "torch>=2.0",
+    "transformers>=4.40",
+    "vllm>=0.5.0",
+    "sglang>=0.2.0",
+    "numpy",
+    "arkhe-cognitive>=2.0.0",
+    "arkhe-security>=12.9.0",
+    "arkhe-chain>=1.0.0"
+]

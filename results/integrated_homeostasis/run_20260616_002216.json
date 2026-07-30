@@ -1,0 +1,289 @@
+{
+  "timestamp": "2026-06-16T00:22:05.772457",
+  "configuration": {
+    "initial_params": {
+      "kappa": 0.75,
+      "lambda_l1": 0.003,
+      "binarization_threshold": 0.15,
+      "embedding_dim": 3
+    },
+    "max_epochs": 20,
+    "N_steps": 2000,
+    "capture_threshold": 0.8,
+    "publish_dir": "publish/interpretability"
+  },
+  "optimization": {
+    "history": [
+      {
+        "epoch": 1,
+        "params": {
+          "kappa": 0.7806811799049186,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.11931882009508141,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.5833333333333334,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 2,
+        "params": {
+          "kappa": 0.8191197856560444,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.15775742584620722,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5454545454545454,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 3,
+        "params": {
+          "kappa": 0.8736115004230374,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.21224914061320016,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.6153846153846154,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 4,
+        "params": {
+          "kappa": 0.9072718796509818,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.24590951984114454,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.6,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 5,
+        "params": {
+          "kappa": 0.92727693403774,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.2659145742279028,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.5555555555555556,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 6,
+        "params": {
+          "kappa": 0.9680491719143849,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.3,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.5714285714285714,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 7,
+        "params": {
+          "kappa": 0.9970693364012233,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.27097983551316157,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.625,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 8,
+        "params": {
+          "kappa": 0.996007835572731,
+          "lambda_l1": 0.008938499171507647,
+          "binarization_threshold": 0.27204133634165395,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.6,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 9,
+        "params": {
+          "kappa": 0.9857787674646081,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.26181226823353104,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.5555555555555556,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 10,
+        "params": {
+          "kappa": 0.9644540137250276,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.24048751449395048,
+          "embedding_dim": 2
+        },
+        "capture_fraction": 0.625,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 11,
+        "params": {
+          "kappa": 0.9944717249181765,
+          "lambda_l1": 0.01,
+          "binarization_threshold": 0.2705052256870994,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5555555555555556,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 12,
+        "params": {
+          "kappa": 1.0214525716624698,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.29748607243139275,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5454545454545454,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 13,
+        "params": {
+          "kappa": 1.014187581173789,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.29022108194271196,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5833333333333334,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 14,
+        "params": {
+          "kappa": 1.0193197152305224,
+          "lambda_l1": 0.005232134056733297,
+          "binarization_threshold": 0.28508894788597866,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5833333333333334,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 15,
+        "params": {
+          "kappa": 1.0134889082415284,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.2909197548749727,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5714285714285714,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 16,
+        "params": {
+          "kappa": 1.031124490525731,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.3,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 17,
+        "params": {
+          "kappa": 1.0297378594272024,
+          "lambda_l1": 0.0001,
+          "binarization_threshold": 0.2986133689014713,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5555555555555556,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 18,
+        "params": {
+          "kappa": 1.0340444536585154,
+          "lambda_l1": 0.004406594231312885,
+          "binarization_threshold": 0.29430677467015837,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.6,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 19,
+        "params": {
+          "kappa": 1.0327652888042245,
+          "lambda_l1": 0.003127429377022062,
+          "binarization_threshold": 0.29558593952444917,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5,
+        "proofs_generated": 0
+      },
+      {
+        "epoch": 20,
+        "params": {
+          "kappa": 1.0269039352817435,
+          "lambda_l1": 0.008988782899502949,
+          "binarization_threshold": 0.3,
+          "embedding_dim": 3
+        },
+        "capture_fraction": 0.5714285714285714,
+        "proofs_generated": 0
+      }
+    ],
+    "final_params": {
+      "kappa": 1.0269039352817435,
+      "lambda_l1": 0.008988782899502949,
+      "binarization_threshold": 0.3,
+      "embedding_dim": 3
+    },
+    "final_capture_fraction": 0.5714285714285714,
+    "total_proofs_generated": 0,
+    "execution_time_s": 9.113084589000096
+  },
+  "proofs": [],
+  "publications": [
+    "publish/interpretability/evidence_epoch_5.json",
+    "publish/interpretability/evidence_epoch_10.json",
+    "publish/interpretability/evidence_epoch_15.json",
+    "publish/interpretability/evidence_epoch_20.json"
+  ],
+  "steering": {
+    "n_pairs_tested": 4,
+    "results": [
+      {
+        "pair_idx": 0,
+        "path_length": 20,
+        "max_curvature": 0.05,
+        "reconstruction_error": 0.02,
+        "proof_hash": "7ceb7ef50409201bfeccf3409df3d8bd2ce51a5e8af98e78bb5b514a3adfd506"
+      },
+      {
+        "pair_idx": 1,
+        "path_length": 20,
+        "max_curvature": 0.05,
+        "reconstruction_error": 0.02,
+        "proof_hash": "4b66d8caa77fcf1e2890d9f6331e1fef4d25706bfccd158d24a35736a5e471ff"
+      },
+      {
+        "pair_idx": 2,
+        "path_length": 20,
+        "max_curvature": 0.05,
+        "reconstruction_error": 0.02,
+        "proof_hash": "c240afec35162fe9d0dcdf6cf3589296e3778222c477cd87e8b62afd4dc57971"
+      },
+      {
+        "pair_idx": 3,
+        "path_length": 20,
+        "max_curvature": 0.05,
+        "reconstruction_error": 0.02,
+        "proof_hash": "c85a5a0602d28c34add8e33a84d7d9eea9e3e5e2b7cc7552c6f62029c25c5af6"
+      }
+    ],
+    "execution_time_s": 1.366233761999979
+  }
+}

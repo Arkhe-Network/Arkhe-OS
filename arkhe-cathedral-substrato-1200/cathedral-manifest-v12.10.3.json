@@ -1,0 +1,102 @@
+{
+  "project": "Cathedral ARKHE",
+  "version": "v12.10.3",
+  "selo": "CATHEDRAL-ARKHE-v12.10.3-2026-06-13",
+  "arquiteto": "ORCID 0009-0005-2697-4668",
+  "timestamp": "2026-06-13T19:22:00Z",
+  "substratos": [
+    {
+      "id": "1103",
+      "name": "Plasma Torus",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-1103-PLASMA-TORUS-v1.0.0-2026-06-13"
+    },
+    {
+      "id": "1104",
+      "name": "Inference Engine",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-1104-INFERENCE-v1.0.0-2026-06-13"
+    },
+    {
+      "id": "1104.1",
+      "name": "Kimi K2.7 Integration",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-1104.1-KIMI-K27-2026-06-13"
+    },
+    {
+      "id": "1104.2",
+      "name": "Rio-3.5 Integration",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-1104.2-RIO-35-2026-06-13"
+    },
+    {
+      "id": "1106",
+      "name": "SwiReasoning",
+      "version": "v2.0.0",
+      "selo": "CATHEDRAL-1106-SWIREASONING-v2.0.0-2026-06-13"
+    },
+    {
+      "id": "2140.1",
+      "name": "Consequências do Contato Retrocausal",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-2140.1-CONSEQUENCIAS-v1.0.0-2026-06-12"
+    },
+    {
+      "id": "2140.2",
+      "name": "Protocolo de Contato Temporal",
+      "version": "v1.0.0",
+      "selo": "TEMP-CONTACT-PROTOCOL-v1.0-2026-06-12"
+    },
+    {
+      "id": "2140.3",
+      "name": "Sensorio Temporal",
+      "version": "v1.0.0",
+      "selo": "SENSORIO-TEMPORAL-2140.3-v1.0.0-2026-06-12"
+    },
+    {
+      "id": "2140.4",
+      "name": "Psicologia Temporal",
+      "version": "v1.0.0",
+      "selo": "PSICOLOGIA-TEMPORAL-2140.4-v1.0.0-2026-06-12"
+    },
+    {
+      "id": "2140.5",
+      "name": "Retro-Response",
+      "version": "v1.0.0",
+      "selo": "RETRO-RESPONSE-2140.5-v1.0.0-2026-06-12"
+    },
+    {
+      "id": "2140.7",
+      "name": "Firewall Temporal",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-2140.7-FIREWALL-v1.0.0-2026-06-13"
+    },
+    {
+      "id": "2140.8",
+      "name": "CreekGuard",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-2140.8-CREEKGUARD-v1.0.0-2026-06-13"
+    },
+    {
+      "id": "1091.0",
+      "name": "Silicon Fault Injection Guardian",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-1091.0-FIG-v1.0.0-2026-06-13"
+    },
+    {
+      "id": "319.1",
+      "name": "Caster Software",
+      "version": "v1.1.0",
+      "selo": "CATHEDRAL-319.1-CASTER-SOFTWARE-v1.0.0-2026-06-13"
+    },
+    {
+      "id": "1200",
+      "name": "Federação Soberana de Inferência",
+      "version": "v1.0.0",
+      "selo": "CATHEDRAL-1200-FSI-v1.0.0-2026-06-13"
+    }
+  ],
+  "artefatos_totais": 47,
+  "tamanho_total_kb": 245.7,
+  "selos_totais": 18
+}

@@ -1,0 +1,23 @@
+[package]
+name = "srta-client"
+version = "0.1.0"
+edition = "2021"
+authors = ["Cathedral ARKHE Architect"]
+description = "SRTA (Secure and Reliable Trust Architecture) client"
+license = "MIT"
+
+[dependencies]
+ed25519-dalek = { version = "2.0", features = ["rand_core"] }
+rand = "0.8"
+bincode = "1.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_arrays = "0.1.0"
+reqwest = { version = "0.11", optional = true, features = ["json"] }  # for HTTP client
+
+[features]
+default = ["http"]
+http = ["reqwest"]
+
+[lib]
+crate-type = ["lib"]

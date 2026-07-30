@@ -1,0 +1,7 @@
+[substrate]
+id = "319.1"
+name = "Caster Software v1.0.0"
+version = "1.0.0"
+description = "Implementação software do Substrato 319 (Unified Field SDR) usando hardware comum."
+author = "ORCID 0009-0005-2697-4668"
+seal = "CATHEDRAL-319.1-CASTER-SOFTWARE-v1.0.0-2026-06-13"

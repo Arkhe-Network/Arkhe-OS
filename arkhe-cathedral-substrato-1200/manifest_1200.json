@@ -1,0 +1,136 @@
+{
+  "substrato": "1200",
+  "nome": "Federação Soberana de Inferência (FSI)",
+  "version": "1.0.0",
+  "selo": "CATHEDRAL-1200-FSI-v1.0.0-2026-06-13",
+  "arquiteto": "ORCID 0009-0005-2697-4668",
+  "timestamp": "2026-06-13T19:22:00Z",
+  "artefatos": [
+    "README.md — Documentação do repositório",
+    "docs/FSI_Whitepaper_v1.0.0.md — Visão arquitetural completa",
+    "docs/FSI_Risk_Matrix_v1.0.0.md — 15 riscos mapeados com probabilidade, impacto, mitigação",
+    "src/inference/federated_router.rs — Rust: FederatedRouter com EngineRouter, ZK-proof, Caster, QBA",
+    "src/contracts/ArkheFederation.sol — Smart Contract: join, heartbeat, routeTask, verifyTask, slash",
+    "src/security/creek_guard_stub.rs — Stub de integração CreekGuard 2140.8",
+    "src/chain/rbb_client_stub.rs — Stub de cliente RBB Chain",
+    "manifest_1200.json — Este manifesto",
+    "cathedral-manifest-v12.10.3.json — Manifesto global atualizado"
+  ],
+  "membros_fundadores_propostos": [
+    {
+      "id": "rio35",
+      "name": "Rio-3.5-Open-397B",
+      "jurisdiction": "BRA",
+      "tier": 1,
+      "models": [
+        "Rio35Open397B"
+      ]
+    },
+    {
+      "id": "kimi27",
+      "name": "Kimi K2.7 Code",
+      "jurisdiction": "CHN",
+      "tier": 1,
+      "models": [
+        "KimiK27Code"
+      ]
+    },
+    {
+      "id": "qwen37",
+      "name": "Qwen 3.7 Plus",
+      "jurisdiction": "CHN",
+      "tier": 1,
+      "models": [
+        "Qwen37Plus"
+      ]
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek V4 Pro",
+      "jurisdiction": "CHN",
+      "tier": 1,
+      "models": [
+        "DeepSeekV4Pro"
+      ]
+    },
+    {
+      "id": "glm",
+      "name": "GLM-Z",
+      "jurisdiction": "CHN",
+      "tier": 2,
+      "models": [
+        "GLMZ"
+      ]
+    },
+    {
+      "id": "claude",
+      "name": "Claude Fable 5",
+      "jurisdiction": "USA",
+      "tier": 1,
+      "models": [
+        "ClaudeFable5"
+      ]
+    },
+    {
+      "id": "gpt55",
+      "name": "GPT-5.5",
+      "jurisdiction": "USA",
+      "tier": 1,
+      "models": [
+        "GPT55"
+      ]
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini Ultra",
+      "jurisdiction": "USA",
+      "tier": 1,
+      "models": [
+        "GeminiUltra"
+      ]
+    },
+    {
+      "id": "llama",
+      "name": "Llama 4 Maverick",
+      "jurisdiction": "USA",
+      "tier": 2,
+      "models": [
+        "Llama4Maverick"
+      ]
+    },
+    {
+      "id": "starlink",
+      "name": "Starlink Edge",
+      "jurisdiction": "ORB",
+      "tier": 2,
+      "models": [
+        "StarlinkEdge"
+      ]
+    },
+    {
+      "id": "palantir",
+      "name": "Palantir Ontology",
+      "jurisdiction": "USA",
+      "tier": 2,
+      "models": []
+    }
+  ],
+  "roadmap": {
+    "F0_2026Q3": "POC bilateral: Arkhe + Rio-3.5 + Kimi K2.7 (2 modelos, 1 nó BRICS)",
+    "F1_2026Q4": "Adicionar Qwen 3.7 + DeepSeek V4 (4 modelos, 2 nós BRICS + 1 nó CN)",
+    "F2_2027Q1": "Adicionar Claude Fable 5 + GPT-5.5 (6 modelos, governança Quadratic Voting)",
+    "F3_2027Q2": "Adicionar Starlink edge + NASA orbital (computação orbital ativa)",
+    "F4_2027Q3": "Adicionar Palantir (ontologia governamental, tier 2)",
+    "F5_2027Q4": "Federação completa (10+ modelos, 5+ jurisdições, QBA consenso)"
+  },
+  "dependencies_substratos": [
+    "1104.x InferenceEngine + EngineRouter",
+    "1106 SwiReasoning",
+    "2140.x PCT (Protocolo de Contato Temporal)",
+    "319.1 Caster (tunnels PQC)",
+    "1091.0 FIG (hardware security)",
+    "2140.8 CreekGuard (covert channels)",
+    "ASI Omni-Triad (arya-STARK, xaynet, OxiRS)",
+    "Arkhe Blockchain v1.0.0 (Cosmos SDK + CometBFT + CosmWasm)"
+  ]
+}

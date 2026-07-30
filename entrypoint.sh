@@ -1,0 +1,102 @@
+#!/bin/bash
+# Cathedral ARKHE v28.2 Entrypoint
+# Selo: CATHEDRAL-ARKHE-v28.2-ENTRYPOINT-2026-06-16
+# Arquiteto ORCID: 0009-0005-2697-4668
+
+set -e
+
+echo "═══════════════════════════════════════════════════════════════"
+echo " Cathedral ARKHE v28.2 — Starting Multi‑Agent Stack"
+echo "═══════════════════════════════════════════════════════════════"
+
+# -------------------------------------------------------------------
+# 1. Configuração de ambiente
+# -------------------------------------------------------------------
+export CATHEDRAL_CONFIG="${CATHEDRAL_CONFIG:-/config/config.yaml}"
+export CATHEDRAL_MODEL_PATH="${CATHEDRAL_MODEL_PATH:-/models}"
+export CATHEDRAL_POLICY_HASH="${CATHEDRAL_POLICY_HASH:-sha256:example}"
+export RUST_LOG="${RUST_LOG:-info}"
+export TOOL_CALL_MODE="${TOOL_CALL_MODE:-automatic}"
+
+# -------------------------------------------------------------------
+# 2. Função para aguardar serviços dependentes
+# -------------------------------------------------------------------
+wait_for_service() {
+  local host=$1
+  local port=$2
+  local name=$3
+  echo -n "⏳ Aguardando $name ($host:$port) ... "
+  while ! nc -z "$host" "$port" 2>/dev/null; do
+    sleep 2
+  done
+  echo "✅"
+}
+
+# -------------------------------------------------------------------
+# 3. Aguardar dependências essenciais (se disponíveis)
+# -------------------------------------------------------------------
+if [ "$ORCHESTRATOR_MODE" != "python" ]; then
+  # Modo Rust com serviços externos
+  wait_for_service llm-server 8000 "LLM Server"
+  wait_for_service redis 6379 "Redis"
+  wait_for_service vector-db 6333 "Vector DB"
+  wait_for_service temporal-chain 5432 "TemporalChain (Postgres)"
+fi
+
+# -------------------------------------------------------------------
+# 4. Inicializar banco de dados da TemporalChain (se PostgreSQL)
+# -------------------------------------------------------------------
+if [ -n "$TEMPORAL_DSN" ]; then
+  echo "🔄 Inicializando esquema da TemporalChain..."
+  cathedral-cli temporal migrate --dsn "$TEMPORAL_DSN" || echo "⚠️ Migration falhou (talvez já exista)"
+fi
+
+# -------------------------------------------------------------------
+# 5. Registrar workflows (se houver arquivos YAML)
+# -------------------------------------------------------------------
+if [ -d "/workflows" ]; then
+  for wf in /workflows/*.yaml; do
+    if [ -f "$wf" ]; then
+      echo "📝 Registrando workflow: $wf"
+      cathedral-cli orchestrator register --file "$wf" || echo "⚠️ Falha ao registrar $wf"
+    fi
+  done
+fi
+
+# -------------------------------------------------------------------
+# 6. Executar o serviço apropriado baseado no modo
+# -------------------------------------------------------------------
+case "${ORCHESTRATOR_MODE:-rust}" in
+  rust)
+    echo "🚀 Iniciando Agente Rust (Orquestrador embutido) na porta 8001"
+    exec cathedral-agent-runtime \
+      --config "$CATHEDRAL_CONFIG" \
+      --mode orchestrator \
+      --http-port 8001
+    ;;
+
+  python)
+    echo "🐍 Iniciando Orquestrador Python (prototipagem rápida)"
+    # Usar o orquestrador Python que geramos
+    exec python3 /app/multi_agent_orchestrator.py
+    ;;
+
+  standalone-agent)
+    echo "🤖 Iniciando apenas o agente (sem orquestrador) em modo loop"
+    exec cathedral-agent-runtime \
+      --config "$CATHEDRAL_CONFIG" \
+      --mode agent \
+      --http-port 8001
+    ;;
+
+  llm-only)
+    echo "🧠 Iniciando apenas o servidor LLM"
+    exec cathedral-llm-server
+    ;;
+
+  *)
+    echo "❌ Modo desconhecido: $ORCHESTRATOR_MODE"
+    echo "   Opções: rust, python, standalone-agent, llm-only"
+    exit 1
+    ;;
+esac

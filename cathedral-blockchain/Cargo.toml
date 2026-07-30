@@ -1,0 +1,12 @@
+[package]
+name = "cathedral-blockchain"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# We don't really have dependencies for the code provided...
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+ffi = []
