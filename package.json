@@ -128,26 +128,26 @@
     "node": "^20.19.0 || ^22.12.0 || >=23"
   },
   "dependencies": {
-    "@erc725/smart-contracts": "^6.0.0",
+    "@erc725/smart-contracts": "^8.0.1",
     "@openzeppelin/contracts": "^4.9.3",
     "@react-native-async-storage/async-storage": "^3.0.2",
     "@react-native-community/netinfo": "^12.0.1",
     "@react-navigation/bottom-tabs": "^7.16.0",
     "@react-navigation/native": "^7.2.4",
     "@react-navigation/native-stack": "^7.15.0",
-    "@types/three": "^0.184.1",
+    "@types/three": "^0.185.1",
     "framer-motion": "^12.38.0",
     "i18next": "^26.1.0",
     "i18next-browser-languagedetector": "^8.2.1",
     "i18next-http-backend": "^4.0.0",
-    "katex": "^0.17.0",
+    "katex": "^0.18.1",
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
     "react-i18next": "^17.0.7",
     "react-katex": "^3.1.0",
-    "react-native": "^0.85.3",
+    "react-native": "^0.86.2",
     "recharts": "^3.8.1",
-    "three": "^0.184.0"
+    "three": "^0.185.1"
   },
   "directories": {
     "doc": "docs",
