@@ -1,0 +1,22 @@
+[package]
+name = "arkhe_data"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "arkhe_data"
+crate-type = ["cdylib", "staticlib"]
+
+[features]
+default = []
+python = ["pyo3"]
+
+[dependencies]
+pyo3 = { version = "0.22", features = ["extension-module"], optional = true }
+ndarray = "0.16"
+tokio = { version = "1", features = ["full"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true

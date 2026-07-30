@@ -1,0 +1,8 @@
+{% if messages[0]['role'] == 'system' %}
+  {% set loop_messages = messages[1:] %}
+  {% set system_message = messages[0]['content'] %}
+{% else %}
+  {% set loop_messages = messages %}
+  {% set system_message = '' %}
+{% endif %}
+{{ bos_token }}{% if system_message != '' %}{{ system_message }}{{ '<|end_of_text|>' }}{% endif %}{% for message in loop_messages %}{% if message['role'] == 'user' %}{{ '<|user|>\n' + message['content'] + '<|end_of_text|>' }}{% elif message['role'] == 'assistant' %}{{ '<|assistant|>\n' + message['content'] + '<|end_of_text|>' }}{% endif %}{% endfor %}{% if add_generation_prompt %}{{ '<|assistant|>\n' }}{% endif %}

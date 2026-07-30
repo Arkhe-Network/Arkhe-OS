@@ -1,0 +1,17 @@
+[substrate]
+id = "cathedral_blockchain_spec"
+name = "Cathedral Blockchain Spec"
+version = "1.0.0"
+type = "specification"
+
+[metadata]
+author = "Arkhe OS"
+description = "Especificação arquitetural da Cathedral Blockchain, baseada em Cosmos SDK, CometBFT e IBC v2, com suporte a contratos CosmWasm e integração PQC."
+date = "2026-06-13"
+
+[dependencies]
+cosmos_sdk = "latest"
+cometbft = "latest"
+cosmwasm = "latest"
+ibc_v2 = "latest"
+pqc = ["SPHINCS+", "ML-DSA"]

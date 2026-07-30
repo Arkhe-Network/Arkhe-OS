@@ -1,0 +1,16 @@
+[substrate]
+id = "1115"
+name = "CATHEDRAL-PAXOS-USDG-INTEGRATION"
+version = "1.0.0"
+description = "Paxos USDG Gateway"
+author = "Cathedral AGI"
+seal = "CATHEDRAL-PAXOS-USDG-1115-v1.0.0-2026-06-15"
+
+[dependencies]
+python = ">=3.10"
+aiohttp = "*"
+web3 = "*"
+prometheus_client = "*"
+
+[execution]
+entrypoint = "integration_example.py"

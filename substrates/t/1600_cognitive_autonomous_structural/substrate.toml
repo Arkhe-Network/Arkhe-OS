@@ -1,0 +1,9 @@
+[substrate]
+id = "1600"
+name = "Cognitive Autonomous and Structural"
+version = "1.0.0"
+layer = "7"
+status = "STABLE"
+
+[canonizer]
+entrypoint = "canonizer.py"

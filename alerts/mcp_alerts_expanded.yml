@@ -1,0 +1,58 @@
+# alerts/mcp_alerts_expanded.yml
+# Expanded alert rules for Cathedral ARKHE, focusing on Security, Seal, and Capability Tokens
+
+groups:
+  - name: cathedral_security_alerts
+    interval: 30s
+    rules:
+      # ============================================================
+      # 1. Capability Token Revocation Spike
+      # ============================================================
+      - alert: CapabilityTokenRevocationSpike
+        expr: increase(capability_tokens_revoked_total[5m]) > 20
+        for: 1m
+        labels:
+          severity: critical
+          category: security
+        annotations:
+          summary: "Spike in Capability Token revocations detected"
+          description: "More than 20 capability tokens have been revoked in the last 5 minutes. Possible mass revocation event or compromise."
+
+      # ============================================================
+      # 2. Seal Access Failures Spike
+      # ============================================================
+      - alert: SealAccessFailuresSpike
+        expr: rate(seal_policy_evaluations_total{result="denied"}[5m]) > 5
+        for: 2m
+        labels:
+          severity: warning
+          category: security
+        annotations:
+          summary: "High rate of Seal Policy access denials"
+          description: "Seal Policy is denying access at a rate > 5 per second over 5 minutes. Check for unauthorized access attempts or misconfigured policies."
+
+      # ============================================================
+      # 3. Active Tokens Drop
+      # ============================================================
+      - alert: ActiveTokensDrop
+        expr: delta(sum(capability_tokens_active)[15m:1m]) < -50
+        for: 5m
+        labels:
+          severity: warning
+          category: security
+        annotations:
+          summary: "Significant drop in active capability tokens"
+          description: "The total number of active capability tokens has dropped by more than 50 in 15 minutes."
+
+      # ============================================================
+      # 4. Unauthorized Access Attempts High
+      # ============================================================
+      - alert: UnauthorizedAccessHigh
+        expr: increase(seal_unauthorized_access_total[5m]) > 15
+        for: 2m
+        labels:
+          severity: critical
+          category: security
+        annotations:
+          summary: "High number of unauthorized access attempts"
+          description: "More than 15 unauthorized access attempts detected in 5 minutes. Possible attack underway."

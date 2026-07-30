@@ -1,0 +1,13 @@
+[substrate]
+id = "1114"
+name = "Cathedral SPHINCS Verifier"
+author = "Arkhe OS Canonical System"
+version = "1.0.0"
+layer = "execution"
+
+[metadata]
+description = "Verifies SPHINCS- C13 (WOTS+C / FORS+C) post-quantum signatures on-chain."
+tags = ["solidity", "post-quantum", "sphincs", "zk-agentica"]
+
+[build]
+compiler = "solc ^0.8.28"

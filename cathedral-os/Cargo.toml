@@ -1,0 +1,64 @@
+[workspace]
+members = [
+    "crates/cathedral-core",
+    "crates/cathedral-identity",
+    "crates/cathedral-wormgraph",
+    "crates/cathedral-zk",
+    "crates/cathedral-uast",
+    "crates/cathedral-analysis",
+    "crates/cathedral-transpile",
+    "crates/cathedral-temporal",
+    "crates/cathedral-sandbox",
+    "crates/cathedral-tools",
+    "crates/cathedral-permissions",
+    "crates/cathedral-extensibility",
+    "crates/cathedral-self-improve",
+    "crates/cathedral-harness",
+    "crates/cathedral-orchestrator",
+    "crates/cathedral-agents",
+    "crates/cathedral-codesign",
+    "crates/cathedral-marketplace",
+    "crates/cathedral-prometheus",
+    "crates/cathedral-bridge",
+    "crates/cathedral-kernel",
+    "crates/cathedral-server",
+    "crates/cathedral-cli",
+    "apps/native/src-tauri",
+    "native/desktop",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Cathedral OS Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/cathedral/cathedral-os"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+thiserror = "1.0"
+anyhow = "1.0"
+chrono = "0.4"
+uuid = { version = "1.0", features = ["v4"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+sha3 = "0.10"
+hex = "0.4"
+rand = "0.8"
+async-trait = "0.1"
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+reqwest = { version = "0.11", features = ["json"] }
+clap = { version = "4.0", features = ["derive"] }
+tree-sitter = "0.22"
+walkdir = "2"
+regex = "1"
+glob = "0.3"
+# Dependências para identidade e criptografia pós-quântica
+sirraya-ml-dsa-65 = "0.1"                            # ML-DSA-65 com DIDs e VC
+# Dependências para geração de bundles/instaladores
+cargo-bundle = "0.9"                                 # Geração de .app, .deb, .msi

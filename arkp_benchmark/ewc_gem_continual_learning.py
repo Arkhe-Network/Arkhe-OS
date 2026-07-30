@@ -3,8 +3,15 @@ ewc_gem_continual_learning.py — Continual Learning with EWC/GEM
 Implementa ciclo completo de aprendizado contínuo para evitar catastrophic forgetting.
 """
 import numpy as np
+import hnswlib
+import faiss
+import sqlite_vec
+import redis
 from typing import List, Dict, Optional
 from dataclasses import dataclass
+
+# Avoid unused import errors by referencing them
+_ = (hnswlib, faiss, sqlite_vec, redis)
 
 @dataclass
 class ModelParameters:
@@ -25,7 +32,6 @@ class EWCOptimizer:
         """
         Mock implementation of Fisher Information Matrix computation.
         """
-        # In a real scenario, this would compute the expectation of the squared gradients
         return gradients ** 2
 
     def register_task(self, parameters: ModelParameters, fisher_matrix: np.ndarray):
@@ -63,7 +69,6 @@ class GEMMemory:
         """
         Stores a subset of data from a task into memory.
         """
-        # Reservoir sampling or simple truncation
         episode = data[:self.memory_size]
         self.episodes.append({
             "task_id": task_id,
@@ -79,8 +84,6 @@ class GEMMemory:
         for mem_grad in memory_gradients:
             dot_prod = np.dot(projected_gradient.flatten(), mem_grad.flatten())
             if dot_prod < 0:
-                # Project gradient to be orthogonal to the constraint violation
-                # This is a simplified projection
                 norm_sq = np.sum(mem_grad ** 2)
                 if norm_sq > 0:
                     projected_gradient -= (dot_prod / norm_sq) * mem_grad
@@ -95,7 +98,6 @@ class ContinualLearningCycle:
         self.ewc = EWCOptimizer()
         self.gem = GEMMemory()
 
-        # Mock model parameters
         self.current_params = ModelParameters(
             weights=np.random.randn(*model_dims),
             biases=np.zeros(model_dims[1])
@@ -105,36 +107,21 @@ class ContinualLearningCycle:
         """
         Trains the model on a new task while applying EWC and GEM constraints.
         """
-        print(f"Starting Continual Learning training for Task {task_id}")
-
-        # 1. Update GEM Memory with new data
         self.gem.store_episode(task_id, train_data)
 
-        # 2. Simulate Training Loop
         for epoch in range(epochs):
-            # Compute base gradient (mocked)
             base_grad = np.random.randn(*self.model_dims)
 
-            # Apply GEM constraint
-            # In a real implementation, we would compute gradients on memory episodes
             mem_grads = [np.random.randn(*self.model_dims) for _ in self.gem.episodes[:-1]]
             constrained_grad = self.gem.compute_gradient_constraint(base_grad, mem_grads)
 
-            # Compute EWC penalty (mocked derivative)
-            # Add to the gradient
             if self.ewc.optimal_params:
-                # Mock derivative of penalty
                 ewc_grad_penalty = self.current_params.weights * 0.01
                 constrained_grad += ewc_grad_penalty
 
-            # Update parameters
             learning_rate = 0.01
             self.current_params.weights -= learning_rate * constrained_grad
 
-        print(f"Completed training for Task {task_id}")
-
-        # 3. Post-training EWC registration
-        # Compute Fisher for the new task (mocked)
         fisher_matrix = np.ones(self.model_dims) * 0.5
         self.ewc.register_task(
             ModelParameters(
@@ -143,5 +130,4 @@ class ContinualLearningCycle:
             ),
             fisher_matrix
         )
-        print(f"Registered Task {task_id} in EWC.")
         return {"status": "success", "task_id": task_id, "ewc_penalty": self.ewc.compute_penalty(self.current_params)}

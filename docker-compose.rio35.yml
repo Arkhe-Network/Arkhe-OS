@@ -1,0 +1,418 @@
+version: "3.8"
+
+# ============================================================
+# Arkhe-Cathedral Rio-3.5 Docker Compose
+# Substrato 1104.2 — v1.1.0
+# Selo: CATHEDRAL-1104.2-DOCKER-COMPOSE-v1.1.0-2026-06-13
+# Arquiteto: ORCID 0009-0005-2697-4668
+# ============================================================
+
+services:
+  # ============================================================
+  # SERVICE 1: vLLM Inference Server (Rio-3.5-Open-397B)
+  # ============================================================
+  vllm-rio35:
+    image: vllm/vllm-openai:latest
+    container_name: arkhe-vllm-rio35
+    restart: unless-stopped
+
+    # GPU Requirements: 8x A100/H100 (80GB each)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    environment:
+      - CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+      - HF_HOME=/root/.cache/huggingface
+      - VLLM_WORKER_MULTIPROC_METHOD=spawn
+      - VLLM_TRUST_REMOTE_CODE=1
+      - VLLM_ATTENTION_BACKEND=FLASH_ATTN
+      - NCCL_IB_DISABLE=1
+      - GLOO_SOCKET_IFNAME=eth0
+
+    volumes:
+      - huggingface-cache:/root/.cache/huggingface
+      - ./configs/vllm_rio35.yaml:/app/config.yaml:ro
+      - ./models:/models:ro
+
+    ports:
+      - "8000:8000"
+
+    command: >
+      python -m vllm.entrypoints.openai.api_server
+      --model prefeitura-rio/Rio-3.5-Open-397B
+      --tensor-parallel-size 8
+      --max-model-len 1048576
+      --trust-remote-code
+      --gpu-memory-utilization 0.92
+      --max-num-seqs 256
+      --enable-prefix-caching
+      --port 8000
+      --config /app/config.yaml
+
+    shm_size: 32g
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+    networks:
+      - arkhe-internal
+
+    # Security: Run as non-root if possible (vLLM image limitation)
+    # user: "1000:1000"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+        labels: "service,engine"
+        tag: "{{.ImageName}}|{{.Name}}|{{.ID}}"
+
+  # ============================================================
+  # SERVICE 2: SwiReasoning Metrics Collector (Python)
+  # ============================================================
+  metrics-collector:
+    build:
+      context: ./metrics
+      dockerfile: Dockerfile.metrics
+    container_name: arkhe-metrics-collector
+    restart: unless-stopped
+
+    environment:
+      - VLLM_ENDPOINT=http://vllm-rio35:8000
+      - METRICS_PORT=9106
+      - METRICS_FILE=/data/swir_metrics.jsonl
+      - CALIBRATION_DIR=/data/calibration
+      - PLOTS_DIR=/data/plots
+      - PYTHONUNBUFFERED=1
+      - ARKHE_LOG_LEVEL=INFO
+
+    volumes:
+      - metrics-data:/data
+      - ./scripts:/app/scripts:ro
+      - ./configs:/app/configs:ro
+      - ./prompts:/app/prompts:ro
+
+    ports:
+      - "9106:9106"
+
+    depends_on:
+      vllm-rio35:
+        condition: service_healthy
+
+    networks:
+      - arkhe-internal
+
+    command: >
+      python /app/scripts/metrics_server.py
+      --vllm-endpoint http://vllm-rio35:8000
+      --port 9106
+      --metrics-file /data/swir_metrics.jsonl
+      --auto-calibrate
+      --calibration-interval 3600
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ============================================================
+  # SERVICE 3: PQC Anchor Service (RBB Chain)
+  # ============================================================
+  pqc-anchor:
+    build:
+      context: ./anchor
+      dockerfile: Dockerfile.anchor
+    container_name: arkhe-pqc-anchor
+    restart: unless-stopped
+
+    environment:
+      - CHAIN_ENDPOINT=http://rbb-testnet-1:26657
+      - CHAIN_ID=rbb-testnet-1
+      - SPHINCS_KEY_PATH=/secrets/rio35_sphincs.key
+      - SPHINCS_PUB_PATH=/secrets/rio35_sphincs.pub
+      - ANCHOR_INTERVAL_BLOCKS=100
+      - BATCH_SIZE=100
+      - GAS_LIMIT=180000
+      - METRICS_FILE=/data/swir_metrics.jsonl
+      - ARKHE_LOG_LEVEL=INFO
+
+    volumes:
+      - metrics-data:/data:ro
+      - pqc-secrets:/secrets:ro
+      - ./anchor/config:/app/config:ro
+
+    depends_on:
+      - metrics-collector
+      # - rbb-testnet-1  # Uncomment when RBB Chain node is available
+
+    networks:
+      - arkhe-internal
+      # - rbb-chain      # Uncomment for RBB Chain network
+
+    command: >
+      python /app/anchor_service.py
+      --metrics-file /data/swir_metrics.jsonl
+      --chain-id rbb-testnet-1
+      --batch-size 100
+      --sphincs-key /secrets/rio35_sphincs.key
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ============================================================
+  # SERVICE 4: SwiReasoning Analyzer (Plot Generation)
+  # ============================================================
+  swir-analyzer:
+    build:
+      context: ./analyzer
+      dockerfile: Dockerfile.analyzer
+    container_name: arkhe-swir-analyzer
+    restart: "no"  # Run on-demand or via cron
+
+    environment:
+      - METRICS_FILE=/data/swir_metrics.jsonl
+      - OUTPUT_DIR=/data/plots
+      - CALIBRATION_DIR=/data/calibration
+      - PYTHONUNBUFFERED=1
+
+    volumes:
+      - metrics-data:/data:ro
+      - plots-output:/data/plots
+      - ./scripts/analyze_swir_metrics.py:/app/analyze.py:ro
+
+    depends_on:
+      - metrics-collector
+
+    networks:
+      - arkhe-internal
+
+    command: >
+      python /app/analyze.py
+      /data/swir_metrics.jsonl
+      --output-dir /data/plots
+      --mode metrics
+
+    # Alternative: run as cron job every 5 minutes
+    # deploy:
+    #   restart_policy:
+    #     condition: on-failure
+    #     delay: 5m
+
+  # ============================================================
+  # SERVICE 5: FIG Monitor (Hardware Security)
+  # ============================================================
+  fig-monitor:
+    build:
+      context: ./fig
+      dockerfile: Dockerfile.fig
+    container_name: arkhe-fig-monitor
+    restart: unless-stopped
+    privileged: true  # Required for hardware access
+
+    environment:
+      - VOLTAGE_THRESHOLD_MV=950
+      - TEMP_THRESHOLD_C=85
+      - JITTER_THRESHOLD_NS=500
+      - HARD_RESET_ON_ANOMALY=true
+      - ZEROIZE_KEY_PATH=/secrets/rio35_sphincs.key
+      - ALERT_WEBHOOK=http://metrics-collector:9106/alert
+
+    volumes:
+      - pqc-secrets:/secrets:ro
+      - /dev:/dev
+      - /sys:/sys:ro
+
+    networks:
+      - arkhe-internal
+
+    command: >
+      /app/fig_daemon
+      --voltage-threshold 950
+      --temp-threshold 85
+      --jitter-threshold 500
+      --hard-reset
+      --zeroize-key /secrets/rio35_sphincs.key
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  # ============================================================
+  # SERVICE 6: Caster Tunnel (Network Security)
+  # ============================================================
+  caster-tunnel:
+    build:
+      context: ./caster
+      dockerfile: Dockerfile.caster
+    container_name: arkhe-caster-tunnel
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+
+    environment:
+      - TUNNEL_TYPE=boringtun_native
+      - PQC_ENCAPSULATION=true
+      - LISTEN_PORT=51820
+      - PEER_ENDPOINT=arkhe-vllm-rio35:8000
+      - METRICS_PORT=9107
+
+    ports:
+      - "51820:51820/udp"
+
+    networks:
+      - arkhe-internal
+
+    command: >
+      /app/caster
+      --tunnel-type boringtun_native
+      --pqc-encapsulation
+      --listen 0.0.0.0:51820
+      --peer arkhe-vllm-rio35:8000
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  # ============================================================
+  # SERVICE 7: CreekGuard (Covert Channel Detection)
+  # ============================================================
+  creek-guard:
+    build:
+      context: ./creekguard
+      dockerfile: Dockerfile.creekguard
+    container_name: arkhe-creekguard
+    restart: unless-stopped
+
+    environment:
+      - ENTROPY_WINDOW=128
+      - CHI_SQUARE_THRESHOLD=0.05
+      - SIMHASH_THRESHOLD=0.85
+      - MINHASH_THRESHOLD=0.80
+      - RATE_LIMIT_NOVELTY=0.1
+      - BURST_DETECTION_WINDOW=10
+      - ALERT_ENDPOINT=http://metrics-collector:9106/alert
+
+    networks:
+      - arkhe-internal
+
+    command: >
+      python /app/creekguard.py
+      --entropy-window 128
+      --chi-square 0.05
+      --simhash 0.85
+      --burst-window 10
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  # ============================================================
+  # SERVICE 8: Prometheus + Grafana (Observability)
+  # ============================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: arkhe-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - arkhe-internal
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: arkhe-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=arkhe_admin_2026
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./configs/grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./configs/grafana-datasources:/etc/grafana/provisioning/datasources:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - arkhe-internal
+    depends_on:
+      - prometheus
+
+# ============================================================
+# VOLUMES
+# ============================================================
+
+volumes:
+  huggingface-cache:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/arkhe/cache/huggingface
+
+  metrics-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/arkhe/data/metrics
+
+  plots-output:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/arkhe/data/plots
+
+  pqc-secrets:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/arkhe/secrets/pqc
+
+  prometheus-data:
+    driver: local
+
+  grafana-data:
+    driver: local
+
+# ============================================================
+# NETWORKS
+# ============================================================
+
+networks:
+  arkhe-internal:
+    driver: bridge
+    internal: false
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

@@ -1,0 +1,6 @@
+[substrate]
+id = "4004"
+name = "B20 BASE BRIDGE"
+version = "1.0.0"
+architect = "ORCID 0009-0005-2697-4668"
+dependencies = ["ethers", "serde", "tokio", "sha2"]

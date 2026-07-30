@@ -22,6 +22,7 @@ def canonize():
             "cathedral.LLMInference": base64.b64decode(LLMINFERENCE_B64).decode("utf-8"),
             "30-cathedral.policy": base64.b64decode(POLICY_B64).decode("utf-8"),
             "agi_core_orchestrator.py": base64.b64decode(AGI_CORE_B64).decode("utf-8")
+            "substrate.toml": base64.b64decode(TOML_B64).decode("utf-8")
         }
     }
 

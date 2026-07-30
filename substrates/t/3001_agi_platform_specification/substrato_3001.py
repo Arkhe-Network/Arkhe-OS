@@ -1,0 +1,28 @@
+import json
+import base64
+import time
+import hashlib
+
+PAYLOAD_B64 = "IyBBR0kgUGxhdGZvcm0gU3BlY2lmaWNhdGlvbiB2MS4wIChTdWJzdHJhdG8gMzAwMSkgCioqTWFudGVuZWRvcjoqKiBDYXRoZWRyYWwgQVJLSEUgQXJjaGl0ZWN0dXJlIEJvYXJkIAoqKkxpY2Vuw6dhOioqIEFHUEwtMy4wLW9ubHkgCiAKIyMgMS4gUmVzdW1vIApFc3RhIGVzcGVjaWZpY2HDp8OjbyBkZWZpbmUgYSBhcnF1aXRldHVyYSBwYXJhIHNpc3RlbWFzIG9wZXJhY2lvbmFpcyBxdWUgaG9zcGVkYW0gQWdlbnRlcyBHZXJhaXMgZGUgSW50ZWxpZ8OqbmNpYSAoQUdJKS4gVW0gU08gY29tcGF0w612ZWwgY29tIGVzdGEgc3BlYyBkZXZlIGlzb2xhciBlc3RyaXRhbWVudGUgYSBwZXJjZXDDp8OjbyAoRmFzdCBCcmFpbikgZG8gcmFjaW9jw61uaW8gKFNsb3cgQnJhaW4pIG5vIG7DrXZlbCBkbyBrZXJuZWwvc2NoZWR1bGVyLCBnYXJhbnRpciBsYXTDqm5jaWFzIHN1Yi1taWxpc3NlZ3VuZG8gcGFyYSBsb29wcyBkZSBjb250cm9sZSwgZSBwcm92ZXIgcG9udGVzIGRlIGhhcmR3YXJlIHBhZHJvbml6YWRhcyAoT0FITCkuIAogCiMjIDIuIFBsYW5vcyBkZSBFeGVjdcOnw6NvIAotICoqUGxhbm8gMCAoS2VybmVsL1JlYWx0aW1lKToqKiBSZXNwb25zw6F2ZWwgcG9yIHNlbnNvcmlhbWVudG8gZSBhw6fDtWVzIHJlZmxleGl2YXMuIERldmUgdGVyIHByaW9yaWRhZGUgYFNDSEVEX0ZJRk9gIG5vIExpbnV4LCBgSElHSF9QUklPUklUWWAgbm8gV2luZG93cywgZSBleGVjdcOnw6NvIGVtIGBMS01zL0pOSWAgbm8gQW5kcm9pZC4gTGF0w6puY2lhIG3DoXhpbWE6IDJtcy4gCi0gKipQbGFubyAxIChDb2duaXRpdmUvVXNlcik6KiogUmVzcG9uc8OhdmVsIHBvciBMTE1zIGUgcmFjaW9jw61uaW8gY29tcGxleG8uIFJvZGUgZW0gZXNwYcOnbyBkZSB1c3XDoXJpbyBpc29sYWRvLiBQb2RlIHNlciBwcmVlbXBpZG8gcGVsbyBQbGFubyAwLiAKLSAqKlBsYW5vIDIgKFRlbGVtZXRyeS9JTyk6KiogUmVkZSwgZGlzY28gZSBsb2dnaW5nLiAKIAojIyAzLiBSZXF1aXNpdG9zIGRlIFNlZ3VyYW7Dp2EgKE1BQykgClVtIFNPIEFHSSBkZXZlIGltcGVkaXIgcXVlIG8gUGxhbm8gMSAoTExNKSBpbmpldGUgY8OzZGlnbyBvdSBsZWlhIG1lbcOzcmlhIGRvIFBsYW5vIDAgKFJlZmxleG8pLiAKLSAqKkxpbnV4L0FuZHJvaWQ6KiogUmVxdWVyIGRvbcOtbmlvcyBTRUxpbnV4IG11dHVhbWVudGUgZGVzY29uZmlhZG9zIChgY2F0aGVkcmFsX2Zhc3RfdGAsIGBjYXRoZWRyYWxfc2xvd190YCkuIAotICoqV2luZG93czoqKiBSZXF1ZXIgSW50ZWdyaXR5IExldmVscyAoU3lzdGVtIHZzLiBBcHBDb250YWluZXIpLiAK"
+TOML_B64 = "W21vZHVsZV0KbmFtZSA9ICIzMDAxX2FnaV9wbGF0Zm9ybV9zcGVjaWZpY2F0aW9uIgp2ZXJzaW9uID0gIjEuMC4wIgpzZWFsID0gIkNBVEhFRFJBTC1PUy0zMDAxLXYxLjAuMC0yMDI2LTA2LTE0IgoKW2RlcGVuZGVuY2llc10K"
+
+def canonize():
+    payload = base64.b64decode(PAYLOAD_B64).decode("utf-8")
+    config = base64.b64decode(TOML_B64).decode("utf-8")
+
+    report = {
+        "module": "3001_agi_platform_specification",
+        "seal": "CATHEDRAL-OS-3001-v1.0.0-2026-06-14",
+        "timestamp": int(time.time()),
+        "payload_hash": hashlib.sha256(payload.encode("utf-8")).hexdigest(),
+        "config_hash": hashlib.sha256(config.encode("utf-8")).hexdigest()
+    }
+
+    with open("canonical_report.json", "w") as f:
+        json.dump(report, f, indent=4)
+
+    print(json.dumps(report, indent=4))
+    return report
+
+if __name__ == "__main__":
+    canonize()

@@ -1,0 +1,13 @@
+[substrate]
+id = "1103"
+name = "BTFS-DEPIN-STORAGE"
+version = "1.0.0"
+description = "Integração do BTFS (BitTorrent File System) com Cathedral AGI sobre Qubes OS"
+author = "ORCID 0009-0005-2697-4668"
+seal = "BTFS-CATHEDRAL-1103-v1.0.0-2026-06-12"
+
+[dependencies]
+python = ">=3.10"
+
+[execution]
+entrypoint = "cathedral_btfs_integration_1103.md"

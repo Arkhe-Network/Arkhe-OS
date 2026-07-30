@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "reasoning": {
+      "type": "string",
+      "description": "Explicação passo a passo do raciocínio"
+    },
+    "action_vector": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "Vetor de ação (4 floats) no intervalo [-1, 1]"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Confiança na decisão"
+    },
+    "safety_override": {
+      "type": "boolean",
+      "description": "Se true, substitui a decisão do Fast Brain"
+    }
+  },
+  "required": ["reasoning", "action_vector", "confidence"],
+  "additionalProperties": false
+}

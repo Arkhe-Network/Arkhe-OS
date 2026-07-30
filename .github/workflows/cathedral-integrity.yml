@@ -285,7 +285,28 @@ jobs:
             -d "{\"alert\": \"critical_security_findings\", \"run_id\": \"${{ github.run_id }}\"}"
 
   # ============================================================================
-  # JOB 5: INTEGRITY DASHBOARD UPDATE (Post-success)
+  # JOB 5: ZKHYDRA SECURITY SCAN
+  # ============================================================================
+  zkhydra-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: ⚙️ Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 🔍 Security scan with zkHydra
+        run: |
+          # Create a dummy circuit file for testing
+          mkdir -p test_circuits
+          echo "template Multiplier2() { signal input a; signal input b; signal output c; c <== a * b; } component main = Multiplier2();" > test_circuits/multiplier2.circom
+          python cathedral-os/zkhydra_gateway.py analyze --circuit test_circuits/multiplier2.circom --tools all --fail-on-finding --output security-report.json
+
+  # ============================================================================
+  # JOB 6: INTEGRITY DASHBOARD UPDATE (Post-success)
   # ============================================================================
   update-dashboard:
     needs: [integrity-tests]

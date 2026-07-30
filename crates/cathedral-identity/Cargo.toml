@@ -1,0 +1,11 @@
+[package]
+name = "cathedral-identity"
+version = "0.1.0"
+edition = "2024"
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+cathedral-arkheobex = { path = "../cathedral-arkheobex" }
+hex.workspace = true

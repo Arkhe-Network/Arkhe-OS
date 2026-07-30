@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # The actual FastAPI backend handling the logic and memory proof validation
+  fastapi-backend:
+    image: python:3.10-slim
+    container_name: cathedral-picoads-backend
+    ports:
+      - "8000:8000"
+    working_dir: /app
+    volumes:
+      - ./backend/picoads_service:/app
+    command: sh -c "pip install fastapi uvicorn pydantic httpx && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    depends_on:
+      - picoads-mock
+
+  # A local mock for the PicoAds service to test against
+  picoads-mock:
+    image: python:3.10-slim
+    container_name: picoads-mock-python
+    ports:
+      - "8080:8080"
+    working_dir: /app
+    volumes:
+      - ./picoads_mock:/app
+    command: sh -c "pip install fastapi uvicorn pydantic && uvicorn main:app --host 0.0.0.0 --port 8080 --reload"
+
+  # The agent that connects to the backend
+  cathedral-agent:
+    image: node:20
+    container_name: cathedral-agent
+    working_dir: /app
+    volumes:
+      - ./agentkit-zkproof:/app
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - fastapi-backend
+    environment:
+      - PICOADS_BASE_URL=http://fastapi-backend:8000
+      - PICOADS_API_KEY=pico_mock_api_key_here

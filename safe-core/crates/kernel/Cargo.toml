@@ -1,0 +1,33 @@
+# crates/kernel/Cargo.toml
+[package]
+name = "kernel"
+version = "0.8.0"
+edition = "2021"
+
+[dependencies]
+# Crates internos
+cognitive-core = { path = "../cognitive-core" }
+action-executor = { path = "../action-executor" }
+memory-system = { path = "../memory-system" }
+
+# Agentic framework
+heartbit-core = { workspace = true }
+
+# Async
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# Utils
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+sha2 = { workspace = true }
+hex = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"

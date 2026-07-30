@@ -1,0 +1,11 @@
+[module]
+name = "3000_vision_transformer_core"
+version = "1.0.0"
+seal = "CATHEDRAL-ARKHE-v16.0.0-VISION-2026-06-14"
+
+[dependencies]
+torch = "*"
+timm = "*"
+owlready2 = "*"
+z3-solver = "*"
+opencv-python = "*"

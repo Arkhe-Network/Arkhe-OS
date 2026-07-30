@@ -1,0 +1,10 @@
+FROM rust:1.85-slim AS builder
+WORKDIR /app
+COPY Cargo.toml Cargo.lock* ./
+COPY crates ./crates
+RUN cargo build --release -p safe-core-bridge
+
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y ca-certificates curl
+COPY --from=builder /app/target/release/safe-core-bridge /usr/local/bin/
+CMD ["safe-core-bridge"]

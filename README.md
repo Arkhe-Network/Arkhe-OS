@@ -161,3 +161,5 @@ Este projeto é distribuído sob a licença **MIT**. Se usar em pesquisa acadêm
 - **Trade Finance**: Smart contracts para comércio exterior com privacidade diferencial.
 - **CICS Bridge**: Conectividade legada com mainframes IBM z/OS via Java.
 - **Edge ATM Fraud Detector**: TinyML em C++(Arduino) para análise de fraudes em caixas eletrônicos físicos.
+
+[![Feito no Brasil](https://selo.feitonobrasil.dev.br/pt-br/colorido/1x.svg)](https://feitonobrasil.dev.br)

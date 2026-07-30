@@ -1,0 +1,9 @@
+[package]
+name = "safe-core-verifier"
+version = "1.0.0"
+edition = "2024"
+description = "Verificação Formal via Lean4 — Provas Matemáticas de Correção"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

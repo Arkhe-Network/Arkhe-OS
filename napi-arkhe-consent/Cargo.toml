@@ -1,0 +1,11 @@
+[package]
+name = "napi-arkhe-consent"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+napi = "2"
+napi-derive = "2"
+hyperon-bridge = { path = "../hyperon-bridge" }
+metacognitive-regulator = { path = "../metacognitive-regulator" }
+cathedral-embodied-no_std = { path = "../cathedral-embodied-no_std" }

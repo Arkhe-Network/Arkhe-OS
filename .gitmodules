@@ -141,7 +141,7 @@
 	url = https://github.com/ar-io/ar-io-verify.git
 [submodule "third_party/spec-kit"]
 	path = third_party/spec-kit
-	url = https://github.com/github/spec-kit.git
+	url = https://github.com/github/spec-kit
 [submodule "gitlawb/openclaude"]
 	path = gitlawb/openclaude
 	url = https://github.com/Gitlawb/openclaude

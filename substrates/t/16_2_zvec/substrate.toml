@@ -1,0 +1,14 @@
+[substrate]
+id = "16.2"
+name = "Cathedral ARKHE v16.2 zVEC Persistent Episodic Memory"
+version = "v1.0.0"
+date = "2026-06-14"
+seal = "CATHEDRAL-ARKHE-v16.2-ZVEC-2026-06-14"
+
+[dependencies]
+python = ">=3.10"
+zvec = "*"
+
+[modules]
+name = "cathedral_arkhe_v16_2_zvec.py"
+type = "python"

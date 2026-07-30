@@ -1,0 +1,10 @@
+--- Dockerfile.agent-runtime
++++ Dockerfile.agent-runtime
+@@ -10,7 +10,7 @@
+
+ RUN apt-get update && apt-get install -y ca-certificates curl python3 python3-pip netcat-traditional python3-venv && rm -rf /var/lib/apt/lists/*
+
+ # Instalar dependências Python para bridge (se necessário)
+ COPY cathedral_agent_bridge.py /opt/cathedral/
+-RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir httpx pydantic maturin
++RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir httpx pydantic maturin --break-system-packages

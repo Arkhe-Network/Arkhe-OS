@@ -1,0 +1,9 @@
+[package]
+name = "arkhe-agents"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+arkhe-core = { path = "../arkhe-core" }
+arkhe-llm = { path = "../arkhe-llm" }
+arkhe-metacognition = { path = "../arkhe-metacognition" }
