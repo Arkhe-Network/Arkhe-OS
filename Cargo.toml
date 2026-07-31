@@ -30,7 +30,8 @@ members = [
     "crates/safe-core-bridge",
     "cathedral-arkhe/floquet_ptc",
     "cathedral-arkhe/safety-core",
-    "cathedral-arkhe/unified_uep"
+    "cathedral-arkhe/unified_uep",
+    "crates/arkhe-soc-tlm"
 ]
 
 [workspace.package]
