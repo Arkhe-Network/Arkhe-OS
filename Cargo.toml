@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "tools/cargo-hg-check",
     "crates/cathedral-llm-core",
     "crates/cathedral-inference-runtime",
     "crates/cathedral-identity",
