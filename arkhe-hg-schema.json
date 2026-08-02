@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "arkhe-hg-schema-v2.0",
+  "title": "Arkhe Hypergraph Schema v2.0",
+  "description": "Schema para nós e hiperarestas do Arkhe, com zonas de confiança e cardinalidade.",
+  "definitions": {
+    "NodeId": { "type": "string", "format": "uuid" },
+    "HyperedgeId": { "type": "string", "format": "uuid" },
+    "Zone": {
+      "type": "string",
+      "enum": ["Z0_Theory", "Z1_Tools", "Z2_Continuous", "Z3_Discrete"]
+    },
+    "NodeType": {
+      "type": "string",
+      "enum": [
+        "Paper", "Theorem", "PhysicalLaw",
+        "ExternalSolver", "Orchestrator",
+        "ModelState", "ActivationSet", "PromptDistribution", "Methodology",
+        "ChainState", "ContractStorage", "AttackVector", "ThreatDataset", "ComplianceFramework",
+        "Invariant", "FormalConstraint", "Witness", "Hypothesis", "Observation", "DivergenceMetric"
+      ]
+    },
+    "HyperedgeType": {
+      "type": "string",
+      "enum": [
+        "SOLVES", "CALCULATES_BOUND", "AUDITS_PARAMS",
+        "INSTANCIATES_TEST", "APPLIES_METHODOLOGY", "MAPPED_TO_CONTROL",
+        "TRANSLATES_TO_PRIMITIVE", "CONSTRAINS_THEOREM",
+        "PRODUCES_WITNESS", "CERTIFIES"
+      ]
+    },
+    "Node": {
+      "type": "object",
+      "required": ["id", "node_type", "zone", "metadata"],
+      "properties": {
+        "id": { "$ref": "#/definitions/NodeId" },
+        "node_type": { "$ref": "#/definitions/NodeType" },
+        "zone": { "$ref": "#/definitions/Zone" },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean"] }
+        }
+      }
+    },
+    "Hyperedge": {
+      "type": "object",
+      "required": ["id", "edge_type", "nodes", "weight", "provenance"],
+      "properties": {
+        "id": { "$ref": "#/definitions/HyperedgeId" },
+        "edge_type": { "$ref": "#/definitions/HyperedgeType" },
+        "nodes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/NodeId" },
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "provenance": { "type": "string" },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean"] }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Node" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Hyperedge" }
+    }
+  }
+}
