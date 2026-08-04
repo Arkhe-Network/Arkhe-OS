@@ -1,14 +1,14 @@
 use crate::{
-    ArkhePeripheral, ClockDomain, DOMAIN_NODES, PerformanceCounters, QplResult, SocError,
-    sram::SramDxController,
+    sram::SramDxController, ArkhePeripheral, ClockDomain, PerformanceCounters, QplResult, SocError,
+    DOMAIN_NODES,
 };
 
 #[repr(C)]
 pub struct QplAcceleratorConfig {
-    pub control: u32,    // bit 0: start, bit 1: reset
-    pub status: u32,    // bit 0: done, bit 1: error
+    pub control: u32, // bit 0: start, bit 1: reset
+    pub status: u32,  // bit 0: done, bit 1: error
     pub iterations: u32,
-    pub threshold: u32,  // veto threshold (focal_weight scaled)
+    pub threshold: u32, // veto threshold (focal_weight scaled)
 }
 
 pub struct QplAccelerator {
@@ -55,7 +55,11 @@ impl QplAccelerator {
             let left = sram.read_domain_d(((i + DOMAIN_NODES - 1) % DOMAIN_NODES) as u8)?;
             let right = sram.read_domain_d(((i + 1) % DOMAIN_NODES) as u8)?;
             let output = (left + input + right) / 3.0;
-            results[i] = QplResult { node: i, input, output };
+            results[i] = QplResult {
+                node: i,
+                input,
+                output,
+            };
         }
 
         // Modelo de latência: 2.37us + 0.1us por iteração adicional
@@ -65,7 +69,7 @@ impl QplAccelerator {
 
         self.counters.qpl_cycles += self.clock.total_cycles() - start_cycles;
         self.config.status = 0x1; // Done
-        self.config.control = 0;  // Auto-clear start
+        self.config.control = 0; // Auto-clear start
 
         Ok(results)
     }

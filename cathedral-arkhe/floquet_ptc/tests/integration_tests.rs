@@ -1,4 +1,4 @@
-use floquet_ptc::{FloquetHamiltonian, ExceptionalPointResult, PTCSignature};
+use floquet_ptc::{ExceptionalPointResult, FloquetHamiltonian, PTCSignature};
 
 #[test]
 fn test_transitions() {

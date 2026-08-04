@@ -32,7 +32,8 @@ impl UedGovernance for ReactiveLog {
 #[async_trait]
 impl SparseRouterGovernance for ReactiveLog {
     async fn is_route_banned(&self, router_id: &str, from_module: &str, to_module: &str) -> bool {
-        self.is_route_banned(router_id, from_module, to_module).await
+        self.is_route_banned(router_id, from_module, to_module)
+            .await
     }
 
     async fn is_frozen(&self) -> bool {

@@ -1,12 +1,12 @@
 #[cfg(feature = "mcp")]
 pub mod mcp_impl {
-    use crate::tools;
     use crate::state::BridgeState;
+    use crate::tools;
     use rmcp::{ServerHandler, ServiceExt, transport::stdio};
     use rmcp::{tool, tool_router};
+    use serde::{Deserialize, Serialize};
     use std::sync::Arc;
     use tracing::info;
-    use serde::{Deserialize, Serialize};
 
     #[derive(Clone)]
     pub struct SafeCoreMcpServer {
@@ -48,33 +48,25 @@ pub mod mcp_impl {
         }
 
         #[tool(description = "List all recorded ethics violations")]
-        pub async fn get_violations(
-            &self,
-        ) -> Result<serde_json::Value, String> {
+        pub async fn get_violations(&self) -> Result<serde_json::Value, String> {
             let resp = tools::get_violations(&self.state).await;
             serde_json::to_value(&resp).map_err(|e| e.to_string())
         }
 
         #[tool(description = "Clear all recorded ethics violations")]
-        pub async fn clear_violations(
-            &self,
-        ) -> Result<serde_json::Value, String> {
+        pub async fn clear_violations(&self) -> Result<serde_json::Value, String> {
             let result = tools::clear_violations(&self.state).await;
             Ok(result)
         }
 
         #[tool(description = "List all safety invariants")]
-        pub async fn list_invariants(
-            &self,
-        ) -> Result<serde_json::Value, String> {
+        pub async fn list_invariants(&self) -> Result<serde_json::Value, String> {
             let resp = tools::list_invariants(&self.state);
             serde_json::to_value(&resp).map_err(|e| e.to_string())
         }
 
         #[tool(description = "Export safety invariants")]
-        pub async fn export_invariants(
-            &self,
-        ) -> Result<serde_json::Value, String> {
+        pub async fn export_invariants(&self) -> Result<serde_json::Value, String> {
             let result = tools::export_invariants(&self.state)
                 .await
                 .map_err(|e| e.to_string())?;
@@ -82,9 +74,7 @@ pub mod mcp_impl {
         }
 
         #[tool(description = "Health check")]
-        pub async fn health(
-            &self,
-        ) -> Result<serde_json::Value, String> {
+        pub async fn health(&self) -> Result<serde_json::Value, String> {
             let resp = tools::health_check(&self.state).await;
             serde_json::to_value(&resp).map_err(|e| e.to_string())
         }
@@ -101,7 +91,10 @@ pub mod mcp_impl {
         }
 
         pub async fn run_stdio(self) -> Result<(), Box<dyn std::error::Error>> {
-            Err("MCP não disponível. Compile com: cargo build -p safe-core-bridge --features mcp".into())
+            Err(
+                "MCP não disponível. Compile com: cargo build -p safe-core-bridge --features mcp"
+                    .into(),
+            )
         }
     }
 }

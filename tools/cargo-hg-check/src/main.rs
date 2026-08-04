@@ -57,7 +57,11 @@ fn main() -> Result<()> {
         Commands::Verify { invariant } => {
             let graph = materialize(&PathBuf::from("."))?;
             let sat = verify_invariant(&graph, &invariant)?;
-            println!("Invariant {}: {}", invariant, if sat { "SAT" } else { "UNSAT" });
+            println!(
+                "Invariant {}: {}",
+                invariant,
+                if sat { "SAT" } else { "UNSAT" }
+            );
         }
         Commands::Visualize { output } => {
             let graph = materialize(&PathBuf::from("."))?;

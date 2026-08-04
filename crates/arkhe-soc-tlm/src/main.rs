@@ -1,6 +1,8 @@
 use arkhe_soc_tlm::{
-    micros, aotb::{AotbEncoderHw, AotbVerifierHw}, soc::ArkheSoc, ClockDomain,
-    PerformanceCounters, REFERENCE_SOL_US,
+    aotb::{AotbEncoderHw, AotbVerifierHw},
+    micros,
+    soc::ArkheSoc,
+    ClockDomain, PerformanceCounters, REFERENCE_SOL_US,
 };
 use ed25519_dalek::SigningKey;
 use serde::Serialize;
@@ -33,11 +35,7 @@ fn main() {
     let freq_mhz = 400u32; // 400 MHz = 2.5ns/ciclo
     let clock = ClockDomain::new(freq_mhz);
     let key = SigningKey::from_bytes(&[7u8; 32]);
-    let mut soc = ArkheSoc::new(
-        [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
-        [9u8; 16],
-        clock,
-    );
+    let mut soc = ArkheSoc::new([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], [9u8; 16], clock);
     let mut encoder = AotbEncoderHw::new(
         key.clone(),
         soc.session_id,
@@ -52,7 +50,9 @@ fn main() {
         soc.expand(sequence);
         let frame = soc.emit_frame(&mut encoder).expect("encode deve funcionar");
         let v_start = Instant::now();
-        verifier.verify(&frame).expect("benchmark frame must verify");
+        verifier
+            .verify(&frame)
+            .expect("benchmark frame must verify");
         let _v_elapsed = v_start.elapsed();
         // Acumula no encoder/verifier — precisamos expor contadores
     }

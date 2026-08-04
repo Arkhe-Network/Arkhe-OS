@@ -1,5 +1,5 @@
-pub mod domains;
 pub mod diamond_nv;
+pub mod domains;
 
-pub use domains::Domain;
 pub use diamond_nv::DiamondNVMonitor;
+pub use domains::Domain;

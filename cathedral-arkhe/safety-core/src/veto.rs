@@ -34,10 +34,10 @@ impl AnubisVetoV3 {
     ) -> VetoAction {
         // 1. Verificar a entropia PRIMEIRO (métrica de menor latência)
         if metrics.token_entropy > self.entropy_limit {
-            return VetoAction::HaltAndLog(
-                format!("[VETO] EntropySpike: {} > {}. Context: {}",
-                    metrics.token_entropy, self.entropy_limit, context)
-            );
+            return VetoAction::HaltAndLog(format!(
+                "[VETO] EntropySpike: {} > {}. Context: {}",
+                metrics.token_entropy, self.entropy_limit, context
+            ));
         }
 
         // 2. Verificar a integridade da costura
@@ -48,7 +48,7 @@ impl AnubisVetoV3 {
             ConsistencyResult::Paraphrase => {
                 VetoAction::Allow // Falso negativo benigno
             }
-            _ => VetoAction::Allow
+            _ => VetoAction::Allow,
         }
     }
 }
@@ -64,8 +64,15 @@ mod tests {
             entropy_limit: 1.5,
         };
 
-        let ok_metrics = RealMetrics { perplexity: 10.0, token_entropy: 1.0, rag_density: 0.8 };
-        let bad_metrics = RealMetrics { token_entropy: 2.0, ..ok_metrics.clone() };
+        let ok_metrics = RealMetrics {
+            perplexity: 10.0,
+            token_entropy: 1.0,
+            rag_density: 0.8,
+        };
+        let bad_metrics = RealMetrics {
+            token_entropy: 2.0,
+            ..ok_metrics.clone()
+        };
 
         // Test EntropySpike
         match veto.evaluate(&ConsistencyResult::Consistent, &bad_metrics, "test") {
@@ -80,9 +87,15 @@ mod tests {
         }
 
         // Test Paraphrase (should be allowed)
-        assert_eq!(veto.evaluate(&ConsistencyResult::Paraphrase, &ok_metrics, "test"), VetoAction::Allow);
+        assert_eq!(
+            veto.evaluate(&ConsistencyResult::Paraphrase, &ok_metrics, "test"),
+            VetoAction::Allow
+        );
 
         // Test Consistent (should be allowed)
-        assert_eq!(veto.evaluate(&ConsistencyResult::Consistent, &ok_metrics, "test"), VetoAction::Allow);
+        assert_eq!(
+            veto.evaluate(&ConsistencyResult::Consistent, &ok_metrics, "test"),
+            VetoAction::Allow
+        );
     }
 }

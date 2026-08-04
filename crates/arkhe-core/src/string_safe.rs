@@ -12,7 +12,9 @@ pub struct SafeString {
 impl SafeString {
     /// Cria uma nova string segura a partir de um slice de bytes.
     pub fn new(bytes: &[u8]) -> Self {
-        Self { inner: bytes.to_vec() }
+        Self {
+            inner: bytes.to_vec(),
+        }
     }
 
     /// Busca um caractere, garantindo que não ultrapasse o buffer.
@@ -56,7 +58,9 @@ mod verification {
     #[kani::proof]
     fn verify_find_char_bounds() {
         let bytes = kani::any::<[u8; 256]>();
-        let s = SafeString { inner: bytes.to_vec() };
+        let s = SafeString {
+            inner: bytes.to_vec(),
+        };
         let c = kani::any::<u8>();
         let result = s.find_char(c);
 
@@ -102,7 +106,9 @@ mod verification {
     #[kani::proof]
     fn verify_no_squidbleed_pattern() {
         let bytes = kani::any::<[u8; 256]>();
-        let s = SafeString { inner: bytes.to_vec() };
+        let s = SafeString {
+            inner: bytes.to_vec(),
+        };
         let c = kani::any::<u8>();
 
         // A função find_char nunca pode retornar uma posição >= len

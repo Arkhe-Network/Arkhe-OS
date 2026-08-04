@@ -1,6 +1,6 @@
 use axum::Router;
 use clap::Parser;
-use safe_core_bridge::{handlers, BridgeState, SafeCoreMcpServer};
+use safe_core_bridge::{BridgeState, SafeCoreMcpServer, handlers};
 use std::sync::Arc;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 
@@ -30,7 +30,10 @@ async fn main() -> anyhow::Result<()> {
 
         tracing::info!("Safe-Core Bridge iniciando em modo MCP (stdio)");
         let server = SafeCoreMcpServer::new(state);
-        server.run_stdio().await.map_err(|e| anyhow::anyhow!("{}", e))?;
+        server
+            .run_stdio()
+            .await
+            .map_err(|e| anyhow::anyhow!("{}", e))?;
     } else {
         tracing_subscriber::fmt()
             .with_env_filter(

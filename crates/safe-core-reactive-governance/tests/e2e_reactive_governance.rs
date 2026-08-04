@@ -34,7 +34,11 @@ async fn test_reactive_freeze_blocks_operations() {
 async fn test_reactive_ban_routing_path() {
     let (gov_vk, mut reactive_log) = setup();
 
-    assert!(!reactive_log.is_route_banned("router-1", "vision", "dense_v3").await);
+    assert!(
+        !reactive_log
+            .is_route_banned("router-1", "vision", "dense_v3")
+            .await
+    );
 
     let action = GovernanceAction::BanRoutingPath {
         router_id: "router-1".into(),
@@ -54,12 +58,16 @@ async fn test_reactive_ban_routing_path() {
     reactive_log.apply_governance_entry(entry).await.unwrap();
 
     assert!(
-        reactive_log.is_route_banned("router-1", "vision", "dense_v3").await,
+        reactive_log
+            .is_route_banned("router-1", "vision", "dense_v3")
+            .await,
         "Route should be banned"
     );
 
     assert!(
-        !reactive_log.is_route_banned("router-1", "audio", "sparse_v1").await,
+        !reactive_log
+            .is_route_banned("router-1", "audio", "sparse_v1")
+            .await,
         "Unrelated route should be free"
     );
 }

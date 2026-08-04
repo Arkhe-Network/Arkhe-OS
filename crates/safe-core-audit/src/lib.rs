@@ -1,11 +1,11 @@
 //! Auditoria Imutável — Cadeia de Merkle para Decisões de Governança
 
-pub mod merkle;
 pub mod event;
+pub mod merkle;
 pub mod trail;
 
-pub use merkle::{MerkleTree, MerkleProof};
 pub use event::{AuditEvent, EventType};
+pub use merkle::{MerkleProof, MerkleTree};
 pub use trail::AuditTrail;
 
 #[derive(Debug, thiserror::Error)]

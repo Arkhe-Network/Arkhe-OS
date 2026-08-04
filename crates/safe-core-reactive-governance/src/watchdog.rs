@@ -1,5 +1,5 @@
-use crate::reactive_log::ReactiveLog;
 use crate::governance::{GovernanceAction, GovernanceEntry, GovernanceError};
+use crate::reactive_log::ReactiveLog;
 use std::sync::Arc;
 use std::time::Duration;
 use tracing::{error, info};
@@ -33,7 +33,8 @@ impl GovernanceWatchdog {
     }
 
     pub async fn run(&mut self) {
-        let mut interval = tokio::time::interval(Duration::from_secs(self.config.check_interval_secs));
+        let mut interval =
+            tokio::time::interval(Duration::from_secs(self.config.check_interval_secs));
         loop {
             interval.tick().await;
             self.check_and_act().await;
