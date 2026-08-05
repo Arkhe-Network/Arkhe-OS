@@ -1,0 +1,6 @@
+{
+  "name": "ERC-20-Conservation",
+  "invariant": "forall addr, balances[addr] >= 0 AND sum(balances) == totalSupply",
+  "pre_condition": "caller != address(0) AND amount <= balance[msg.sender]",
+  "post_condition": "sum(balances_after) == sum(balances_before) AND balance[from] + balance[to] == balance[from]_after + balance[to]_after"
+}
