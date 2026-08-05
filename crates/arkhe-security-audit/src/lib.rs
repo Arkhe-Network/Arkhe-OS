@@ -7,22 +7,22 @@
 //! 5. Structured Output — findings.json validado por schema
 //! 6. Independent Verification — Agentes frescos verificam cada alegação
 
-pub mod recon;
 pub mod hunt;
-pub mod validate;
+pub mod independent_verification;
+pub mod recon;
 pub mod report;
 pub mod structured_output;
-pub mod independent_verification;
+pub mod validate;
 
 pub mod types;
 
-pub use types::{Finding, Severity, AttackClass};
-pub use recon::ReconnaissancePhase;
 pub use hunt::HuntPhase;
-pub use validate::ValidationPhase;
+pub use independent_verification::IndependentVerificationPhase;
+pub use recon::ReconnaissancePhase;
 pub use report::ReportPhase;
 pub use structured_output::StructuredOutputPhase;
-pub use independent_verification::IndependentVerificationPhase;
+pub use types::{AttackClass, Finding, Severity};
+pub use validate::ValidationPhase;
 
 /// Orquestrador que executa as 6 fases em sequência.
 pub struct AuditOrchestrator {
@@ -31,7 +31,10 @@ pub struct AuditOrchestrator {
 }
 
 impl AuditOrchestrator {
-    pub fn new(target_dir: &str, llm: std::sync::Arc<dyn arkhe_llm::engine::InferenceEngine>) -> Self {
+    pub fn new(
+        target_dir: &str,
+        llm: std::sync::Arc<dyn arkhe_llm::engine::InferenceEngine>,
+    ) -> Self {
         Self {
             target_dir: target_dir.to_string(),
             llm,

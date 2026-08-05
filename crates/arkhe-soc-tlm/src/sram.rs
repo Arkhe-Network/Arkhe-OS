@@ -1,12 +1,10 @@
-use crate::{
-    ArkhePeripheral, BufferId, ClockDomain, DOMAIN_NODES, FULL_NODES, SocError,
-};
+use crate::{ArkhePeripheral, BufferId, ClockDomain, SocError, DOMAIN_NODES, FULL_NODES};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 /// SRAM dual-port com double buffering (arXiv:2607.16100)
 pub struct SramDxController {
     bank_d: [[u8; 8]; DOMAIN_NODES], // 8 vértices × 64-bit cada (f64)
-    bank_x: [[u8; 8]; FULL_NODES],  // 16 vértices expandidos
+    bank_x: [[u8; 8]; FULL_NODES],   // 16 vértices expandidos
     active: BufferId,
     ready_sequence: AtomicU64,
     clock: ClockDomain,

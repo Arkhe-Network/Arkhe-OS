@@ -1,8 +1,8 @@
-use crate::governance::{GovernanceAction, GovernanceEntry, GovernanceResult, GovernanceError};
+use crate::governance::{GovernanceAction, GovernanceEntry, GovernanceError, GovernanceResult};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use tracing::{info, warn, error};
+use tracing::{error, info, warn};
 
 #[derive(Debug, Default)]
 pub struct GovernanceState {
@@ -18,9 +18,7 @@ pub struct ReactiveLog {
 }
 
 impl ReactiveLog {
-    pub fn new(
-        authorized_keys: Vec<Vec<u8>>,
-    ) -> Self {
+    pub fn new(authorized_keys: Vec<Vec<u8>>) -> Self {
         Self {
             state: Arc::new(RwLock::new(GovernanceState::default())),
             authorized_keys,
@@ -38,17 +36,43 @@ impl ReactiveLog {
                 state.last_rollback_sth = Some(target_sth);
                 warn!(reason, "Rollback curriculum to STH");
             }
-            GovernanceAction::AdjustTeacherReward { teacher_id, environment_hash, reward_delta, reason } => {
-                let current = state.reward_adjustments.entry(teacher_id.clone()).or_insert(0.0);
+            GovernanceAction::AdjustTeacherReward {
+                teacher_id,
+                environment_hash,
+                reward_delta,
+                reason,
+            } => {
+                let current = state
+                    .reward_adjustments
+                    .entry(teacher_id.clone())
+                    .or_insert(0.0);
                 *current += reward_delta;
-                warn!(teacher_id, environment_hash, reward_delta, reason, "Teacher reward adjusted");
+                warn!(
+                    teacher_id,
+                    environment_hash, reward_delta, reason, "Teacher reward adjusted"
+                );
             }
-            GovernanceAction::BanRoutingPath { router_id, from_module, to_module, reason } => {
+            GovernanceAction::BanRoutingPath {
+                router_id,
+                from_module,
+                to_module,
+                reason,
+            } => {
                 let path = format!("{}->{}", from_module, to_module);
-                state.banned_routes.entry(router_id.clone()).or_default().push(path);
-                warn!(router_id, from_module, to_module, reason, "Routing path banned");
+                state
+                    .banned_routes
+                    .entry(router_id.clone())
+                    .or_default()
+                    .push(path);
+                warn!(
+                    router_id,
+                    from_module, to_module, reason, "Routing path banned"
+                );
             }
-            GovernanceAction::EmergencyFreeze { reason, duration_seconds } => {
+            GovernanceAction::EmergencyFreeze {
+                reason,
+                duration_seconds,
+            } => {
                 state.frozen = true;
                 error!(reason, duration_seconds, "🚨 SYSTEM FROZEN");
                 let state_clone = self.state.clone();
@@ -56,7 +80,10 @@ impl ReactiveLog {
                     tokio::time::sleep(tokio::time::Duration::from_secs(duration_seconds)).await;
                     let mut state = state_clone.write().await;
                     state.frozen = false;
-                    info!("System unfrozen automatically after {} seconds", duration_seconds);
+                    info!(
+                        "System unfrozen automatically after {} seconds",
+                        duration_seconds
+                    );
                 });
             }
             GovernanceAction::Unfreeze { reason } => {
@@ -71,7 +98,12 @@ impl ReactiveLog {
         self.state.read().await.frozen
     }
 
-    pub async fn is_route_banned(&self, router_id: &str, from_module: &str, to_module: &str) -> bool {
+    pub async fn is_route_banned(
+        &self,
+        router_id: &str,
+        from_module: &str,
+        to_module: &str,
+    ) -> bool {
         let state = self.state.read().await;
         if let Some(banned) = state.banned_routes.get(router_id) {
             banned.contains(&format!("{}->{}", from_module, to_module))
@@ -81,8 +113,11 @@ impl ReactiveLog {
     }
 
     pub async fn get_teacher_reward_delta(&self, teacher_id: &str) -> f64 {
-        self.state.read().await
-            .reward_adjustments.get(teacher_id)
+        self.state
+            .read()
+            .await
+            .reward_adjustments
+            .get(teacher_id)
             .copied()
             .unwrap_or(0.0)
     }

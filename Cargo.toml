@@ -33,7 +33,7 @@ members = [
     "cathedral-arkhe/safety-core",
     "cathedral-arkhe/unified_uep",
     "crates/arkhe-soc-tlm",
-    "arkhe-buzz-integration"
+    "timechain"
 ]
 
 [workspace.package]

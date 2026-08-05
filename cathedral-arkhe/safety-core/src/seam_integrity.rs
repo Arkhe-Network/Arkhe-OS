@@ -1,21 +1,25 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ConsistencyResult {
     Consistent,
-    HallucinationRisk,  // Falso Positivo (VETO)
-    Paraphrase,         // Falso Negativo (Log)
-    Inconsistent,       // Irrelevante
+    HallucinationRisk, // Falso Positivo (VETO)
+    Paraphrase,        // Falso Negativo (Log)
+    Inconsistent,      // Irrelevante
 }
 
 /// Função anteriormente indefinida. Implementada usando similaridade de cosseno.
 pub fn calculate_textual_consistency(a: &str, b: &str) -> f64 {
     // Stub para simular NLI/Embeddings. Em produção, chamaria o modelo de embeddings.
-    if a == b { return 1.0; }
+    if a == b {
+        return 1.0;
+    }
     // Simulação heurística simples de similaridade de palavras
     let words_a: std::collections::HashSet<_> = a.split_whitespace().collect();
     let words_b: std::collections::HashSet<_> = b.split_whitespace().collect();
     let intersection = words_a.intersection(&words_b).count();
     let union = words_a.union(&words_b).count();
-    if union == 0 { return 0.0; }
+    if union == 0 {
+        return 0.0;
+    }
     intersection as f64 / union as f64
 }
 
@@ -34,14 +38,17 @@ pub struct SeamIntegrityMonitor<P> {
 
 impl<P: SemanticEquivalence + FactualEquivalence> SeamIntegrityMonitor<P> {
     pub fn new(entropy_threshold: f64) -> Self {
-        Self { entropy_threshold, _phantom: std::marker::PhantomData }
+        Self {
+            entropy_threshold,
+            _phantom: std::marker::PhantomData,
+        }
     }
 
     pub fn check(&self, a: &P, b: &P) -> ConsistencyResult {
         match (a.semantic_eq(b), a.factual_eq(b)) {
-            (true, true)   => ConsistencyResult::Consistent,
-            (true, false)  => ConsistencyResult::HallucinationRisk,
-            (false, true)  => ConsistencyResult::Paraphrase,
+            (true, true) => ConsistencyResult::Consistent,
+            (true, false) => ConsistencyResult::HallucinationRisk,
+            (false, true) => ConsistencyResult::Paraphrase,
             (false, false) => ConsistencyResult::Inconsistent,
         }
     }
@@ -53,8 +60,14 @@ impl<P: SemanticEquivalence + FactualEquivalence> SeamIntegrityMonitor<P> {
 
         // Transitividade só é exigida quando ambas as premissas são relações reais.
         // Se ab ou bc for Inconsistent, a implicação é vacuosamente verdadeira.
-        let ab_is_real = matches!(ab, ConsistencyResult::Consistent | ConsistencyResult::Paraphrase);
-        let bc_is_real = matches!(bc, ConsistencyResult::Consistent | ConsistencyResult::Paraphrase);
+        let ab_is_real = matches!(
+            ab,
+            ConsistencyResult::Consistent | ConsistencyResult::Paraphrase
+        );
+        let bc_is_real = matches!(
+            bc,
+            ConsistencyResult::Consistent | ConsistencyResult::Paraphrase
+        );
 
         if !ab_is_real || !bc_is_real {
             return true; // vacuously true
@@ -91,19 +104,43 @@ mod tests {
         let monitor = SeamIntegrityMonitor::<MockPoint>::new(0.5);
 
         // Consistent
-        let p_cons = MockPoint { semantic: true, factual: true };
-        assert_eq!(monitor.check(&p_cons, &p_cons), ConsistencyResult::Consistent);
+        let p_cons = MockPoint {
+            semantic: true,
+            factual: true,
+        };
+        assert_eq!(
+            monitor.check(&p_cons, &p_cons),
+            ConsistencyResult::Consistent
+        );
 
         // HallucinationRisk
-        let p_hall = MockPoint { semantic: true, factual: false };
-        assert_eq!(monitor.check(&p_hall, &p_hall), ConsistencyResult::HallucinationRisk);
+        let p_hall = MockPoint {
+            semantic: true,
+            factual: false,
+        };
+        assert_eq!(
+            monitor.check(&p_hall, &p_hall),
+            ConsistencyResult::HallucinationRisk
+        );
 
         // Paraphrase
-        let p_para = MockPoint { semantic: false, factual: true };
-        assert_eq!(monitor.check(&p_para, &p_para), ConsistencyResult::Paraphrase);
+        let p_para = MockPoint {
+            semantic: false,
+            factual: true,
+        };
+        assert_eq!(
+            monitor.check(&p_para, &p_para),
+            ConsistencyResult::Paraphrase
+        );
 
         // Inconsistent
-        let p_inc = MockPoint { semantic: false, factual: false };
-        assert_eq!(monitor.check(&p_inc, &p_inc), ConsistencyResult::Inconsistent);
+        let p_inc = MockPoint {
+            semantic: false,
+            factual: false,
+        };
+        assert_eq!(
+            monitor.check(&p_inc, &p_inc),
+            ConsistencyResult::Inconsistent
+        );
     }
 }

@@ -17,7 +17,7 @@ pub enum PTCSignature {
 pub struct ExceptionalPointResult {
     pub signature: PTCSignature,
     pub loss_reduction_fraction: f64, // Redução de perdas (> 0.5 no paper)
-    pub gain_bandwidth_ghz: f64,     // Largura de linha estreitada
+    pub gain_bandwidth_ghz: f64,      // Largura de linha estreitada
 }
 
 impl ExceptionalPointResult {

@@ -3,10 +3,10 @@
 
 #[derive(Debug, Clone)]
 pub struct FloquetHamiltonian {
-    pub omega_0: f64,       // Frequência natural da cavidade (rad/THz)
-    pub omega_d: f64,       // Frequência de drive (rad/THz)
-    pub eta_0: f64,         // Amplitude da modulação de massa (até 0.8)
-    pub gamma_0: f64,       // Amortecimento intrínseco
+    pub omega_0: f64, // Frequência natural da cavidade (rad/THz)
+    pub omega_d: f64, // Frequência de drive (rad/THz)
+    pub eta_0: f64,   // Amplitude da modulação de massa (até 0.8)
+    pub gamma_0: f64, // Amortecimento intrínseco
 }
 
 impl FloquetHamiltonian {

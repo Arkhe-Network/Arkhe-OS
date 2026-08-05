@@ -1,6 +1,6 @@
-use crate::event::AuditEvent;
-use crate::merkle::{MerkleTree, MerkleProof};
 use crate::AuditError;
+use crate::event::AuditEvent;
+use crate::merkle::{MerkleProof, MerkleTree};
 
 /// Trilha de auditoria imutável com prova Merkle.
 pub struct AuditTrail {

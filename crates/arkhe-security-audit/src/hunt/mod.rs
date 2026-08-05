@@ -2,8 +2,8 @@
 //!
 //! 12 Ângulos de ataque adaptados da metodologia Cloudflare.
 
-use arkhe_llm::engine::InferenceEngine;
 use crate::types::Finding;
+use arkhe_llm::engine::InferenceEngine;
 
 pub struct HuntPhase {
     llm: std::sync::Arc<dyn InferenceEngine>,
@@ -73,7 +73,11 @@ async fn hunt_class(
         architecture
     );
 
-    let response = llm.generate(&prompt, 0.3, 8192).await.map_err(|e| arkhe_core::ArkheError::Internal(e))?;
-    let findings: Vec<Finding> = serde_json::from_str(&response).map_err(|e| arkhe_core::ArkheError::Internal(e.to_string()))?;
+    let response = llm
+        .generate(&prompt, 0.3, 8192)
+        .await
+        .map_err(|e| arkhe_core::ArkheError::Internal(e))?;
+    let findings: Vec<Finding> = serde_json::from_str(&response)
+        .map_err(|e| arkhe_core::ArkheError::Internal(e.to_string()))?;
     Ok(findings)
 }

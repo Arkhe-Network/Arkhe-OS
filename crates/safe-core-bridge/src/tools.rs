@@ -26,9 +26,7 @@ pub async fn enforce_action(
 }
 
 /// Lista violações registradas.
-pub async fn get_violations(
-    state: &Arc<BridgeState>,
-) -> ViolationsResponse {
+pub async fn get_violations(state: &Arc<BridgeState>) -> ViolationsResponse {
     let violations = state.ethics_engine.get_violations().await;
     ViolationsResponse {
         total: violations.len(),
@@ -38,17 +36,13 @@ pub async fn get_violations(
 }
 
 /// Limpa violações registradas.
-pub async fn clear_violations(
-    state: &Arc<BridgeState>,
-) -> serde_json::Value {
+pub async fn clear_violations(state: &Arc<BridgeState>) -> serde_json::Value {
     state.ethics_engine.clear_violations().await;
     json!({"ok": true, "cleared": true})
 }
 
 /// Lista invariantes de segurança.
-pub fn list_invariants(
-    state: &Arc<BridgeState>,
-) -> InvariantsResponse {
+pub fn list_invariants(state: &Arc<BridgeState>) -> InvariantsResponse {
     InvariantsResponse {
         total: state.invariants.len(),
         invariants: state.invariants.clone(),
@@ -57,16 +51,12 @@ pub fn list_invariants(
 }
 
 /// Exporta especificações Lean 4.
-pub async fn export_invariants(
-    _state: &Arc<BridgeState>,
-) -> Result<serde_json::Value, String> {
+pub async fn export_invariants(_state: &Arc<BridgeState>) -> Result<serde_json::Value, String> {
     Ok(json!({"ok": true, "path": "/tmp/safe-core-lean4-export", "note": "Pseudo-código Lean 4"}))
 }
 
 /// Healthcheck.
-pub async fn health_check(
-    state: &Arc<BridgeState>,
-) -> HealthResponse {
+pub async fn health_check(state: &Arc<BridgeState>) -> HealthResponse {
     let constraints = state.ethics_engine.constraint_count().await;
     HealthResponse {
         status: "ok".into(),

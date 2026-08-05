@@ -1,11 +1,11 @@
 //! Arkhe SoC TLM v2.0 — Transaction-Level Model
 //! Selo: ARKHE-SOC-TLM-v2.0-2026-07-31
 
-pub mod sram;
-pub mod qpl;
 pub mod aotb;
 pub mod power;
+pub mod qpl;
 pub mod soc;
+pub mod sram;
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};

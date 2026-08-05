@@ -1,4 +1,4 @@
-use crate::{AotbFrame, ClockDomain, DOMAIN_NODES, PerformanceCounters, SocError, VerifyError};
+use crate::{AotbFrame, ClockDomain, PerformanceCounters, SocError, VerifyError, DOMAIN_NODES};
 use ed25519_dalek::{Signer, SigningKey, Verifier, VerifyingKey};
 
 pub struct AotbEncoderHw {
