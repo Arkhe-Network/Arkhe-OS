@@ -33,7 +33,6 @@ members = [
     "cathedral-arkhe/safety-core",
     "cathedral-arkhe/unified_uep",
     "crates/arkhe-soc-tlm",
-    "timechain",
     "timechain"
 ]
 

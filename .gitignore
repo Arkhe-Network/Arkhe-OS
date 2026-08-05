@@ -145,6 +145,7 @@ $# arkhe-*/
 !arkhe-core/
 !arkhe-os/
 !arkhe-qart/
+!arkhe-buzz-integration/
 substrates/legacy/
 archive/
 *.mtp3
