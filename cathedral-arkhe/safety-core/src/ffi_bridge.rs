@@ -1,16 +1,18 @@
 //! Cathedral Arkhe v16.1 — FFI Bridge Corrigido
 //! Agora usa SeamIntegrityMonitor em vez de comparação ingênua de hash.
 
+use crate::seam_integrity::{
+    ConsistencyResult, FactualEquivalence, SeamIntegrityMonitor, SemanticEquivalence,
+};
+use serde::{Deserialize, Serialize};
 use std::ffi::CStr;
 use std::os::raw::c_char;
-use serde::{Deserialize, Serialize};
-use crate::seam_integrity::{ConsistencyResult, FactualEquivalence, SeamIntegrityMonitor, SemanticEquivalence};
 
 #[derive(Serialize, Deserialize)]
 pub struct LeanVerifiablePoint {
     pub point_data: String,
     pub evidence_hash: String,
-    pub semantic_signature: Vec<f32>,  // embedding para semantic_eq
+    pub semantic_signature: Vec<f32>, // embedding para semantic_eq
 }
 
 impl SemanticEquivalence for LeanVerifiablePoint {
@@ -18,15 +20,29 @@ impl SemanticEquivalence for LeanVerifiablePoint {
         if self.semantic_signature.len() != other.semantic_signature.len() {
             return false;
         }
-        let dot: f32 = self.semantic_signature.iter()
+        let dot: f32 = self
+            .semantic_signature
+            .iter()
             .zip(&other.semantic_signature)
             .map(|(a, b)| a * b)
             .sum();
-        let norm_a = self.semantic_signature.iter().map(|x| x * x).sum::<f32>().sqrt();
-        let norm_b = other.semantic_signature.iter().map(|x| x * x).sum::<f32>().sqrt();
-        if norm_a == 0.0 || norm_b == 0.0 { return false; }
+        let norm_a = self
+            .semantic_signature
+            .iter()
+            .map(|x| x * x)
+            .sum::<f32>()
+            .sqrt();
+        let norm_b = other
+            .semantic_signature
+            .iter()
+            .map(|x| x * x)
+            .sum::<f32>()
+            .sqrt();
+        if norm_a == 0.0 || norm_b == 0.0 {
+            return false;
+        }
         let cosine = dot / (norm_a * norm_b);
-        cosine > 0.85  // threshold configurável
+        cosine > 0.85 // threshold configurável
     }
 }
 
@@ -52,7 +68,9 @@ pub extern "C" fn arkhe_rust_check_faithful(
 
     let a_str = unsafe {
         let bytes = CStr::from_ptr(a_json_ptr).to_bytes();
-        if bytes.len() > MAX_LEN { return false; }
+        if bytes.len() > MAX_LEN {
+            return false;
+        }
         match std::str::from_utf8(bytes) {
             Ok(s) => s,
             Err(_) => return false,
@@ -61,7 +79,9 @@ pub extern "C" fn arkhe_rust_check_faithful(
 
     let b_str = unsafe {
         let bytes = CStr::from_ptr(b_json_ptr).to_bytes();
-        if bytes.len() > MAX_LEN { return false; }
+        if bytes.len() > MAX_LEN {
+            return false;
+        }
         match std::str::from_utf8(bytes) {
             Ok(s) => s,
             Err(_) => return false,
@@ -86,7 +106,10 @@ pub extern "C" fn arkhe_rust_check_faithful(
     // checkFaithful retorna true APENAS quando semântico e factual batem (Consistent)
     // ou quando factual bate mas semântico não (Paraphrase — falso negativo aceitável).
     // Retorna false quando semântico bate mas factual não (HallucinationRisk).
-    matches!(result, ConsistencyResult::Consistent | ConsistencyResult::Paraphrase)
+    matches!(
+        result,
+        ConsistencyResult::Consistent | ConsistencyResult::Paraphrase
+    )
 }
 
 #[no_mangle]
@@ -98,9 +121,7 @@ pub extern "C" fn arkhe_rust_check_seam_integrity(
 }
 
 #[no_mangle]
-pub extern "C" fn arkhe_rust_get_entropy(
-    _logits_json_ptr: *const c_char,
-) -> f64 {
+pub extern "C" fn arkhe_rust_get_entropy(_logits_json_ptr: *const c_char) -> f64 {
     // Scaffold implementation
     1.0
 }

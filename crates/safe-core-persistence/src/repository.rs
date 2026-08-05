@@ -16,7 +16,11 @@ pub struct StateRepository {
 impl StateRepository {
     pub async fn new(database_url: &str) -> Result<Self, RepositoryError> {
         let pool = SqlitePoolOptions::new()
-            .connect(if database_url == "sqlite://state.db" { "sqlite::memory:" } else { database_url })
+            .connect(if database_url == "sqlite://state.db" {
+                "sqlite::memory:"
+            } else {
+                database_url
+            })
             .await?;
 
         Self::migrate(&pool).await?;
@@ -70,26 +74,29 @@ impl StateRepository {
 
     pub async fn load_all_rules(&self) -> Result<Vec<EthicsRule>, RepositoryError> {
         let rows = sqlx::query_as::<_, (String, String, String, String, bool)>(
-            "SELECT id, action, constraint_text, severity, enabled FROM ethics_rules"
+            "SELECT id, action, constraint_text, severity, enabled FROM ethics_rules",
         )
         .fetch_all(&self.pool)
         .await?;
 
-        Ok(rows.into_iter().map(|row| {
-            let severity = match row.3.as_str() {
-                "Block" => Severity::Block,
-                "RequireApproval" => Severity::RequireApproval,
-                _ => Severity::Allow,
-            };
+        Ok(rows
+            .into_iter()
+            .map(|row| {
+                let severity = match row.3.as_str() {
+                    "Block" => Severity::Block,
+                    "RequireApproval" => Severity::RequireApproval,
+                    _ => Severity::Allow,
+                };
 
-            EthicsRule {
-                id: row.0,
-                action: row.1,
-                constraint: row.2,
-                severity,
-                enabled: row.4,
-            }
-        }).collect())
+                EthicsRule {
+                    id: row.0,
+                    action: row.1,
+                    constraint: row.2,
+                    severity,
+                    enabled: row.4,
+                }
+            })
+            .collect())
     }
 
     pub async fn save_rule(&self, rule: &EthicsRule) -> Result<(), RepositoryError> {
@@ -121,7 +128,9 @@ impl StateRepository {
     }
 
     pub async fn count_rules(&self) -> Result<i64, RepositoryError> {
-        let row: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM ethics_rules").fetch_one(&self.pool).await?;
+        let row: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM ethics_rules")
+            .fetch_one(&self.pool)
+            .await?;
         Ok(row.0)
     }
 }

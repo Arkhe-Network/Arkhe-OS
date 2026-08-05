@@ -1,7 +1,6 @@
 use crate::{
-    aotb::AotbEncoderHw,
-    AotbFrame, ClockDomain, DOMAIN_NODES, PerformanceCounters,
-    power::PowerDomain, qpl::QplAccelerator, QplResult, sram::SramDxController,
+    aotb::AotbEncoderHw, power::PowerDomain, qpl::QplAccelerator, sram::SramDxController,
+    AotbFrame, ClockDomain, PerformanceCounters, QplResult, DOMAIN_NODES,
 };
 
 pub struct ArkheSoc {
@@ -15,11 +14,7 @@ pub struct ArkheSoc {
 }
 
 impl ArkheSoc {
-    pub fn new(
-        domain: [f64; DOMAIN_NODES],
-        session_id: [u8; 16],
-        clock: ClockDomain,
-    ) -> Self {
+    pub fn new(domain: [f64; DOMAIN_NODES], session_id: [u8; 16], clock: ClockDomain) -> Self {
         let proof_hash = crate::hash_state(&domain);
         let mut sram = SramDxController::new(ClockDomain::new(clock.freq_mhz));
         for (i, &v) in domain.iter().enumerate() {

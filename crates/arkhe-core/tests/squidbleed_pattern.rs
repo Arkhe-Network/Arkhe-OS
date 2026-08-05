@@ -10,7 +10,7 @@ fn prevent_buffer_overread_patterns() {
         r"while\s*\(\s*[^;]*\s*\)\s*\+\+",
         r"while\s*\(\s*![^;]*\)\s*\+\+",
         r"\.get\s*\([^)]*\)\s*\.unwrap\s*\(\)", // unwrap sem verificação
-        r"unsafe\s*\{[^}]*\}", // blocos unsafe não documentados
+        r"unsafe\s*\{[^}]*\}",                  // blocos unsafe não documentados
     ];
 
     for pattern in dangerous_patterns {

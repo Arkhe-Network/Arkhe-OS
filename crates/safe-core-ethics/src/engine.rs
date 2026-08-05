@@ -1,4 +1,4 @@
-use crate::{EthicsRule, EthicsEngine, EthicsVerdict, EthicsError, rule::Severity};
+use crate::{EthicsEngine, EthicsError, EthicsRule, EthicsVerdict, rule::Severity};
 use async_trait::async_trait;
 
 pub struct Lean4Verifier {
@@ -13,7 +13,11 @@ impl Lean4Verifier {
 
 #[async_trait]
 impl EthicsEngine for Lean4Verifier {
-    async fn evaluate(&self, action: &str, context: &serde_json::Value) -> Result<EthicsVerdict, EthicsError> {
+    async fn evaluate(
+        &self,
+        action: &str,
+        context: &serde_json::Value,
+    ) -> Result<EthicsVerdict, EthicsError> {
         for rule in &self.rules {
             if rule.action == action {
                 if !rule.enabled {
@@ -21,12 +25,14 @@ impl EthicsEngine for Lean4Verifier {
                 }
 
                 let valid = if rule.constraint == "context.percentage <= 20" {
-                    context.get("percentage")
+                    context
+                        .get("percentage")
                         .and_then(|v| v.as_f64())
                         .map(|p| p <= 20.0)
                         .unwrap_or(false)
                 } else if rule.constraint == "context.amount <= 100000" {
-                    context.get("amount")
+                    context
+                        .get("amount")
                         .and_then(|v| v.as_f64())
                         .map(|a| a <= 100000.0)
                         .unwrap_or(false)

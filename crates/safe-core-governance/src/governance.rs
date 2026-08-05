@@ -1,9 +1,9 @@
 //! GovernanceEngine — O Coração dos 4 Pilares
 
-use crate::ethics::{EthicsEngine, engine::Lean4Verifier, EthicsVerdict};
-use crate::persistence::{StateRepository};
-use crate::verifier::{Verifier, Constraint, ConstraintResult};
-use crate::audit::{AuditTrail, AuditEvent, EventType};
+use crate::audit::{AuditEvent, AuditTrail, EventType};
+use crate::ethics::{EthicsEngine, EthicsVerdict, engine::Lean4Verifier};
+use crate::persistence::StateRepository;
+use crate::verifier::{Constraint, ConstraintResult, Verifier};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tracing::info;
@@ -44,7 +44,10 @@ impl GovernanceEngine {
         // 4. Auditoria
         let audit = Arc::new(RwLock::new(AuditTrail::new()));
 
-        info!("GovernanceEngine inicializada com {} regras", repository.count_rules().await?);
+        info!(
+            "GovernanceEngine inicializada com {} regras",
+            repository.count_rules().await?
+        );
 
         Ok(Self {
             ethics,
@@ -82,7 +85,11 @@ impl GovernanceEngine {
     }
 
     /// Verifica uma restrição (Pilar 3).
-    pub fn verify_constraint(&self, constraint: &Constraint, context: &serde_json::Value) -> ConstraintResult {
+    pub fn verify_constraint(
+        &self,
+        constraint: &Constraint,
+        context: &serde_json::Value,
+    ) -> ConstraintResult {
         self.verifier.verify(constraint, context)
     }
 
@@ -112,24 +119,26 @@ impl Verifier for SimpleVerifier {
         // Em produção: chamar Lean4 real
         // Aqui, simula validação baseada em regex simples
         let valid = match constraint.expression.as_str() {
-            "percentage <= 20" => {
-                context.get("percentage")
-                    .and_then(|v| v.as_f64())
-                    .map(|p| p <= 20.0)
-                    .unwrap_or(false)
-            }
-            "amount <= 100000" => {
-                context.get("amount")
-                    .and_then(|v| v.as_f64())
-                    .map(|a| a <= 100000.0)
-                    .unwrap_or(false)
-            }
+            "percentage <= 20" => context
+                .get("percentage")
+                .and_then(|v| v.as_f64())
+                .map(|p| p <= 20.0)
+                .unwrap_or(false),
+            "amount <= 100000" => context
+                .get("amount")
+                .and_then(|v| v.as_f64())
+                .map(|a| a <= 100000.0)
+                .unwrap_or(false),
             _ => true,
         };
 
         ConstraintResult {
             valid,
-            counterexample: if valid { None } else { Some("Violação detectada".to_string()) },
+            counterexample: if valid {
+                None
+            } else {
+                Some("Violação detectada".to_string())
+            },
             proof: None,
         }
     }

@@ -32,7 +32,9 @@ members = [
     "cathedral-arkhe/floquet_ptc",
     "cathedral-arkhe/safety-core",
     "cathedral-arkhe/unified_uep",
-    "crates/arkhe-soc-tlm"
+    "crates/arkhe-soc-tlm",
+    "timechain",
+    "timechain"
 ]
 
 [workspace.package]

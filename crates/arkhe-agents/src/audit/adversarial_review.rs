@@ -1,10 +1,10 @@
 // crates/arkhe-agents/src/audit/adversarial_review.rs
 //! Agente de revisão adversária — tenta refutar cada PR antes do merge.
 
+use arkhe_core::ArkheError;
 use arkhe_llm::engine::InferenceEngine;
 use arkhe_metacognition::Escalator;
 use std::sync::Arc;
-use arkhe_core::ArkheError;
 
 pub enum ReviewVerdict {
     Verified,
@@ -37,7 +37,11 @@ impl AdversarialReviewer {
             pr_description, diff
         );
 
-        let response = self.llm.generate(&prompt, 0.3, 4096).await.map_err(|e| ArkheError::Internal(e))?;
+        let response = self
+            .llm
+            .generate(&prompt, 0.3, 4096)
+            .await
+            .map_err(|e| ArkheError::Internal(e))?;
 
         if response.contains("REJECTED") {
             self.escalator.escalate(pr_description, &response).await;

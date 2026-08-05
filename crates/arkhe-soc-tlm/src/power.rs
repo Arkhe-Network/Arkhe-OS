@@ -4,9 +4,9 @@ use crate::ClockDomain;
 pub struct PowerDomain {
     pub name: &'static str,
     pub enabled: bool,
-    pub voltage_mv: u32,      // 800-1200mV
+    pub voltage_mv: u32, // 800-1200mV
     pub freq_mhz: u32,
-    pub fertility: f64,       // 0.0-1.0 (capital alocado / total)
+    pub fertility: f64, // 0.0-1.0 (capital alocado / total)
     pub clock: ClockDomain,
 }
 
