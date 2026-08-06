@@ -1,29 +1,15 @@
-# syntax=docker/dockerfile:1
-# ARKHE ASI Multi‑Arch Build Container
+# Dockerfile for deterministic build
+FROM python:3.11.9-slim-bookworm
 
-FROM --platform=$BUILDPLATFORM alpine:3.20 AS builder
+RUN pip install --no-cache-dir \
+    jax==0.4.38 jaxlib==0.4.38 numpyro==0.16.2 arviz==0.20.0 \
+    numpy==1.26.4 scipy==1.14.1 nuitka==2.6.9 rpy2==3.5.17
 
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
+COPY arkhe_inference_v3.py /app/
+WORKDIR /app
 
-RUN apk add --no-cache build-base curl git python3 py3-pip rust cargo
+RUN nuitka --standalone --onefile --windows-console-mode=disable \
+    --output-dir=build arkhe_inference_v3.py
 
-WORKDIR /build
-COPY . .
-
-# Compilar para a plataforma alvo
-RUN TARGET=$(echo $TARGETPLATFORM | sed 's/\//-/g') && make TARGET=$TARGET && \
-    mkdir -p /build/out && cp -r /build/dist/$TARGET/* /build/out/
-
-# Estágio final mínimo
-FROM --platform=$TARGETPLATFORM alpine:3.20
-
-RUN apk add --no-cache python3 libstdc++
-
-COPY --from=builder /build/out/ /opt/arkhe/
-COPY --from=builder /build/etc/ /etc/arkhe/
-
-EXPOSE 5000 8080
-
-ENTRYPOINT ["/opt/arkhe/bin/arkhe-agi"]
-CMD ["--config", "/etc/arkhe/config.yaml"]
+# Compute SHA‑256
+RUN sha256sum build/arkhe_inference_v3.exe > arkhe_sha256.txt
