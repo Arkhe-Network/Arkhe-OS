@@ -1,0 +1,5 @@
+Target: test_fixture
+Files: 2
+Directories: 2
+Total Size: 1048581 bytes
+Largest File: test_fixture/subdir1/large.bin (1048576 bytes)
