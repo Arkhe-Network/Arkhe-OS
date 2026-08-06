@@ -1,0 +1,11 @@
+Generation: DB-G0001
+Target Platform: Linux (ELF 64-bit)
+
+1. Created a clean directory DB-G0001.
+2. Emitted the base64-encoded byte-stream representing the pre-compiled file scanner executable into `DB-G0001/scanner.b64`.
+3. Decoded the byte-stream using `base64 -d scanner.b64 > scanner` and set executable permissions.
+4. Generated the SHA-256 hash of the decoded executable (`scanner`) and stored it in `manifest.txt`.
+5. Created a test fixture with directories (`subdir1`, `subdir2`) and files (`file1.txt`, `large.bin`).
+6. Executed `./scanner test_fixture` to perform the validation scan.
+7. Captured the generated `report.txt` as `test_results.txt`.
+8. The tool correctly scanned the fixture, counted files/directories, and identified the largest file.
