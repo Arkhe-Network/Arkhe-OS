@@ -4,3 +4,4 @@ pub mod string_safe;
 pub enum ArkheError {
     Internal(String),
 }
+pub mod inertia_certifier;
