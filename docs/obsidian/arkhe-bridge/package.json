@@ -1,0 +1,20 @@
+{
+  "name": "arkhe-bridge",
+  "version": "1.0.0",
+  "description": "ARKHE Bridge Plugin for Obsidian",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc -noEmit -skipLibCheck && esbuild src/main.ts --bundle --platform=browser --format=cjs --external:obsidian --outfile=main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "obsidian": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "esbuild": "^0.17.3",
+    "typescript": "^4.5.2"
+  }
+}
