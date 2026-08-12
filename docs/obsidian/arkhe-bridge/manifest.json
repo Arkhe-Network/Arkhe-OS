@@ -1,0 +1,10 @@
+{
+  "id": "arkhe-bridge",
+  "name": "ARKHE Bridge",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Ponte entre análises do BLOCK 11 e Obsidian",
+  "author": "ARKHE",
+  "authorUrl": "https://github.com/arkhe",
+  "isDesktopOnly": false
+}
