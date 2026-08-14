@@ -551,7 +551,6 @@ Arkhe-OS.iso
 iso_root/
 selo_canonico.txt
 !arkhe-cpp/
-bin/
 obj/
 safe-core/target/
 safe-core/Cargo.lock

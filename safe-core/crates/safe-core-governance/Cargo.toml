@@ -1,0 +1,19 @@
+[package]
+name = "safe-core-governance"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Camada 2: Capability Tokens"
+
+[dependencies]
+safe-core-core = { path = "../safe-core-core" }
+safe-core-identity = { path = "../safe-core-identity" }
+
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+mockall = { workspace = true }

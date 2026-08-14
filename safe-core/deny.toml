@@ -1,11 +1,17 @@
+[graph]
+targets = [
+    { triple = "x86_64-unknown-linux-gnu" },
+    { triple = "aarch64-unknown-linux-gnu" },
+]
+exclude = []
+all-features = false
+no-default-features = false
+
 [advisories]
 vulnerability = "deny"
 unmaintained = "deny"
 notice = "warn"
-ignore = [
-    # IDs de vulnerabilidades conhecidas que foram verificadas
-    # e não afetam o Safe-Core
-]
+ignore = []
 
 [licenses]
 unlicensed = "deny"
@@ -14,8 +20,17 @@ allow = [
     "Apache-2.0",
     "BSD-3-Clause",
     "ISC",
+    "MPL-2.0",
+    "Unicode-DFS-2016",
 ]
+deny = []
+copyleft = "warn"
+allow-osi-fsf-free = "never"
 default = "deny"
 
 [bans]
 multiple-versions = "warn"
+wildcards = "deny"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"

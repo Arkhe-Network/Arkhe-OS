@@ -1,0 +1,6 @@
+sign-commit = false
+sign-tag = false
+push-remote = "origin"
+publish = false
+workspace = true
+dependent-version = "fix"

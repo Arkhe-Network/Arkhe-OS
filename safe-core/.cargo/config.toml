@@ -1,0 +1,19 @@
+[build]
+# rustflags = ["-D", "warnings"]
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "target-cpu=native"]
+
+[target.aarch64-unknown-linux-gnu]
+linker = "clang"
+
+[alias]
+co = "check --workspace"
+t = "test --workspace"
+b = "build --workspace"
+r = "run --workspace"
+fmt = "fmt --all"
+clippy = "clippy --workspace -- -D warnings"
+audit = "audit --workspace"
+deny = "deny --workspace"

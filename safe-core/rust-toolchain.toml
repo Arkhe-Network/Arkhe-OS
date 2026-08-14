@@ -1,4 +1,5 @@
 [toolchain]
-channel = "nightly-2026-06-01"  # Versão compatível com Kani e Prusti
-components = ["rustc", "rust-std", "cargo", "rustfmt", "clippy"]
+channel = "1.81.0"
+components = ["rustfmt", "clippy", "llvm-tools-preview"]
+targets = ["x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu"]
 profile = "minimal"
