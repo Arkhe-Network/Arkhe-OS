@@ -325,7 +325,7 @@ impl GrubConfig {
     }
 }
 
-pub fn create_grub_config(bundle_hash: &str) -> GrubConfig {
+pub fn create_grub_config(_bundle_hash: &str) -> GrubConfig {
     GrubConfig {
         timeout: 10,
         default_entry: "arkhe-live".to_string(),

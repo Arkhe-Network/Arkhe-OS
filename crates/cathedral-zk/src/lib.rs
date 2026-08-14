@@ -28,6 +28,12 @@ pub struct ZKGateway {
     // Futuramente: RISC Zero prover.
 }
 
+impl Default for ZKGateway {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ZKGateway {
     pub fn new() -> Self {
         Self {}

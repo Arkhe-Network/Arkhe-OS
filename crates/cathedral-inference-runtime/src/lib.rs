@@ -5,17 +5,16 @@ pub mod verification;
 
 use cathedral_arkheobex::{ArkheObject, HeaderType};
 use cathedral_identity::{IdentityGateway, SignatureGuard};
-use cathedral_llm_core::{CathedralCore, ModelTier};
+use cathedral_llm_core::CathedralCore;
 use cathedral_reputation::ReputationRouter;
 use cathedral_wormgraph::WormGraphClient;
-use cathedral_zk::{ZKGateway, ZKProof};
+use cathedral_zk::ZKGateway;
 use delegation::DelegationRouter;
 pub use models::{GenerateRequest, GenerateResponse, VerificationLevel};
 use prompt_builder::build_prompt;
 use std::sync::Arc;
 use std::time::Instant;
 use thiserror::Error;
-use verification::VerificationEngine;
 
 #[derive(Debug, Error)]
 pub enum RuntimeError {
@@ -68,7 +67,7 @@ impl CathedralRuntime {
 
     /// Executa o pipeline completo de inferência.
     pub async fn generate(&self, req: GenerateRequest) -> Result<GenerateResponse, RuntimeError> {
-        let start = Instant::now();
+        let _start = Instant::now();
 
         // 1. Verifica identidade (mock)
         let verified = self
