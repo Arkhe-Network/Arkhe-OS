@@ -1,0 +1,58 @@
+[package]
+name = "arkhe-quantum-auth"
+version = "0.1.0"
+edition = "2021"
+authors = ["Arkhe OS Team"]
+description = "Fast/Slow Path Authentication for Quantum Repeater Links"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/arkhe-os/arkhe-quantum-auth"
+keywords = ["quantum", "cryptography", "post-quantum", "no-std", "authentication"]
+categories = ["cryptography", "no-std"]
+rust-version = "1.75"
+
+[features]
+default = ["std"]
+std = [
+    "alloc",
+    "aes-gcm-siv/std",
+    "rand/std",
+    "rand/std_rng",
+    "rand_core/std",
+    "pqcrypto-dilithium/std",
+    "pqcrypto-kyber/std",
+]
+alloc = []
+no_std = ["alloc", "aes-gcm-siv/heapless"]
+arkhe-core = ["dep:arkhe-core"]
+hwaccel = ["aes-gcm-siv/aes"]
+
+[dependencies]
+hkdf = { version = "0.12", default-features = false }
+sha3 = { version = "0.10", default-features = false }
+digest = { version = "0.10", default-features = false }
+aes-gcm-siv = { version = "0.11", default-features = false, features = ["aes"] }
+aead = { version = "0.5", default-features = false }
+pqcrypto-dilithium = { version = "0.5", default-features = false }
+pqcrypto-kyber = { version = "0.7", default-features = false }
+pqcrypto-traits = { version = "0.3", default-features = false }
+x25519-dalek = { version = "2.0", default-features = false, features = ["static_secrets", "zeroize", "precomputed-tables"] }
+curve25519-dalek = { version = "4.1", default-features = false, features = ["zeroize"] }
+rand_core = { version = "0.6", default-features = false }
+rand = { version = "0.8", default-features = false, optional = true }
+blake3 = { version = "1.5", default-features = false }
+zeroize = { version = "1.8", default-features = false, features = ["derive", "alloc"] }
+log = { version = "0.4", default-features = false }
+arkhe-core = { path = "../arkhe-core", optional = true }
+
+[dev-dependencies]
+rand = { version = "0.8", features = ["std", "std_rng"] }
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = 1

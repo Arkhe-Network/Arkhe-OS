@@ -1,6 +1,6 @@
 use cathedral_wormgraph::ExecutionReceipt;
 use cathedral_zk::ZKProof;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// Níveis de verificação suportados pelo protótipo.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

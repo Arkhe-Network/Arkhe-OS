@@ -2,7 +2,6 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use serde_json::Value;
-use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -73,32 +72,32 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn materialize(root: &PathBuf) -> Result<Graph> {
+fn materialize(_root: &PathBuf) -> Result<Graph> {
     // Lê todos os arquivos .md com frontmatter TOML, constrói nós e arestas.
     unimplemented!()
 }
 
-fn validate_schema(graph: &Graph) -> Result<()> {
+fn validate_schema(_graph: &Graph) -> Result<()> {
     // Valida contra JSON Schema.
     unimplemented!()
 }
 
-fn validate_firewall(graph: &Graph) -> Result<()> {
+fn validate_firewall(_graph: &Graph) -> Result<()> {
     // Verifica se não há arestas Z2-Z3 sem TRANSLATES_TO_PRIMITIVE.
     unimplemented!()
 }
 
-fn execute_query(graph: &Graph, query: &str) -> Result<Value> {
+fn execute_query(_graph: &Graph, _query: &str) -> Result<Value> {
     // Parseia query em operações algébricas (projeção, closure, corte).
     unimplemented!()
 }
 
-fn verify_invariant(graph: &Graph, invariant: &str) -> Result<bool> {
+fn verify_invariant(_graph: &Graph, _invariant: &str) -> Result<bool> {
     // Gera SMT-LIB e chama Z3.
     unimplemented!()
 }
 
-fn generate_mermaid(graph: &Graph) -> Result<String> {
+fn generate_mermaid(_graph: &Graph) -> Result<String> {
     // Renderiza grafo em Mermaid.
     unimplemented!()
 }

@@ -1,3 +1,4 @@
+#[derive(Default)]
 pub struct IdentityGateway;
 impl IdentityGateway {
     pub fn new() -> Self {
@@ -13,6 +14,7 @@ impl IdentityGateway {
     }
 }
 
+#[derive(Default)]
 pub struct SignatureGuard;
 impl SignatureGuard {
     pub fn new() -> Self {

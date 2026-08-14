@@ -49,15 +49,13 @@ impl WormGraphClient {
             .unwrap_or_else(|| PathBuf::from("."))
             .join(".cathedral/memory.json");
         let store = Arc::new(DashMap::new());
-        if path.exists() {
-            if let Ok(data) = fs::read_to_string(&path) {
-                if let Ok(map) = serde_json::from_str::<HashMap<String, Vec<MemoryEntry>>>(&data) {
+        if path.exists()
+            && let Ok(data) = fs::read_to_string(&path)
+                && let Ok(map) = serde_json::from_str::<HashMap<String, Vec<MemoryEntry>>>(&data) {
                     for (k, v) in map {
                         store.insert(k, v);
                     }
                 }
-            }
-        }
         Self {
             store,
             storage_path: path,
@@ -113,7 +111,7 @@ impl WormGraphClient {
         };
         self.store
             .entry(did.to_string())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(entry);
         self.persist();
         // Mock de Merkle root (hash dos últimos 10)

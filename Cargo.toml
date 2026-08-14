@@ -15,6 +15,8 @@ members = [
     "crates/cathedral-benchmarks",
     "crates/cathedral-tests",
     "crates/arkhe-core",
+    "crates/arkhe-quantum-auth",
+    "crates/arkhe-quantum-auth",
     "crates/arkhe-forge",
     "crates/arkhe-agents",
     "crates/arkhe-security-audit",
