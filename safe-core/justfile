@@ -1,0 +1,52 @@
+# Variáveis
+CARGO := "cargo"
+
+# Tarefa padrão (check + test)
+default: check test
+
+# Verificação rápida
+check:
+	{{CARGO}} check --workspace --all-features
+
+# Verificação rigorosa com clippy
+lint:
+	{{CARGO}} clippy --workspace --all-features -- -D warnings -D clippy::pedantic
+
+# Executar todos os testes (unit + integration)
+test:
+	{{CARGO}} test --workspace --all-features -- --nocapture
+
+# Testes com cobertura (requer cargo-llvm-cov)
+cov:
+	cargo llvm-cov --workspace --lcov --output-path lcov.info
+
+# Build de release (otimizado)
+build:
+	{{CARGO}} build --workspace --release
+
+# Auditoria de segurança
+audit:
+	{{CARGO}} audit
+
+# Negar (licenças, duplicatas)
+deny:
+	{{CARGO}} deny check
+
+# Formatação
+fmt:
+	{{CARGO}} fmt --all
+
+# Checagem de dependências
+graph:
+	cargo depgraph --workspace --dot | dot -Tpng > deps.png
+
+# Limpeza
+clean:
+	{{CARGO}} clean
+
+# Atualizar dependências
+update:
+	{{CARGO}} update -w
+
+# Executar todos os checks pré-commit
+precommit: fmt lint test audit deny

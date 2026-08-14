@@ -1,0 +1,20 @@
+[package]
+name = "safe-core-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "CLI principal do SAFE-CORE OS"
+
+[dependencies]
+safe-core-core = { path = "../../crates/safe-core-core" }
+safe-core-identity = { path = "../../crates/safe-core-identity" }
+safe-core-governance = { path = "../../crates/safe-core-governance" }
+safe-core-pea = { path = "../../crates/safe-core-pea" }
+safe-core-inference = { path = "../../crates/safe-core-inference" }
+safe-core-mcp-adapter = { path = "../../crates/safe-core-mcp-adapter" }
+
+serde = { workspace = true }
+thiserror = { workspace = true }

@@ -1,0 +1,18 @@
+[package]
+name = "safe-core-identity"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Camada 1: DIDs e identidades"
+
+[dependencies]
+safe-core-core = { path = "../safe-core-core" }
+
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+mockall = { workspace = true }

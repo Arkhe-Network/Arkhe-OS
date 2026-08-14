@@ -1,0 +1,8 @@
+[rules]
+safe-core-core = []
+safe-core-identity = ["safe-core-core"]
+safe-core-governance = ["safe-core-core", "safe-core-identity"]
+safe-core-pea = ["safe-core-core", "safe-core-identity", "safe-core-governance"]
+safe-core-inference = ["safe-core-core"]
+safe-core-mcp-adapter = ["safe-core-core", "safe-core-identity", "safe-core-pea"]
+safe-core-cli = ["*"]

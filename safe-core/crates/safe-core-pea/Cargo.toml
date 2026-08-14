@@ -1,0 +1,20 @@
+[package]
+name = "safe-core-pea"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Camada 3: Motor de Políticas (PEA)"
+
+[dependencies]
+safe-core-core = { path = "../safe-core-core" }
+safe-core-identity = { path = "../safe-core-identity" }
+safe-core-governance = { path = "../safe-core-governance" }
+
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+mockall = { workspace = true }
