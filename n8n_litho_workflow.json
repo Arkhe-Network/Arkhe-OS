@@ -1,0 +1,202 @@
+{
+  "name": "Litho Verifier Batch Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 60
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python /app/litho_batch.py --input-dir /data/specs --output-dir /data/reports --format json,markdown --workers 4"
+      },
+      "name": "Run Batch Validation",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const fs = require('fs');\nconst path = '/data/reports/_batch_summary.json';\nif (fs.existsSync(path)) {\n  const data = JSON.parse(fs.readFileSync(path, 'utf8'));\n  return [{json: data}];\n}\nreturn [{json: {total_files: 0}}];"
+      },
+      "name": "Parse Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-1",
+              "leftValue": "={{ $json.total_errors }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Has Errors?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        850,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "channel": "={{ $env.SLACK_CHANNEL }}",
+        "text": "\ud83d\udea8 *Litho Verifier Alert*\n\n{{ $json.total_errors }} erro(s) encontrado(s) em {{ $json.total_files }} arquivo(s).\n\nResumo:\n- \u2705 OK: {{ $json.total_ok }}\n- \u26a0\ufe0f Warnings: {{ $json.total_warning }}\n- \u274c Errors: {{ $json.total_error }}\n\nRelat\u00f3rio: /data/reports/_batch_summary.md",
+        "otherOptions": {},
+        "attachments": []
+      },
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [
+        1050,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "channel": "={{ $env.SLACK_CHANNEL }}",
+        "text": "\u2705 *Litho Verifier* \u2014 Processamento conclu\u00eddo.\n\n{{ $json.total_files }} arquivo(s) processado(s) sem erros.",
+        "otherOptions": {},
+        "attachments": []
+      },
+      "name": "Slack Success",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [
+        1050,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": {
+          "value": "litho_validation_runs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "run_at": "={{ $json.generated_at }}",
+            "total_files": "={{ $json.total_files }}",
+            "total_ok": "={{ $json.total_ok }}",
+            "total_warning": "={{ $json.total_warning }}",
+            "total_error": "={{ $json.total_error }}",
+            "summary_json": "={{ JSON.stringify($json) }}"
+          }
+        }
+      },
+      "name": "Save to Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [
+        850,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Run Batch Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Batch Validation": {
+      "main": [
+        [
+          {
+            "node": "Parse Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Summary": {
+      "main": [
+        [
+          {
+            "node": "Has Errors?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save to Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Errors?": {
+      "main": [
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    "litho",
+    "automation",
+    "validation"
+  ]
+}

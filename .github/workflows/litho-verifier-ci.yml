@@ -1,0 +1,171 @@
+name: Litho Verifier CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "**.md"
+      - "**.txt"
+      - "**.spec"
+      - "litho_verifier*.py"
+      - "equipment_db.json"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.md"
+      - "**.txt"
+      - "**.spec"
+      - "litho_verifier*.py"
+      - "equipment_db.json"
+
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: python litho_verifier_v310.py --test
+
+  validate-specs:
+    name: Validate Specification Files
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Find specification files
+        id: find-specs
+        run: |
+          echo "spec_files=$(find . -type f \( -name '*.md' -o -name '*.txt' -o -name '*.spec' \) | tr '\n' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Validate each specification file
+        id: validate
+        run: |
+          mkdir -p reports
+          EXIT_CODE=0
+          for file in ${{ steps.find-specs.outputs.spec_files }}; do
+            echo "🔍 Validando: $file"
+            python litho_verifier_v310.py "$file" --md-out "reports/$(basename "$file").md" --json-out "reports/$(basename "$file").json" || EXIT_CODE=1
+          done
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-reports
+          path: reports/
+          retention-days: 30
+
+      - name: Comment PR with summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const reportsDir = 'reports';
+            let body = '## 🔬 Litho Verifier — Relatório de Validação \n\n';
+
+            if (!fs.existsSync(reportsDir)) {
+              body += '⚠️ Nenhum relatório gerado.\n';
+            } else {
+              const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.json'));
+              let totalConfirmed = 0, totalWarning = 0, totalError = 0, totalUnverifiable = 0;
+
+              for (const file of files) {
+                const report = JSON.parse(fs.readFileSync(path.join(reportsDir, file), 'utf8'));
+                const c = report.status_counts;
+                totalConfirmed += c.CONFIRMED || 0;
+                totalWarning += c.WARNING || 0;
+                totalError += c.ERROR || 0;
+                totalUnverifiable += c.UNVERIFIABLE || 0;
+
+                const statusEmoji = (c.ERROR || 0) > 0 ? '❌' : (c.WARNING || 0) > 0 ? '⚠️' : '✅';
+                body += `### ${statusEmoji} \`${report.source_file}\`\n`;
+                body += `- ✅ CONFIRMED: ${c.CONFIRMED || 0} | ⚠️ WARNING: ${c.WARNING || 0} | ❌ ERROR: ${c.ERROR || 0} | 🔍 UNVERIFIABLE: ${c.UNVERIFIABLE || 0}\n\n`;
+
+                // Listar erros
+                const errors = report.validation_results.filter(r => r.status === 'ERROR');
+                if (errors.length > 0) {
+                  body += '<details><summary>❌ Erros encontrados</summary>\n\n';
+                  for (const e of errors.slice(0, 10)) {
+                    body += `- **${e.equipment || 'N/I'}** \`${e.param_name}\`: ${e.detail}\n`;
+                  }
+                  if (errors.length > 10) body += `- ... e mais ${errors.length - 10} erro(s)\n`;
+                  body += '</details>\n\n';
+                }
+              }
+
+              body += '---\n';
+              body += `**Total:** ✅ ${totalConfirmed} | ⚠️ ${totalWarning} | ❌ ${totalError} | 🔍 ${totalUnverifiable}\n`;
+
+              if (totalError > 0) {
+                body += '\n> 🚫 **Bloqueio:** Foram encontrados erros de validação. Corrija antes do merge.\n';
+              } else if (totalWarning > 0) {
+                body += '\n> ⚠️ **Atenção:** Existem avisos que merecem revisão.\n';
+              } else {
+                body += '\n> ✅ Todas as especificações validadas com sucesso!\n';
+              }
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail on validation errors
+        if: steps.validate.outputs.exit_code != '0'
+        run: |
+          echo "❌ Erros de validação encontrados. Verifique os relatórios."
+          exit 1
+
+  api-healthcheck:
+    name: API Health Check
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          pip install -r requirements.txt
+          pip install httpx
+      - name: Start API and test
+        run: |
+          python litho_api.py &
+          sleep 3
+          curl -sf http://localhost:8000/health || exit 1
+          curl -sf http://localhost:8000/equipment || exit 1
+        timeout-minutes: 2
