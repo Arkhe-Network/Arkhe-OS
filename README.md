@@ -126,3 +126,6 @@ Score: 88-92/100 | Status: PRONTO PARA PRODUÇÃO
 Testes: 18/18 | API: ✅ | CI/CD: ✅ | Automação: ✅
 📄 Licença
 MIT License — veja LICENSE para detalhes.
+# Arkhe OS
+
+Repository root.
