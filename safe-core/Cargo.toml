@@ -7,6 +7,7 @@ members = [
     "crates/safe-core-inference",
     "crates/safe-core-mcp-adapter",
     "bin/safe-core-cli",
+    "crates/xtask",
 ]
 resolver = "2"
 
@@ -16,6 +17,7 @@ resolver = "2"
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.91.0"
 authors = ["Arkhe OS Architects <safe-core@safe-core-os.org>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/safe-core-os/safe-core"
@@ -109,3 +111,9 @@ tower-http = { version = "0.5", features = ["trace", "cors"] }
 # --- Armazenamento ---
 sled = "0.34"
 rocksdb = "0.22"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+pedantic = "warn"
