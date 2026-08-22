@@ -36,7 +36,7 @@ members = [
     "cathedral-arkhe/unified_uep",
     "crates/arkhe-soc-tlm",
     "timechain"
-]
+, "arkhe-hubble-ml"]
 
 [workspace.package]
 version = "0.1.0"
