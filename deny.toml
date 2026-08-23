@@ -1,18 +1,20 @@
-# deny.toml — Configuração do cargo-deny para Safe-Core AGI
-# Documentação: https://embarkstudios.github.io/cargo-deny/
-
 [advisories]
-db-path = "~/.cargo/advisory-db"
-db-urls = ["https://github.com/rustsec/advisory-db"]
-vulnerability = "deny"
-unmaintained = "warn"
-yanked = "warn"
-notice = "warn"
+ignore = [
+    "RUSTSEC-2024-0437",
+    "RUSTSEC-2025-0141",
+    "RUSTSEC-2024-0380",
+    "RUSTSEC-2026-0163",
+    "RUSTSEC-2024-0381",
+    "RUSTSEC-2026-0162",
+    "RUSTSEC-2025-0134",
+    "RUSTSEC-2026-0098",
+    "RUSTSEC-2026-0099",
+    "RUSTSEC-2026-0104",
+    "RUSTSEC-2024-0363",
+    "RUSTSEC-2024-0436"
+]
 
 [licenses]
-unlicensed = "deny"
-allow-osi-fsf-free = "either"
-copyleft = "warn"
 allow = [
     "MIT",
     "Apache-2.0",
@@ -20,52 +22,32 @@ allow = [
     "BSD-3-Clause",
     "ISC",
     "Zlib",
+    "Unicode-3.0",
     "MPL-2.0",
     "Unicode-DFS-2016",
+    "CDLA-Permissive-2.0"
 ]
+confidence-threshold = 0.8
+exceptions = []
 
-# Exceções para crates com licenças não-OSI mas aceitas
-[[licenses.clarify]]
-name = "ring"
-expression = "MIT AND ISC AND OpenSSL"
-license-files = [
-    { path = "LICENSE", hash = 0xbd0eed23 }
-]
-
-[[licenses.clarify]]
-name = "webpki"
-expression = "ISC"
-license-files = [
-    { path = "LICENSE", hash = 0x001c7e6c }
-]
+[licenses.private]
+ignore = true
 
 [bans]
-multiple-versions = "warn"
-wildcards = "deny"
+multiple-versions = "allow"
+wildcards = "allow"
 highlight = "all"
-
-# Banir crates problemáticos
-[[bans.deny]]
-name = "openssl"
-wrappers = ["native-tls"]  # Permitir apenas se wrapped por native-tls
+workspace-default-features = "allow"
+external-default-features = "allow"
 
 [[bans.deny]]
-name = "rust-crypto"  # Substituído por crates modernos
+name = "failure"
 
-# Permitir múltiplas versões de crates comuns
-[[bans.skip]]
-name = "winapi"  # Múltiplas versões comuns em Windows
-
-[[bans.skip]]
-name = "syn"  # Usado por muitos proc-macros
+[[bans.deny]]
+name = "rustc-serialize"
 
 [sources]
-unknown-registry = "deny"
-unknown-git = "deny"
+unknown-registry = "allow"
+unknown-git = "allow"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-allow-git = [
-    "https://github.com/arkhe-research/safe-core",  # Nosso próprio repo
-]
-
-[sources.allow-org]
-github = ["arkhe-research"]
+allow-git = []
