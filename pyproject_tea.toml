@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "arkhe-tea-lcoe"
+version = "0.1.0"
+description = "ARKHE — Techno-Economic Analysis & LCOE Modeling"
+authors = ["ARKHE Research Group <research@arkhe.org>"]
+readme = "README.md"
+packages = [{include = "arkhe_tea"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+# --- Análise de Dados ---
+pandas = "^2.2"
+numpy = "^1.26"
+scipy = "^1.13"
+# --- ML / Estatística ---
+scikit-learn = "^1.5"
+statsmodels = "^0.14"
+# --- Deep Learning (Surrogate) ---
+keras = "^3.3"
+tensorflow = {version = "^2.16", extras = ["and-cuda"]}
+# --- TFX (Produção) ---
+tfx = "^1.15"
+# --- Visualização ---
+matplotlib = "^3.9"
+seaborn = "^0.13"
+plotly = "^5.22"
+# --- Relatórios ---
+jinja2 = "^3.1"
+openpyxl = "^3.1"
+# --- Utilitários ---
+tqdm = "^4.66"
+pyyaml = "^6.0"
+python-dotenv = "^1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+pytest-cov = "^5.0"
+black = "^24.4"
+isort = "^5.13"
+flake8 = "^7.1"
+mypy = "^1.10"
+pre-commit = "^3.7"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.3"
+sphinx-rtd-theme = "^2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100

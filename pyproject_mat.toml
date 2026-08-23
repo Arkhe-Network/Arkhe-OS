@@ -1,0 +1,75 @@
+[tool.poetry]
+name = "arkhe-materials"
+version = "0.1.0"
+description = "ARKHE — Materials Science ML Toolkit"
+authors = ["ARKHE Research Group <research@arkhe.org>"]
+readme = "README.md"
+packages = [{include = "arkhe_materials"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+# --- ML Core ---
+torch = {version = "^2.3", source = "pytorch-cu121"}
+torch-geometric = "^2.5"
+torch-scatter = {version = "^2.1", source = "pyg-cu121"}
+torch-sparse = {version = "^0.6", source = "pyg-cu121"}
+# --- GNNs Equivariantes ---
+e3nn = "^0.5"
+mace-torch = "^0.3"
+# --- ML Clássico ---
+scikit-learn = "^1.5"
+xgboost = "^2.0"
+lightgbm = "^4.3"
+# --- Deep Learning ---
+keras = "^3.3"
+# --- Dados / Química ---
+pandas = "^2.2"
+numpy = "^1.26"
+scipy = "^1.13"
+ase = "^3.22"          # Atomic Simulation Environment
+pymatgen = "^2024.5"   # Materials Project
+matminer = "^0.9"      # Materials descriptors
+# --- Visualização ---
+matplotlib = "^3.9"
+seaborn = "^0.13"
+# --- Interpretabilidade ---
+shap = "^0.45"
+# --- Utilitários ---
+tqdm = "^4.66"
+pyyaml = "^6.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+pytest-cov = "^5.0"
+black = "^24.4"
+isort = "^5.13"
+flake8 = "^7.1"
+mypy = "^1.10"
+pre-commit = "^3.7"
+dvc = {version = "^3.50", extras = ["s3", "gs"]}
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.3"
+sphinx-rtd-theme = "^2.0"
+
+[[tool.poetry.source]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "pyg-cu121"
+url = "https://data.pyg.org/whl/torch-2.3.0+cu121.html"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100

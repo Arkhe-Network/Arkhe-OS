@@ -1,3 +1,159 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "arkhe-ml"
+version = "0.1.0"
+description = "ARKHE Machine Learning — Materiais, QED, TEA/LCOE"
+authors = [
+    {name = "ARKHE Research Group", email = "research@arkhe.io"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = {text = "MIT OR Apache-2.0"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[tool.poetry.dependencies]
+# Core (sempre presente)
+python = "^3.11"
+numpy = "^1.26"
+scipy = "^1.12"
+pandas = "^2.2"
+matplotlib = "^3.8"
+seaborn = "^0.13"
+pyyaml = "^6.0"
+tqdm = "^4.66"
+click = "^8.1"
+python-dotenv = "^1.0"
+pydantic = "^2.5"
+
+# ============================================================
+# Grupos de dependências por domínio
+# ============================================================
+
+# DOMÍNIO MATERIAIS (GNNs, propriedades de cristais)
+[tool.poetry.group.materials]
+optional = true
+[tool.poetry.group.materials.dependencies]
+torch = "^2.4"
+torch-geometric = "^2.4"
+e3nn = "^0.5"
+mace = "^1.0"  # MACE (equivariant GNN)
+pymatgen = "^2024.4"
+ase = "^3.22"
+dvc = "^3.55"
+dvc-s3 = "^2.23"
+
+# DOMÍNIO QED (simulação quântica, precisão numérica)
+[tool.poetry.group.qed]
+optional = true
+[tool.poetry.group.qed.dependencies]
+tensorflow = "^2.16"
+tensorflow-quantum = "^0.7"
+jax = "^0.4"
+jaxlib = "^0.4"
+qiskit = "^1.1"
+pennylane = "^0.34"
+h5py = "^3.10"
+
+# DOMÍNIO TEA/LCOE (análise econômica e sensibilidade)
+[tool.poetry.group.tea]
+optional = true
+[tool.poetry.group.tea.dependencies]
+scikit-learn = "^1.5"
+xgboost = "^2.1"
+lightgbm = "^4.5"
+optuna = "^3.6"
+shap = "^0.45"
+lime = "^0.2"
+statsmodels = "^0.14"
+
+# DOMÍNIO PRODUÇÃO (serving, deploy, edge)
+[tool.poetry.group.production]
+optional = true
+[tool.poetry.group.production.dependencies]
+tensorflow-serving-api = "^2.16"
+torchserve = "^0.11"
+fastapi = "^0.110"
+uvicorn = "^0.30"
+pydantic-settings = "^2.5"
+prometheus-client = "^0.20"
+opentelemetry-api = "^1.25"
+opentelemetry-sdk = "^1.25"
+
+# DOMÍNIO DESENVOLVIMENTO (testes, lint, docs)
+[tool.poetry.group.dev]
+optional = true
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+pytest-cov = "^5.0"
+pytest-xdist = "^3.6"
+black = "^24.4"
+ruff = "^0.4"
+mypy = "^1.10"
+pre-commit = "^3.7"
+sphinx = "^7.3"
+sphinx-rtd-theme = "^2.0"
+jupyter = "^1.0"
+ipykernel = "^6.29"
+
+[tool.poetry.extras]
+materials = ["materials"]
+qed = ["qed"]
+tea = ["tea"]
+production = ["production"]
+dev = ["dev"]
+all = ["materials", "qed", "tea", "production"]
+
+# ============================================================
+# Configurações de ferramentas
+# ============================================================
+
+[tool.black]
+line-length = 100
+target-version = ['py311', 'py312']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "TCH"]
+ignore = ["E501", "E731", "TCH003"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -v --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "ml001: tests for ML-001 (baseline)",
+    "ml002: tests for ML-002 (reproducibility)",
+    "ml003: tests for ML-003 (numerical precision)",
+    "material: tests for materials domain",
+    "qed: tests for QED domain",
+    "tea: tests for TEA/LCOE domain",
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.dvc]
+remote = "s3://arkhe-ml-data"
+cache_dir = ".dvc/cache"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

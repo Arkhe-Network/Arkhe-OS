@@ -1,0 +1,202 @@
+# invariants/ml.yaml
+# ================================================================
+# Domínio: ML — Machine Learning para Materiais e Física
+# ================================================================
+# Data: 2026-08-23 | Versão: 1.0.0
+# Fonte: ARKHE Research Group
+# ================================================================
+
+domain: ML
+domain_name: "Machine Learning para Materiais e Física"
+description: |
+  Invariantes arquiteturais para aplicação de aprendizado de máquina
+  em domínios científicos do ARKHE: materiais avançados (MAT),
+  eletrodinâmica quântica (QED) e análise econômica (TEA/LCOE).
+version: "1.0.0"
+effective_date: "2026-08-23"
+
+invariants:
+
+  - id: ML-001
+    name: "Validação Contra Baseline Estatístico"
+    description: |
+      Modelos preditivos de propriedades de materiais (estabilidade,
+      eficiência, bandgap) devem ser validados contra um baseline
+      estatístico (regressão linear, árvore de decisão, SVM) antes
+      da adoção de arquiteturas de deep learning.
+    severity: CRITICAL
+    status: Specified
+    mechanism: |
+      Comparação de desempenho (R², RMSE, MAE) entre modelo proposto
+      e baseline. O modelo proposto deve superar o baseline em pelo
+      menos 10% em métrica de validação cruzada.
+    formula: performance_proposed >= 1.1 * performance_baseline
+    test: "tests/ml/ml001_baseline_comparison.rs"
+    crate: "arkhe-materials"
+    verification: "integration"
+    frameworks:
+      - Scikit-learn
+      - XGBoost
+      - LightGBM
+    traceability:
+      - NIST-001
+      - MAT-001
+      - MAT-004
+    runbook:
+      id: RB-ML-001
+      trigger: "Novo modelo preditivo proposto"
+      escalation_path:
+        - level: L1
+          role: "ml-engineer"
+          action: "Treinar baseline com validação cruzada"
+          sla_days: 3
+          auto_action: "Gerar relatório de performance do baseline"
+        - level: L2
+          role: "materials-scientist"
+          action: "Validar se modelo proposto supera baseline em >=10%"
+          sla_days: 2
+          auto_action: "Aprovar ou rejeitar modelo"
+
+  - id: ML-002
+    name: "Versionamento e Reprodutibilidade de Pipelines"
+    description: |
+      Todo pipeline de ML aplicado a dados de materiais deve ser
+      versionado e reproduzível, com seed fixa e ambiente containerizado.
+    severity: HIGH
+    status: Specified
+    mechanism: |
+      Uso de DVC (Data Version Control) para dados e modelos.
+      Containerização via Docker com requirements fixos.
+      Seed fixa (ex: 42) para todas as operações aleatórias.
+    formula: reproducibility(seed_fixed, environment_fixed) = true
+    test: "tests/ml/ml002_reproducibility.rs"
+    crate: "arkhe-materials"
+    verification: "static"
+    frameworks:
+      - Scikit-learn Pipeline
+      - PyTorch Lightning
+      - Docker
+      - DVC
+    traceability:
+      - MAT-002
+      - NIST-004
+      - EU-003
+
+  - id: ML-003
+    name: "Precisão Numérica em Simulações Quânticas"
+    description: |
+      Modelos de ML para simulação de sistemas quânticos (QED, DFT,
+      dinâmica molecular) devem usar precisão float64 para diferenças
+      de energia < 1 meV.
+    severity: HIGH
+    status: Specified
+    mechanism: |
+      Uso de tf.float64, torch.float64, ou jax.config.update.
+      Verificação de convergência numérica com tolerância definida.
+    formula: numerical_precision >= required_precision(system_energy_scale)
+    test: "tests/ml/ml003_numerical_precision.rs"
+    crate: "arkhe-qed"
+    verification: "formal"
+    frameworks:
+      - TensorFlow (tf.float64)
+      - PyTorch (torch.float64)
+      - JAX (jax.config.update)
+    traceability:
+      - QED-001
+      - QED-004
+      - MAT-005
+
+  - id: ML-004
+    name: "Equivariância em GNNs para Cristais"
+    description: |
+      GNNs aplicadas a cristais e moléculas devem ser equivariantes
+      ou invariantes sob simetrias do grupo espacial cristalino.
+    severity: HIGH
+    status: Specified
+    mechanism: |
+      Uso de arquiteturas equivariantes (e3nn, MACE, NequIP) ou
+      invariantes (CGCNN, SchNet). Validação via aumento de dados.
+    formula: f(T*x) = T*f(x) (equivariante) ou f(T*x) = f(x) (invariante)
+    test: "tests/ml/ml004_symmetry_test.rs"
+    crate: "arkhe-materials"
+    verification: "formal"
+    frameworks:
+      - PyTorch Geometric
+      - e3nn
+      - MACE
+      - NequIP
+    traceability:
+      - MAT-003
+      - MAT-005
+      - ARC-ARCH-012
+
+  - id: ML-005
+    name: "Quantificação de Incerteza em Surrogates Físicos"
+    description: |
+      Modelos surrogate para simulações físicas caras (DFT, QED)
+      devem quantificar incerteza epistêmica e aleatória.
+    severity: HIGH
+    status: Specified
+    mechanism: |
+      Uso de Gaussian Process, MC Dropout, Deep Ensembles, ou
+      Bayesian Neural Networks. Incerteza reportada com intervalos
+      de confiança (ex: 95%).
+    formula: prediction = mean(predictions) +/- uncertainty(predictions)
+    test: "tests/ml/ml005_uncertainty.rs"
+    crate: "arkhe-materials"
+    verification: "integration"
+    frameworks:
+      - Scikit-learn (GaussianProcessRegressor)
+      - PyTorch (MC Dropout)
+      - TensorFlow Probability
+      - Deep Ensembles
+    traceability:
+      - QED-002
+      - QED-006
+      - NIST-001
+      - MAT-004
+
+  - id: ML-006
+    name: "Validação de Transfer Learning entre Domínios"
+    description: |
+      Transfer learning entre domínios de materiais requer validação
+      de similaridade de distribuição (covariate shift).
+    severity: HIGH
+    status: Specified
+    mechanism: |
+      Testes estatísticos (KS, MMD) para comparar distribuições.
+      Técnicas de domain adaptation (DANN, CORAL) se necessário.
+    formula: p_train(x) ≈ p_target(x) -> direct_transfer
+    test: "tests/ml/ml006_domain_shift.rs"
+    crate: "arkhe-materials"
+    verification: "integration"
+    frameworks:
+      - Scikit-learn (metrics)
+      - SciPy (stats)
+      - PyTorch (fine-tuning)
+      - Keras (fine-tuning)
+    traceability:
+      - MAT-002
+      - MAT-003
+      - NIST-001
+
+# ================================================================
+metadata:
+  maturity_level: 1
+  owner: "ARKHE Research Group — ML Division"
+  review_cycle: "quarterly"
+  references:
+    - "ADR-2026-012 — Estratégia de Frameworks de IA"
+  tags:
+    - "machine-learning"
+    - "materials-science"
+    - "quantum-simulations"
+    - "equivariance"
+    - "uncertainty-quantification"
+    - "domain-adaptation"
+
+seal:
+  created_by: "Arquiteto-Chefe (IC6)"
+  date: "2026-08-23"
+  status: "Aprovado para integração"
+  next_review: "2026-11-23"
