@@ -5,3 +5,5 @@ pub enum ArkheError {
     Internal(String),
 }
 pub mod inertia_certifier;
+
+pub mod safety;
