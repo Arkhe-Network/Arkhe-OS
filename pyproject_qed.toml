@@ -1,0 +1,66 @@
+[tool.poetry]
+name = "arkhe-qed"
+version = "0.1.0"
+description = "ARKHE — Quantum Electrodynamics Simulation Tools"
+authors = ["ARKHE Research Group <research@arkhe.org>"]
+readme = "README.md"
+packages = [{include = "arkhe_qed"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+# --- ML Core ---
+tensorflow = {version = "^2.16", extras = ["and-cuda"]}
+tensorflow-quantum = "^0.7"
+torch = {version = "^2.3", source = "pytorch-cu121"}
+torchvision = {version = "^0.18", source = "pytorch-cu121"}
+# --- Numérico / Simbólico ---
+jax = {version = "^0.4", extras = ["cuda12-pip"]}
+jaxlib = {version = "^0.4", source = "jax-cuda"}
+numba = "^0.59"
+# --- Científico ---
+numpy = "^1.26"
+scipy = "^1.13"
+# --- Dados ---
+pandas = "^2.2"
+h5py = "^3.11"
+# --- Visualização ---
+matplotlib = "^3.9"
+plotly = "^5.22"
+# --- Utilitários ---
+tqdm = "^4.66"
+pyyaml = "^6.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+pytest-cov = "^5.0"
+black = "^24.4"
+isort = "^5.13"
+flake8 = "^7.1"
+mypy = "^1.10"
+pre-commit = "^3.7"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.3"
+sphinx-rtd-theme = "^2.0"
+
+[[tool.poetry.source]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "jax-cuda"
+url = "https://storage.googleapis.com/jax-releases/jax_cuda_releases.html"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
