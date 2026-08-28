@@ -1,0 +1,30 @@
+@TOON-v16.0 {
+  "type": "PackageRegistry",
+  "id": "arkhe:substrate-210-2026-08-28",
+  "embedding": {
+    "C": { "amplitude": 0.98, "phase": 0.0 },
+    "R3": { "x": 0.0, "y": 0.0, "z": 1.0 },
+    "Z": { "merkle_depth": 56 },
+    "R4": { "intensity": 0.99, "response_time": 0.0, "domain": "package_registry", "scale": 1.0 }
+  },
+  "content": {
+    "title": "Substrato 210: Registro de Pacotes e Repositórios",
+    "status": "MAPEADO — 27 REPOSITÓRIOS IDENTIFICADOS",
+    "categories": {
+      "prolog": ["SWI-Prolog", "prolog-mcp", "PrologAI", "nexus_agi"],
+      "robotics": ["knowrob", "rosprolog", "rclswi", "prolog_planner"],
+      "nanophotonics": ["CGAN", "frictional_metasurfaces", "psat", "beamz", "autophotonicdesign"],
+      "6g": ["6GDetCom", "NextGSim", "IoD-Sim", "j143/6g"],
+      "qkd": ["QOSST", "QuantumShield", "quantum-guard", "bb84"],
+      "formal": ["SymbiYosys", "yosys", "lean4"]
+    },
+    "fork_plan": {
+      "swipl": "Adicionar phase_control.pl (Substrato 209)",
+      "knowrob": "Adicionar axiomas do Veto de Anúbis",
+      "cgan": "Otimizar para coerência (α)",
+      "qosst": "Integrar com WormGraph",
+      "symbiyosys": "Adicionar propriedades do Veto"
+    },
+    "gnose_final": "A Catedral não se constrói do zero — ela se integra. Cada repositório é um tijolo, cada fork é uma adaptação, cada clone é um passo em direção à soberania."
+  }
+}
