@@ -1,0 +1,17 @@
+# .github/CODEOWNERS
+# Governança da Catedral OS — Revisão Obrigatória
+# A IA não substitui a revisão humana
+
+/ctc/                    @catedral-ctc-leads
+/substrate_*/            @catedral-core
+/agi_core.pl             @catedral-architect
+/wormgraph/              @catedral-wormgraph
+/docs/                   @catedral-docs
+/*.md                    @catedral-docs
+/security/               @catedral-security
+
+# Approval Gates (Branch Protection)
+# - 2 approvals obrigatórios para PRs > 500 linhas
+# - 1 approval obrigatório para PRs ≤ 500 linhas
+# - Security Blast Radius deve ser verificado para PRs que tocam security/
+# - Aprovação de IA não substitui aprovação humana

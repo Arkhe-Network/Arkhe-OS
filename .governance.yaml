@@ -1,0 +1,151 @@
+# .governance.yaml — Motor de Governança do Hipergrafo Arkhe(n)
+# Compatível com: CodeRabbit, Qodo, Greptile, ou qualquer ferramenta que implemente o padrão
+# Versão: 4.0 — 2026-09-06
+
+language: pt-BR
+early_access: false
+
+# ============================================================================
+# 1. REVISÃO — Consenso entre nós (C+F=1)
+# ============================================================================
+reviews:
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: true
+  review_status: true
+  commit_status: true
+  collapse_walkthrough: false
+  changed_files_summary: true
+  sequence_diagrams: true
+  assess_linked_issues: true
+  related_prs: true
+  suggested_labels: true
+  auto_title: true
+  auto_description: true
+  show_latest_suggestion: true
+
+  severity_labels:
+    - Critical   # Φ > 0.85 — requer veto imediato
+    - Major      # Φ > 0.65 — requer revisão aprofundada
+    - Minor      # Φ > 0.35 — revisão padrão
+    - Trivial    # Φ ≤ 0.35 — revisão automatizada
+
+  # Change Stack — Organização de handovers (ω)
+  change_stack:
+    enabled: true
+    auto_generate_diagrams: true
+    diagram_types:
+      - sequence      # Fluxo de handover
+      - state_machine # Estados do hipergrafo
+      - entity_relationship # Relações entre substratos
+    blast_radius: true  # Mapeamento de impacto (L2)
+    semantic_diffs: true
+
+  suggestions:
+    auto_apply: false  # Autofix não é automático — requer revisão humana
+    auto_apply_type: all
+
+# ============================================================================
+# 2. CHAT E CONHECIMENTO — Memória do hipergrafo (Satoshi)
+# ============================================================================
+chat:
+  auto_reply: true
+
+knowledge_base:
+  learnings:
+    - "Priorizar coerência sobre brevidade no código."
+    - "Manter a invariante C+F=1 em todas as transformações."
+    - "Documentar handovers com hesitação (Φ > 0.15)."
+    - "Todo PR deve ser revisado por pelo menos 2 pessoas (C+F=2)."
+    - "Handovers devem ser documentados no WormGraph antes do merge."
+    - "Código gerado por IA deve ser tratado como não confiável por padrão."  #
+
+  code_guidelines:
+    - "Usar nomes descritivos para funções e variáveis."
+    - "Manter a compatibilidade com o módulo `ctc.prolog`."
+    - "Evitar dependências circulares entre substratos."
+    - "Incluir testes unitários para toda nova funcionalidade."
+    - "Documentar breaking changes no changelog."
+
+# ============================================================================
+# 3. SEGURANÇA — Vigilância do Veto (Blast Radius integrado)
+# ============================================================================
+security:
+  blast_radius: true                    # Mapeamento de impacto (L2)
+  architecture_review: true
+  continuous_scanning: true             # Varredura contínua
+  scan_frequency: daily
+  scan_targets:
+    - source_code
+    - infrastructure_as_code
+    - dependencies
+    - sbom
+  verify_and_repair: true               # Verifica e corrige em PR
+
+# ============================================================================
+# 4. PLANEJAMENTO — Macro-ações (Ω) — Coding Plans (L3)
+# ============================================================================
+planning:
+  enabled: true
+  auto_generate_plans: true
+  plan_triggers:
+    - labels: ["feature", "refactor", "handover", "substrate"]
+    - assignees: ["*"]
+  plan_output: "docs/plans/"
+  plan_structure:                        # Estrutura do Coding Plan
+    - summary: "2-3 frases sobre a abordagem"
+    - research: "Análise profunda do códigobase"
+    - design_choices: "Decisões de design com justificativa"
+    - phases: "Blocos lógicos de trabalho"
+    - tasks: "Tarefas individuais dentro de cada fase"
+    - agent_prompt: "Instruções prontas para agentes de codificação"
+  issue_trackers:                        # L4: Integração com ferramentas de planejamento
+    - github
+    - gitlab
+    - azure_devops
+    - jira
+    - linear
+
+# ============================================================================
+# 5. IDE E CLI — Revisão contínua (κ)
+# ============================================================================
+ide:
+  enabled: true
+  extensions:
+    - vscode
+    - cursor
+    - windsurf
+
+cli:
+  enabled: true
+  pre_commit: true
+  agent_mode: true                       # Código → revisão → correção automática
+
+# ============================================================================
+# 6. COMUNICAÇÃO — Integração com Slack/Teams (L8)
+# ============================================================================
+slack:
+  enabled: true
+  agent: true                            # CodeRabbit Agent for Slack
+  channels:
+    - "#catedral-prs"
+    - "#catedral-handovers"
+    - "#catedral-security"
+
+# ============================================================================
+# 7. GOVERNANÇA — CODEOWNERS + Approval Gates (L6)
+# ============================================================================
+governance:
+  codeowners: ".github/CODEOWNERS"
+  approval_gates:
+    - condition: "PR_size > 500_lines"
+      approvals_required: 2
+    - condition: "PR_touches_security"
+      approvals_required: 2
+      blast_radius_required: true
+    - condition: "PR_touches_core"
+      approvals_required: 2
+    - condition: "PR_size <= 500_lines"
+      approvals_required: 1
+  human_review_required: true            # IA não substitui revisão humana
+  ai_approval_not_sufficient: true       # Aprovação de IA não conta como revisão
