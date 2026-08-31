@@ -1,0 +1,45 @@
+# chaos/validation-probes.yaml
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: arkhe-validation
+  namespace: chaos-testing
+spec:
+  appinfo:
+    appns: arkhe
+    applabel: "app=arkhe-api"
+  chaosServiceAccount: litmus-admin
+  experiments:
+    - name: pod-delete
+      spec:
+        components:
+          - name: POD_DELETE
+            value: "arkhe-api"
+    - name: container-kill
+      spec:
+        components:
+          - name: CONTAINER_KILL
+            value: "jax-worker"
+  probe:
+    - name: "check-coherence-recovery"
+      type: "httpProbe"
+      mode: "Edge"
+      httpProbe/inputs:
+        url: "http://arkhe-api.arkhe.svc.cluster.local:8080/metrics/coherence"
+        method: "GET"
+        expectedResponseCode: 200
+        expectedBody: "coherence>0.95"
+    - name: "check-worker-recovery"
+      type: "k8sProbe"
+      mode: "Edge"
+      k8sProbe/inputs:
+        command:
+          - "kubectl"
+          - "get"
+          - "pods"
+          - "-n"
+          - "arkhe"
+          - "-l"
+          - "role=gpu-worker"
+          - "--field-selector=status.phase=Running"
+        expectedResult: ">2"

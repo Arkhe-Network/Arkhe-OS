@@ -1,0 +1,56 @@
+# kubernetes/istio/ambient-mesh.yaml
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: ambient
+  namespace: istio-system
+spec:
+  profile: ambient
+  components:
+    cni:
+      enabled: true
+    ztunnel:
+      enabled: true
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+  values:
+    ambient:
+      enabled: true
+      ztunnel:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+    global:
+      mtls:
+        enabled: true
+        auto: true
+    pilot:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1024Mi
+---
+# PeerAuthentication: mTLS STRICT
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: arkhe
+spec:
+  mtls:
+    mode: STRICT
+---
+# AuthorizationPolicy: default-deny
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: arkhe-zero-trust
+  namespace: arkhe
+spec:
+  action: DENY
+  rules:
+  - from:
+    - source:
+        notPrincipals: ["*"]

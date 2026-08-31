@@ -1,0 +1,31 @@
+# kubernetes/opa/gatekeeper-policies.yaml
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: arkhe-gpu-taint
+spec:
+  crd:
+    spec:
+      names:
+        kind: ArkheGPURequirement
+  targets:
+  - target: admission.k8s.gatekeeper.sh
+    rego: |
+      package arkhe.gpu
+      violation[{"msg": msg}] {
+        input.review.kind.kind == "Pod"
+        container := input.review.object.spec.containers[_]
+        container.resources.limits["nvidia.com/gpu"] > 0
+        not input.review.object.spec.tolerations[_].key == "nvidia.com/gpu"
+        msg = sprintf("Pod %v requests GPU but lacks toleration", [input.review.object.metadata.name])
+      }
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: ArkheGPURequirement
+metadata:
+  name: enforce-gpu-taint
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]

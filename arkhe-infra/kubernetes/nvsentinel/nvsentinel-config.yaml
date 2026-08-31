@@ -1,0 +1,29 @@
+# kubernetes/nvsentinel/nvsentinel-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nvsentinel-config
+  namespace: arkhe
+data:
+  nvsentinel.yaml: |
+    poll_interval: 10s
+    watch_gpu_errors:
+      - XID: 74  # NVIDIA: GPU memory page fault
+      - XID: 43  # GPU: temperature threshold
+      - XID: 45  # GPU: power threshold
+    actions:
+      - type: pod_restart
+        when:
+          - error: XID 74
+            occurrences: 2
+            within: 1m
+        namespace: arkhe
+        label_selector: "role=gpu-worker"
+      - type: node_cordon
+        when:
+          - error: XID 43
+            occurrences: 1
+            within: 30s
+        node_label: "nvidia.com/gpu"
+      - type: notify_slack
+        webhook: "https://hooks.slack.com/services/xxx"
