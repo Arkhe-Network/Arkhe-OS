@@ -1,0 +1,14 @@
+# cairo/Scarb.toml
+[package]
+name = "governance_stark"
+version = "0.1.0"
+edition = "2024_07"
+
+[dependencies]
+starknet = "2.8.0"
+
+[scripts]
+test = "scarb test"
+build = "scarb build"
+prove = "stone-cli prove --program target/release/governance_stark.casm.json"
+verify = "stone-cli verify --proof proof.json"
