@@ -1,0 +1,43 @@
+name: MLIR Pipeline CI
+
+on:
+  push:
+    paths:
+      - 'mlir/arkhe-dialect/**'
+      - 'integrations/**'
+      - 'scripts/**'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build clang-18 libclang-18-dev llvm-18-dev
+
+      - name: Build MLIR with Arkhe dialect
+        run: |
+          ./scripts/build_arkhe_mlir.sh
+
+      - name: Run E2E test
+        run: |
+          ./scripts/test_e2e.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-artifacts
+          path: outputs/
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: reports/
