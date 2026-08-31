@@ -1,0 +1,30 @@
+# chaos/gpu-node-failure.yaml
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NodeChaos
+metadata:
+  name: gpu-node-reset
+  namespace: chaos-testing
+spec:
+  action: node-reset
+  mode: one
+  selector:
+    nodes:
+      - ip-10-0-1-100.ec2.internal
+  duration: "5m"
+---
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Schedule
+metadata:
+  name: gpu-node-reset-schedule
+  namespace: chaos-testing
+spec:
+  schedule: "0 3 * * 1"
+  historyLimit: 3
+  type: NodeChaos
+  nodeChaos:
+    action: node-reset
+    mode: one
+    selector:
+      labelSelectors:
+        node-type: gpu
+    duration: "5m"

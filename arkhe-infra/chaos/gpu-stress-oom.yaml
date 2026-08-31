@@ -1,0 +1,34 @@
+# chaos/gpu-stress-oom.yaml
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: gpu-compute-stress
+  namespace: chaos-testing
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - arkhe
+    labelSelectors:
+      role: gpu-worker
+  stressors:
+    memory:
+      workers: 4
+      size: "10GB"
+  duration: "2m"
+---
+apiVersion: chaos-mesh.org/v1alpha1
+kind: AIFault
+metadata:
+  name: gpu-oom-demo
+  namespace: chaos-testing
+spec:
+  selector:
+    namespaces:
+      - arkhe
+    labelSelectors:
+      app: jax-worker
+  gpuOOM:
+    targetGPUIndex: 0
+    memoryPressureMB: 24576
+  duration: "30s"

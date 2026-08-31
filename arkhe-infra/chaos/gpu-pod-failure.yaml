@@ -1,0 +1,35 @@
+# chaos/gpu-pod-failure.yaml
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: gpu-pod-kill
+  namespace: chaos-testing
+spec:
+  action: pod-kill
+  mode: fixed-percent
+  value: "30"
+  selector:
+    namespaces:
+      - arkhe
+    labelSelectors:
+      role: gpu-worker
+  duration: "30s"
+---
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Schedule
+metadata:
+  name: gpu-pod-kill-schedule
+  namespace: chaos-testing
+spec:
+  schedule: "0 */2 * * *"
+  historyLimit: 5
+  type: PodChaos
+  podChaos:
+    action: pod-kill
+    mode: fixed-percent
+    value: "30"
+    selector:
+      namespaces:
+        - arkhe
+      labelSelectors:
+        role: gpu-worker

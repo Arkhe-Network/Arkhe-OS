@@ -1,0 +1,18 @@
+# chaos/io-failure.yaml
+apiVersion: chaos-mesh.org/v1alpha1
+kind: IOChaos
+metadata:
+  name: io-failure
+  namespace: chaos-testing
+spec:
+  action: fault
+  mode: one
+  selector:
+    namespaces:
+      - arkhe
+    labelSelectors:
+      app: arkhe-postgres
+  volumePath: /var/lib/postgresql/data
+  path: /var/lib/postgresql/data/*
+  percent: 50
+  duration: "1m"

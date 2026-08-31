@@ -1,0 +1,42 @@
+# kubernetes/cilium/network-policies.yaml
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: arkhe-gpu-isolation
+  namespace: arkhe
+spec:
+  endpointSelector:
+    matchLabels:
+      role: gpu-worker
+  egress:
+  - toServices:
+    - k8sService:
+        serviceName: arkhe-api
+        namespace: arkhe
+    toPorts:
+    - ports:
+      - port: "8080"
+        protocol: TCP
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        role: cpu-worker
+    toPorts:
+    - ports:
+      - port: "8080"
+        protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: arkhe-default-deny
+  namespace: arkhe
+spec:
+  endpointSelector:
+    matchLabels: {}
+  egress:
+  - toEntities:
+    - cluster
+  - toFQDNs:
+    - matchName: "*.amazonaws.com"
+    - matchName: "*.googleapis.com"

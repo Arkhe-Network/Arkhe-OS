@@ -1,0 +1,41 @@
+# chaos/network-partition.yaml
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-partition
+  namespace: chaos-testing
+spec:
+  action: partition
+  mode: one
+  selector:
+    namespaces:
+      - arkhe
+    labelSelectors:
+      app: arkhe-worker
+  duration: "1m"
+  direction: both
+  target:
+    selector:
+      namespaces:
+        - arkhe
+      labelSelectors:
+        app: arkhe-api
+---
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-latency
+  namespace: chaos-testing
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - arkhe
+    labelSelectors:
+      app: arkhe-worker
+  delay:
+    latency: "300ms"
+    correlation: "25"
+    jitter: "50ms"
+  duration: "2m"
