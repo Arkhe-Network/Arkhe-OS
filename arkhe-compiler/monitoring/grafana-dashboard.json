@@ -1,0 +1,37 @@
+{
+  "dashboard": {
+    "title": "Arkhe Compiler Pipeline",
+    "panels": [
+      {
+        "title": "Φ_C por Pipeline",
+        "targets": [
+          {
+            "expr": "arkhe_pipeline_phi_c{job=\"mlir-pipeline\"}",
+            "legendFormat": "Pipeline {{pipeline_id}}"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "title": "Latência dos Passes",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(arkhe_pass_duration_bucket[5m])) by (le, pass))",
+            "legendFormat": "{{pass}}"
+          }
+        ],
+        "type": "heatmap"
+      },
+      {
+        "title": "Taxa de Sucesso da Verificação Formal",
+        "targets": [
+          {
+            "expr": "arkhe_lean_verification_success_rate",
+            "legendFormat": "Sucesso"
+          }
+        ],
+        "type": "gauge"
+      }
+    ]
+  }
+}
