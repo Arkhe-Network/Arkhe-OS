@@ -89,7 +89,7 @@
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
     "chai": "^6.2.2",
-    "chrome-devtools-frontend": "1.0.1638082",
+    "chrome-devtools-frontend": "1.0.1689415",
     "core-js": "3.50.0",
     "debug": "4.4.3",
     "eslint": "^10.3.0",
